@@ -1,0 +1,25 @@
+server:
+  port: 8080
+spring:
+  datasource:
+    hikari:
+      maximumPoolSize: 20
+      max-active: 20
+      max-idle: 10
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+    driverClassName: org.postgresql.Driver
+    url: $JDBC_DATABASE_URL
+    username: $JDBC_DATABASE_USERNAME
+    password: $JDBC_DATABASE_PASSWORD
+  jpa:
+    generate-ddl: true
+    databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
+#flyway:
+#  locations: filesystem:db/migration
+#  password: $JDBC_DATABASE_PASSWORD
+#  url: jdbc:h2:mem:DATABASE
+#  user: $JDBC_DATABASE_USERNAME
+allowed:
+  origin: '*'
