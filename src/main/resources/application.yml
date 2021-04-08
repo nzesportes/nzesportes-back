@@ -2,28 +2,27 @@ server:
   port: 8080
 spring:
   datasource:
-    driver-class-name: org.h2.Driver
-    password: ''
-    url: jdbc:h2:file:./db-local;AUTO_SERVER=TRUE
-    username: sa
-    initialization-mode: always
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-      settings:
-        trace: true
-        web-allow-others: true
+    hikari:
+      maximumPoolSize: 20
+      max-active: 20
+      max-idle: 10
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: 1234
   jpa:
-    open-in-view: true
-    generate-ddl: true
-    database-platform: org.hibernate.dialect.H2Dialect
-    hibernate:
-      ddl-auto: update
-#flyway:
-#  locations: filesystem:db/migration
-#  password: ''
-#  url: jdbc:h2:file:./db-local;AUTO_SERVER=TRUE
-#  user: sa
-allowed:
-  origin: '*'
+    databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
+flyway:
+  locations: filesystem:db/migration
+  password: $JDBC_DATABASE_PASSWORD
+  url: jdbc:h2:mem:DATABASE
+  user: $JDBC_DATABASE_USERNAME
+nz:
+  allowed:
+    origin: '*'
+  jwt:
+    secret: secretofdonossousjwt
+    expiration: 86400000
