@@ -35,4 +35,7 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+	environment('spring.profiles.active', 'test')
+	systemProperty 'spring.profiles.active', 'test'
 }
+
