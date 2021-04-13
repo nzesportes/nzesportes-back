@@ -14,12 +14,15 @@ spring:
     username: $JDBC_DATABASE_USERNAME
     password: $JDBC_DATABASE_PASSWORD
   jpa:
-    generate-ddl: true
     databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
-#flyway:
-#  locations: filesystem:db/migration
-#  password: $JDBC_DATABASE_PASSWORD
-#  url: jdbc:h2:mem:DATABASE
-#  user: $JDBC_DATABASE_USERNAME
-allowed:
-  origin: '*'
+flyway:
+  locations: filesystem:db/migration
+  password: $JDBC_DATABASE_PASSWORD
+  url: jdbc:h2:mem:DATABASE
+  user: $JDBC_DATABASE_USERNAME
+nz:
+  allowed:
+    origin: '*'
+  jwt:
+    secret: $JWT_SECRET
+    expiration: 86400000

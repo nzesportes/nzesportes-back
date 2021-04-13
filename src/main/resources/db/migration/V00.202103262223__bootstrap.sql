@@ -9,4 +9,4 @@
   *
   */
 -- An example how to work convention name flyway on!
--- V00.DDMMYYYHHMM__script_descriprion.sql
+-- V00.YYYYMMDDHHmm__script_descriprion.sql
