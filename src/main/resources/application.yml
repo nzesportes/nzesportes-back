@@ -12,14 +12,14 @@ spring:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/
     username: postgres
-    password: 1234
+    password: 12345
   jpa:
     databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
 flyway:
   locations: filesystem:db/migration
-  password: $JDBC_DATABASE_PASSWORD
-  url: jdbc:h2:mem:DATABASE
-  user: $JDBC_DATABASE_USERNAME
+  password: 12345
+  url: jdbc:postgresql://localhost:5432/
+  user: postgres
 nz:
   allowed:
     origin: '*'

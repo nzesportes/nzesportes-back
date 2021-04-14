@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
+import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
 import br.com.nzesportes.api.nzapi.dtos.AutheticationRequest;
 import br.com.nzesportes.api.nzapi.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,9 @@ public class AuthController {
     private AuthService service;
 
     @PostMapping
-    public ResponseEntity<?> authenticateUser(@RequestBody AutheticationRequest autheticationRequest) {
-        return service.AuthenticateUser(autheticationRequest);
+    public ResponseEntity<AuthenticationResponse> authenticateUser(@RequestBody AutheticationRequest autheticationRequest) {
+            AuthenticationResponse response = service.AuthenticateUser(autheticationRequest);
+            return ResponseEntity.ok().body(response);
     }
 
     @PostMapping("/sign-up")

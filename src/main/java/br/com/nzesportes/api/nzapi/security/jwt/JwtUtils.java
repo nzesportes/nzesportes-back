@@ -1,6 +1,6 @@
-package br.com.nzesportes.api.nzapi.security;
+package br.com.nzesportes.api.nzapi.security.jwt;
 
-import br.com.nzesportes.api.nzapi.domains.User;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,7 +20,7 @@ public class JwtUtils {
 
     public String generateJwtToken(Authentication authentication) {
 
-        User userPrincipal = (User) authentication.getPrincipal();
+        UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder().setSubject((userPrincipal.getUsername())).setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + jwtExpiration)).signWith(SignatureAlgorithm.HS512, jwtSecret)
