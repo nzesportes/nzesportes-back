@@ -1,9 +1,9 @@
 package br.com.nzesportes.api.nzapi.domains;
 
 public enum Role {
-    ADMIN("ADMIN"),
-    MODERATOR("MODERATOR"),
-    USER("USER");
+    ADMIN("ROLE_ADMIN"),
+    MODERATOR("ROLE_MODERATOR"),
+    USER("ROLE_USER");
 
     private final String text;
 
