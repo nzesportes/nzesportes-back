@@ -6,7 +6,8 @@ import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
 import br.com.nzesportes.api.nzapi.dtos.AutheticationRequest;
 import br.com.nzesportes.api.nzapi.errors.ResponseError;
 import br.com.nzesportes.api.nzapi.repositories.UsersRepository;
-import br.com.nzesportes.api.nzapi.security.JwtUtils;
+import br.com.nzesportes.api.nzapi.security.jwt.JwtUtils;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 public class AuthService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+    @Autowired
     private AuthenticationManager authenticationManager;
 
     @Autowired
@@ -33,26 +35,26 @@ public class AuthService {
     @Autowired
     private UsersRepository repository;
 
-    public ResponseEntity<?> AuthenticateUser(AutheticationRequest autheticationRequest) {
+    public AuthenticationResponse AuthenticateUser(AutheticationRequest autheticationRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(autheticationRequest.getUsername(), autheticationRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
 
-        User userDetails = (User) authentication.getPrincipal();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(item -> item.getAuthority()).collect(Collectors.toList());
 
-        return ResponseEntity.ok(new AuthenticationResponse(jwt,
+        return new AuthenticationResponse(jwt,
                 userDetails.getId(),
                 userDetails.getUsername(),
-                roles));
+                roles);
     }
 
     public ResponseEntity<?> registerUser(AutheticationRequest autheticationRequest) {
         if(repository.existsByUsername(autheticationRequest.getUsername()))
-            ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseError.AUTH001);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseError.AUTH001.getText());
 
         User user = new User(autheticationRequest.getUsername(),
                 bCryptPasswordEncoder.encode(autheticationRequest.getPassword()), Role.USER);
