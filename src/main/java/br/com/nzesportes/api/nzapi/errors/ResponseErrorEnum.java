@@ -2,7 +2,9 @@ package br.com.nzesportes.api.nzapi.errors;
 
 public enum ResponseError {
     //Authentication
-    AUTH001("AUTH001 - Usuário já registrado");
+    AUTH001("AUTH001 - Usuário já registrado"),
+    //PROFILE
+    PRO001("PRO001 - Perfil não encontrado");
 
     private final String text;
 
