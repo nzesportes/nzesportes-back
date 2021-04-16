@@ -1,14 +1,15 @@
 package br.com.nzesportes.api.nzapi.domains;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User {
@@ -27,7 +28,6 @@ public class User {
     }
 
     public User() {
-
     }
 
     public List<Role> getRoles() {
