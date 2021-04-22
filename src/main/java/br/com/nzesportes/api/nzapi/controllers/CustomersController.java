@@ -2,7 +2,7 @@ package br.com.nzesportes.api.nzapi.controllers;
 
 import br.com.nzesportes.api.nzapi.domains.Customer;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
-import br.com.nzesportes.api.nzapi.services.ProfileService;
+import br.com.nzesportes.api.nzapi.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +17,10 @@ import java.util.UUID;
 @CrossOrigin("S{allowed.origin}")
 public class CustomersController {
     @Autowired
-    private ProfileService service;
+    private CustomerService service;
 
     @PostMapping
-    ResponseEntity<Customer> save(@RequestBody Customer customer, Authentication authentication) {
+    ResponseEntity<Customer> create(@RequestBody Customer customer, Authentication authentication) {
         return ResponseEntity.ok(service.save(customer, (UserDetailsImpl) authentication.getPrincipal()));
     }
 

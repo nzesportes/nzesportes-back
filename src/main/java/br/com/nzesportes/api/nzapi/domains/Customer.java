@@ -3,12 +3,13 @@ package br.com.nzesportes.api.nzapi.domains;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "customers")
-public class Profile {
+public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public UUID id;
@@ -17,9 +18,10 @@ public class Profile {
     public UUID userId;
     public String instagram;
     public String phone;
+    public LocalDate birthDate;
     public String cpf;
 
-    public Profile (UUID id, String name, String lastName, UUID userId, String instagram, String phone) {
+    public Customer(UUID id, String name, String lastName, UUID userId, String instagram, String phone) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -28,6 +30,6 @@ public class Profile {
         this.phone = phone;
     }
 
-    public Profile() {
+    public Customer() {
     }
 }
