@@ -1,6 +1,6 @@
 package br.com.nzesportes.api.nzapi.services;
 
-import br.com.nzesportes.api.nzapi.domains.Profile;
+import br.com.nzesportes.api.nzapi.domains.Customer;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -18,23 +18,23 @@ public class ProfileService {
     @Autowired
     private ProfileRepository repository;
 
-    public Profile getById(UUID id) {
+    public Customer getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRO001));
     }
 
-    public Profile save(Profile profile, UserDetailsImpl user) {
-        if(repository.existsByUserId(user.getId()) || !user.getId().equals(profile.getUserId()))
+    public Customer save(Customer customer, UserDetailsImpl user) {
+        if(repository.existsByUserId(user.getId()) || !user.getId().equals(customer.getUserId()))
             throw new ResourceConflictException(ResponseErrorEnum.PRO002);
-        return repository.save(profile);
+        return repository.save(customer);
     }
 
-    public Profile update(Profile profile, UserDetailsImpl user) {
-        if(!user.getId().equals(profile.getUserId()))
+    public Customer update(Customer customer, UserDetailsImpl user) {
+        if(!user.getId().equals(customer.getUserId()))
             throw new ResourceConflictException(ResponseErrorEnum.PRO002);
-        return repository.save(profile);
+        return repository.save(customer);
     }
 
-    public Page<Profile> search(String search, int page, int size) {
+    public Page<Customer> search(String search, int page, int size) {
         return repository.search(search,PageRequest.of(page, size));
     }
 
