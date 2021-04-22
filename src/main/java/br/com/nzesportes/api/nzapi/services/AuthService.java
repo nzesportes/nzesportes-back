@@ -4,7 +4,7 @@ import br.com.nzesportes.api.nzapi.domains.Role;
 import br.com.nzesportes.api.nzapi.domains.User;
 import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
 import br.com.nzesportes.api.nzapi.dtos.AutheticationRequest;
-import br.com.nzesportes.api.nzapi.errors.ResponseError;
+import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.UsersRepository;
 import br.com.nzesportes.api.nzapi.security.jwt.JwtUtils;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
@@ -54,7 +54,7 @@ public class AuthService {
 
     public ResponseEntity<?> registerUser(AutheticationRequest autheticationRequest) {
         if(repository.existsByUsername(autheticationRequest.getUsername()))
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseError.AUTH001.getText());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseErrorEnum.AUTH001.getText());
 
         User user = new User(autheticationRequest.getUsername(),
                 bCryptPasswordEncoder.encode(autheticationRequest.getPassword()), Role.USER);
