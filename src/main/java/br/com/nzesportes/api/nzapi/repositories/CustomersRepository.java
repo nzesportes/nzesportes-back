@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 @Repository
-public interface ProfileRepository extends JpaRepository<Customer, UUID> {
+public interface CustomersRepository extends JpaRepository<Customer, UUID> {
     Boolean existsByUserId(UUID userId);
 
     @Query(value = "select * from profiles p ORDER BY difference(p.name || ' ' || p.last_name, :search) DESC;", nativeQuery = true)
