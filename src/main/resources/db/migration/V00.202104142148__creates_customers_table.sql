@@ -8,7 +8,8 @@ CREATE TABLE customers (
     instagram text UNIQUE,
     phone text,
     birth_date date,
-    cpf varchar(14),
+    cpf varchar(14) UNIQUE NOT NULL,
+    gender char(1),
     CONSTRAINT fk_users
         FOREIGN KEY(user_id)
             REFERENCES users(id)

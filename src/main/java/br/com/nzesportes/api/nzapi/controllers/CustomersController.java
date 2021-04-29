@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/profiles")
-@CrossOrigin("S{allowed.origin}")
+@CrossOrigin("${nz.allowed.origin}")
 public class CustomersController {
     @Autowired
     private CustomerService service;

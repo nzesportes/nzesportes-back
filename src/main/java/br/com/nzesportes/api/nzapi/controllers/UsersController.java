@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
-@CrossOrigin("S{allowed.origin}")
+@CrossOrigin("${nz.allowed.origin}")
 public class UsersController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
