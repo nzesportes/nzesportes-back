@@ -7,7 +7,10 @@ public enum ResponseErrorEnum {
     PRO001("PRO001 - Perfil perfil não encontrado"),
     PRO002("PRO002 - Perfil desse usuário já cadastrado ou token inválido"),
     //CATEGORY
-    CATO001("CATO001 - Categoria com esse nome já existe");
+    CATO001("CATO001 - Categoria com esse nome já existe"),
+    //BRAND
+    BRD001("BRD001 - Marca com esse nome já existe"),
+    BRD002("BRD002 - Existem uma ou mais produtos com essa marca");
 
 
     private final String text;

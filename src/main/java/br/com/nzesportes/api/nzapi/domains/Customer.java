@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.domains;
 
+import br.com.nzesportes.api.nzapi.domains.product.Gender;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,6 +21,8 @@ public class Customer {
     public String phone;
     public LocalDate birthDate;
     public String cpf;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     public Customer(UUID id, String name, String lastName, UUID userId, String instagram, String phone) {
         this.id = id;
