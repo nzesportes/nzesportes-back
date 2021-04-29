@@ -3,7 +3,7 @@ package br.com.nzesportes.api.nzapi.services;
 import br.com.nzesportes.api.nzapi.domains.Role;
 import br.com.nzesportes.api.nzapi.domains.User;
 import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
-import br.com.nzesportes.api.nzapi.dtos.AutheticationRequest;
+import br.com.nzesportes.api.nzapi.dtos.AuthenticationRequest;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.UsersRepository;
 import br.com.nzesportes.api.nzapi.security.jwt.JwtUtils;
@@ -35,9 +35,9 @@ public class AuthService {
     @Autowired
     private UsersRepository repository;
 
-    public AuthenticationResponse AuthenticateUser(AutheticationRequest autheticationRequest) {
+    public AuthenticationResponse authenticateUser(AuthenticationRequest authenticationRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(autheticationRequest.getUsername(), autheticationRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -52,14 +52,14 @@ public class AuthService {
                 roles);
     }
 
-    public ResponseEntity<?> registerUser(AutheticationRequest autheticationRequest) {
-        if(repository.existsByUsername(autheticationRequest.getUsername()))
+    public ResponseEntity<?> registerUser(AuthenticationRequest authenticationRequest) {
+        if(repository.existsByUsername(authenticationRequest.getUsername()))
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseErrorEnum.AUTH001.getText());
 
-        User user = new User(autheticationRequest.getUsername(),
-                bCryptPasswordEncoder.encode(autheticationRequest.getPassword()), Role.USER);
+        User user = new User(authenticationRequest.getUsername(),
+                bCryptPasswordEncoder.encode(authenticationRequest.getPassword()), Role.USER);
 
         repository.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Usuário registrado");
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.authenticateUser(authenticationRequest));
     }
 }
