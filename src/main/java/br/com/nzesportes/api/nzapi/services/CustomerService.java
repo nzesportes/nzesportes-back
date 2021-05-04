@@ -38,4 +38,7 @@ public class CustomerService {
         return repository.search(search,PageRequest.of(page, size));
     }
 
+    public Customer getByUserId(UUID id) {
+        return repository.findByUserId(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRO003));
+    }
 }

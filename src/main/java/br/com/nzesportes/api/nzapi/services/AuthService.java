@@ -57,7 +57,7 @@ public class AuthService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(ResponseErrorEnum.AUTH001.getText());
 
         User user = new User(authenticationRequest.getUsername(),
-                bCryptPasswordEncoder.encode(authenticationRequest.getPassword()), Role.USER);
+                bCryptPasswordEncoder.encode(authenticationRequest.getPassword()), Role.ROLE_USER);
 
         repository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.authenticateUser(authenticationRequest));
