@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/profiles")
+@RequestMapping("/customers")
 @CrossOrigin("${nz.allowed.origin}")
 public class CustomersController {
     @Autowired
@@ -25,9 +25,13 @@ public class CustomersController {
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Customer> getById(@PathVariable UUID id) {
         return ResponseEntity.ok(service.getById(id));
+    }
+
+    @GetMapping("/users/{id}")
+    ResponseEntity<Customer> getByUserId(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.getByUserId(id));
     }
 
     @GetMapping

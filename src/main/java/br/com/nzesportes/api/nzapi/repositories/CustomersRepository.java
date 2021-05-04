@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -16,4 +17,6 @@ public interface CustomersRepository extends JpaRepository<Customer, UUID> {
 
     @Query(value = "select * from profiles p ORDER BY difference(p.name || ' ' || p.last_name, :search) DESC;", nativeQuery = true)
     Page<Customer> search(@Param("search") String search, Pageable pageable);
+
+    Optional<Customer> findByUserId(UUID uuid);
 }

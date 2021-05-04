@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -16,8 +17,8 @@ public class ProductDetails {
     private String color;
     private String size;
     private BigDecimal price;
-    @ManyToOne
-    private Category category;
+    @ManyToMany
+    private List<Category> category;
     private String niche;
     @ManyToOne
     private Brand brand;

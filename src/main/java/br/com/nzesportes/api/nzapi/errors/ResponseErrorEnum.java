@@ -6,6 +6,7 @@ public enum ResponseErrorEnum {
     //PROFILE
     PRO001("PRO001 - Perfil perfil não encontrado"),
     PRO002("PRO002 - Perfil desse usuário já cadastrado ou token inválido"),
+    PRO003("PRO003 - Perfil desse usuário não encontrado"),
     //CATEGORY
     CATO001("CATO001 - Categoria com esse nome já existe"),
     //BRAND
