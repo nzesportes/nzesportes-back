@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
+import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class CategoryService {
 
     public Category save(Category category) {
         if(repository.existsByName(category.getName()))
-            throw new ResourceConflictException(ResponseErrorEnum.CATO001);
+            throw new ResourceConflictException(ResponseErrorEnum.CAT001);
         return repository.save(category);
     }
 
@@ -34,5 +35,9 @@ public class CategoryService {
 
     public Category update(Category category) {
         return repository.save(category);
+    }
+
+    public Category getById(UUID id) {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
     }
 }

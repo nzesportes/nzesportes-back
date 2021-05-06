@@ -15,6 +15,7 @@ public class Product {
     public UUID id;
     private String description;
     private String model;
-    @OneToMany
+    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductDetails> productDetails;
+    private Boolean status;
 }

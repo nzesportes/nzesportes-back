@@ -30,6 +30,11 @@ public class CategoryController {
         return service.getAll(page, size);
     }
 
+    @GetMapping("/{id}")
+    public Category getById(@PathVariable UUID id) {
+        return service.getById(id);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public Category update(@RequestBody Category category) {
