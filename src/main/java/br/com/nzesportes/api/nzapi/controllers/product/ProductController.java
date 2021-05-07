@@ -34,6 +34,11 @@ public class ProductController {
         return service.getAll(page, size);
     }
 
+    @PutMapping
+    public Product update(@RequestBody Product product) {
+        return service.update(product);
+    }
+
     @PutMapping("/{id}/status")
     public ResponseEntity<?> changeStatus(@PathVariable UUID id) {
         return ResponseEntity.ok(service.changeStatus(id));

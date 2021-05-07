@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.dtos.StatusTO;
+import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.ProductRepository;
@@ -18,6 +19,8 @@ public class ProductService {
     private ProductRepository repository;
 
     public Product save(Product product) {
+        if(repository.existsByModel(product.getModel()))
+            throw new ResourceConflictException(ResponseErrorEnum.PRD002);
         return repository.save(product);
     }
 
