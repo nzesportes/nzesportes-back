@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Brand;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
+import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.BrandRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,9 @@ public class BrandService {
         if(productDetailsService.existsByBrandId(brandId))
             throw new ResourceConflictException(ResponseErrorEnum.BRD002);
         repository.deleteById(brandId);
+    }
+
+    public Brand getById(UUID id) {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.BRD003));
     }
 }

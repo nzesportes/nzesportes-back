@@ -27,6 +27,11 @@ public class BrandController {
         return service.getAll(page, size);
     }
 
+    @GetMapping("/{id}")
+    public Brand getById(@PathVariable UUID id) {
+        return service.getById(id);
+    }
+
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Brand update(@RequestBody Brand brand) {
