@@ -27,7 +27,7 @@ public class BrandService {
     }
 
     public Brand update(Brand brand) {
-        return this.save(brand);
+        return repository.save(brand);
     }
 
     public Page<Brand> getAll(int page, int size) {
