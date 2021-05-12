@@ -26,4 +26,10 @@ public class ProductDetails {
     private Sale sale;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    private Boolean status;
+
+    @PrePersist
+    private void prePersist() {
+        this.status = false;
+    }
 }

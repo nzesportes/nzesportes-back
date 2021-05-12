@@ -18,4 +18,9 @@ public class Product {
     @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductDetails> productDetails;
     private Boolean status;
+
+    @PrePersist
+    private void prePersist() {
+        this.status = false;
+    }
 }
