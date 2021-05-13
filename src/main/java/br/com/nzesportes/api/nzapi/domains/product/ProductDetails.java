@@ -17,8 +17,6 @@ public class ProductDetails {
     private String color;
     private String size;
     private BigDecimal price;
-    @ManyToMany
-    private List<Category> category;
     private String niche;
     @ManyToOne
     private Brand brand;
