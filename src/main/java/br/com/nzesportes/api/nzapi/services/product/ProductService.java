@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.dtos.StatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
@@ -17,6 +18,9 @@ import java.util.UUID;
 public class ProductService {
     @Autowired
     private ProductRepository repository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
@@ -45,5 +49,16 @@ public class ProductService {
         product.setStatus(!product.getStatus());
         repository.save(product);
         return new StatusTO(product.getStatus());
+    }
+
+    public Product updateCategories(UUID id, UUID categoryId) {
+        Category category = categoryService.getById(categoryId);
+        Product product = this.getById(id);
+        if(product.getCategory().contains(category)) {
+            product.getCategory().remove(category);
+            return repository.save(product);
+        }
+        product.getCategory().add(category);
+        return repository.save(product);
     }
 }

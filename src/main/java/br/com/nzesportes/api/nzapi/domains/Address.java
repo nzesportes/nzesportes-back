@@ -24,4 +24,6 @@ public class Address {
     private String city;
     private String district;
     private String phone;
+    @OneToOne
+    private Customer customer;
 }
