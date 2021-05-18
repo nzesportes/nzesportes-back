@@ -13,5 +13,5 @@ CREATE TABLE addresses (
     costumer_id uuid,
     CONSTRAINT fk_costumer
         FOREIGN KEY(costumer_id)
-            REFERENCES costumers(id)
+            REFERENCES customers(id)
 );
