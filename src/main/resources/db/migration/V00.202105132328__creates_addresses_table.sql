@@ -8,7 +8,7 @@ CREATE TABLE addresses (
     reference text,
     state text,
     city text,
-    distinct text,
+    district text,
     phone text,
     costumer_id uuid,
     CONSTRAINT fk_costumer
