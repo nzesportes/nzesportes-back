@@ -25,7 +25,7 @@ public class ProductDetails {
     private Gender gender;
     private Boolean status;
     @ManyToOne()
-    @JoinColumn(name="product_id", referencedColumnName = "product_id", updatable = false)
+    @JoinColumn(name="product_id")
     private Product product;
 
     @PrePersist
