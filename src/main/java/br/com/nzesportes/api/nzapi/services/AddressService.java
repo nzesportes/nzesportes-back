@@ -47,5 +47,6 @@ public class AddressService {
         if(address.getCustomer().getId().equals(principal.getId())) {
             return repository.save(address);
         }
+        throw new ResourceUnauthorizedException(ResponseErrorEnum.ADR002);
     }
 }
