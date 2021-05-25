@@ -24,7 +24,7 @@ public class ProductDetails {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Boolean status;
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="product_id")
     private Product product;
 

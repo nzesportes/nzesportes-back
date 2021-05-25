@@ -22,7 +22,7 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "category_id")
     )
     private List<Category> category;
-    @OneToMany(targetEntity = ProductDetails.class, mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductDetails> productDetails;
     private Boolean status;
 
