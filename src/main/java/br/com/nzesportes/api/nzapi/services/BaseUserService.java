@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class BaseUserService {
 
     @Autowired
     private UsersRepository repository;
