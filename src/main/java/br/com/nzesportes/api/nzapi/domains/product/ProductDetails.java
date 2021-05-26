@@ -4,7 +4,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -17,8 +16,6 @@ public class ProductDetails {
     private String color;
     private String size;
     private BigDecimal price;
-    @ManyToMany
-    private List<Category> category;
     private String niche;
     @ManyToOne
     private Brand brand;
@@ -26,4 +23,13 @@ public class ProductDetails {
     private Sale sale;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    private Boolean status;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="product_id")
+    private Product product;
+
+    @PrePersist
+    private void prePersist() {
+        this.status = false;
+    }
 }

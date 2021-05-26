@@ -23,13 +23,13 @@ public class CustomerService {
     }
 
     public Customer save(Customer customer, UserDetailsImpl user) {
-        if(repository.existsByUserId(user.getId()) || !user.getId().equals(customer.getUserId()))
+        if(repository.existsByUserId(user.getId()) || !user.getId().equals(customer.getUser().getId()))
             throw new ResourceConflictException(ResponseErrorEnum.PRO002);
         return repository.save(customer);
     }
 
     public Customer update(Customer customer, UserDetailsImpl user) {
-        if(!user.getId().equals(customer.getUserId()))
+        if(!user.getId().equals(customer.getUser().getId()))
             throw new ResourceConflictException(ResponseErrorEnum.PRO002);
         return repository.save(customer);
     }

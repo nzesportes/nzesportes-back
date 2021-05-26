@@ -39,6 +39,11 @@ public class ProductController {
         return service.update(product);
     }
 
+    @PutMapping("/{id}/category/{categoryId}")
+    public Product updateCategories(@PathVariable UUID id, @PathVariable UUID categoryId) {
+        return service.updateCategories(id, categoryId);
+    }
+
     @PutMapping("/{id}/status")
     public ResponseEntity<?> changeStatus(@PathVariable UUID id) {
         return ResponseEntity.ok(service.changeStatus(id));

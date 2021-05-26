@@ -15,7 +15,9 @@ public enum ResponseErrorEnum {
     BRD002("BRD002 - Existem uma ou mais produtos com essa marca"),
     BRD003("BRD003 - Marca não encontrada"),
     PRD001("PRD001 - Produto não encontrado"),
-    PRD002("PRD002 - Produto com esse modelo já existente");
+    PRD002("PRD002 - Produto com esse modelo já existente"),
+    ADR001("ADR001 - Endereço não encontrado"),
+    ADR002("ADR002 - Você não pode fazer isso");
 
 
     private final String text;

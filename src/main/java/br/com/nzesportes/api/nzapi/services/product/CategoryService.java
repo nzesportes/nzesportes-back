@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Category;
+import br.com.nzesportes.api.nzapi.dtos.StatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -39,5 +40,11 @@ public class CategoryService {
 
     public Category getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
+    }
+
+    public StatusTO changeStatus(UUID id) {
+        Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
+        category.setStatus(!category.getStatus());
+        return new StatusTO(repository.save(category).getStatus());
     }
 }

@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Category;
+import br.com.nzesportes.api.nzapi.dtos.StatusTO;
 import br.com.nzesportes.api.nzapi.services.product.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -39,6 +40,11 @@ public class CategoryController {
     @PreAuthorize("hasRole('ADMIN')")
     public Category update(@RequestBody Category category) {
         return service.update(category);
+    }
+
+    @PutMapping("/{id}/status")
+    public ResponseEntity<StatusTO> changeStatus(@PathVariable UUID id) {
+        return ResponseEntity.ok(service.changeStatus(id));
     }
 
     @DeleteMapping("/{id}")

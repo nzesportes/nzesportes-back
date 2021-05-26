@@ -17,4 +17,10 @@ public class Category {
     private String name;
     @Convert(converter = StringConverter.class)
     private List<String> type;
+    private Boolean status;
+
+    @PrePersist
+    private void prePersist() {
+        this.status = false;
+    }
 }

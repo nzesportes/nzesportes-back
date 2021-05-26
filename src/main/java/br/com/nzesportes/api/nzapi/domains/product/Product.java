@@ -15,7 +15,19 @@ public class Product {
     public UUID id;
     private String description;
     private String model;
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL)
+    @ManyToMany
+    @JoinTable(
+            name = "product_categories",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> category;
+    @OneToMany(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductDetails> productDetails;
     private Boolean status;
+
+    @PrePersist
+    private void prePersist() {
+        this.status = false;
+    }
 }

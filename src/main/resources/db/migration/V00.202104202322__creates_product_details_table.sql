@@ -7,6 +7,11 @@ CREATE TABLE products_details(
     brand_id UUID,
     sale_id uuid,
     gender char(1),
+    status boolean,
+    product_id uuid,
+    CONSTRAINT fk_products
+        FOREIGN KEY(product_id)
+            REFERENCES products(id),
     CONSTRAINT fk_brands
         FOREIGN KEY(brand_id)
             REFERENCES brands(id),
