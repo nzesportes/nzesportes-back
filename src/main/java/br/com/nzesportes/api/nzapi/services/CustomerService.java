@@ -1,6 +1,9 @@
 package br.com.nzesportes.api.nzapi.services;
 
+
+
 import br.com.nzesportes.api.nzapi.domains.Customer;
+import br.com.nzesportes.api.nzapi.domains.User;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -15,16 +18,22 @@ import java.util.UUID;
 
 @Service
 public class CustomerService {
+
     @Autowired
     private CustomersRepository repository;
+
+    @Autowired
+    private BaseUserService baseUserService;
 
     public Customer getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRO001));
     }
 
     public Customer save(Customer customer, UserDetailsImpl user) {
-        if(repository.existsByUserId(user.getId()) || !user.getId().equals(customer.getUser().getId()))
+        if(repository.existsByUserId(user.getId()))
             throw new ResourceConflictException(ResponseErrorEnum.PRO002);
+        User owner = baseUserService.getById(user.getId());
+        customer.setUser(owner);
         return repository.save(customer);
     }
 
@@ -35,7 +44,7 @@ public class CustomerService {
     }
 
     public Page<Customer> search(String search, int page, int size) {
-        return repository.search(search,PageRequest.of(page, size));
+        return repository.search(search, PageRequest.of(page, size));
     }
 
     public Customer getByUserId(UUID id) {
