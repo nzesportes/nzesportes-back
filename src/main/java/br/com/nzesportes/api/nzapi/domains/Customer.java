@@ -16,7 +16,8 @@ public class Customer {
     public UUID id;
     public String name;
     public String lastName;
-    public UUID userId;
+    @OneToOne
+    private User user;
     public String instagram;
     public String phone;
     public LocalDate birthDate;
@@ -24,11 +25,11 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    public Customer(UUID id, String name, String lastName, UUID userId, String instagram, String phone) {
+    public Customer(UUID id, String name, String lastName, User user, String instagram, String phone) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
-        this.userId = userId;
+        this.user = user;
         this.instagram = instagram;
         this.phone = phone;
     }
