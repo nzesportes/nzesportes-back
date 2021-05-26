@@ -29,5 +29,6 @@ public class Product {
     @PrePersist
     private void prePersist() {
         this.status = false;
+        this.getProductDetails().forEach(detail -> detail.setProduct(this));
     }
 }
