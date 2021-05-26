@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.domains.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,7 +26,8 @@ public class ProductDetails {
     private Gender gender;
     private Boolean status;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="product_id")
+    @JoinColumn
+    @JsonIgnore
     private Product product;
 
     @PrePersist
