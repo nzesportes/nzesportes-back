@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
 import br.com.nzesportes.api.nzapi.domains.Customer;
+import br.com.nzesportes.api.nzapi.dtos.CustomerUpdateTO;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +42,7 @@ public class CustomersController {
     }
 
     @PutMapping
-    ResponseEntity<Customer> update(@RequestBody Customer customer, Authentication authentication) {
-        return ResponseEntity.ok(service.update(customer, (UserDetailsImpl) authentication.getPrincipal()));
+    ResponseEntity<Customer> update(@RequestBody CustomerUpdateTO dto, Authentication authentication) {
+        return ResponseEntity.ok(service.update(dto, (UserDetailsImpl) authentication.getPrincipal()));
     }
 }

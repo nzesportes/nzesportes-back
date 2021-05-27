@@ -31,4 +31,9 @@ public class Product {
         this.status = false;
         this.getProductDetails().forEach(detail -> detail.setProduct(this));
     }
+
+    @PreUpdate
+    private void preUpdate() {
+        this.getProductDetails().forEach(detail -> detail.setProduct(this));
+    }
 }

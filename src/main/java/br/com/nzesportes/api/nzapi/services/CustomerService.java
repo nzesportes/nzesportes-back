@@ -4,6 +4,7 @@ package br.com.nzesportes.api.nzapi.services;
 
 import br.com.nzesportes.api.nzapi.domains.Customer;
 import br.com.nzesportes.api.nzapi.domains.User;
+import br.com.nzesportes.api.nzapi.dtos.CustomerUpdateTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+
+import static org.springframework.beans.BeanUtils.copyProperties;
 
 @Service
 public class CustomerService {
@@ -37,9 +40,9 @@ public class CustomerService {
         return repository.save(customer);
     }
 
-    public Customer update(Customer customer, UserDetailsImpl user) {
-        if(!user.getId().equals(customer.getUser().getId()))
-            throw new ResourceConflictException(ResponseErrorEnum.PRO002);
+    public Customer update(CustomerUpdateTO dto, UserDetailsImpl user) {
+        Customer customer = getByUserId(user.getId());
+        copyProperties(dto, customer);
         return repository.save(customer);
     }
 
