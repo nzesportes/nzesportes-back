@@ -29,6 +29,7 @@ public class ProductDetails {
     @JoinColumn
     @JsonIgnore
     private Product product;
+    private Integer quantity;
 
     @PrePersist
     private void prePersist() {
