@@ -35,7 +35,6 @@ public class CustomerService {
     public Customer save(Customer customer, UserDetailsImpl user) {
         if(repository.existsByUserId(user.getId()))
             throw new ResourceConflictException(ResponseErrorEnum.PRO002);
-        User owner = baseUserService.getById(user.getId());
         customer.setUserId(user.getId());
         return repository.save(customer);
     }
