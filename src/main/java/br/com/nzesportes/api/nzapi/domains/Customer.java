@@ -13,23 +13,22 @@ import java.util.UUID;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public UUID id;
-    public String name;
-    public String lastName;
-    @OneToOne
-    private User user;
-    public String instagram;
-    public String phone;
-    public LocalDate birthDate;
-    public String cpf;
+    private UUID id;
+    private String name;
+    private String lastName;
+    private UUID userId;
+    private String instagram;
+    private String phone;
+    private LocalDate birthDate;
+    private String cpf;
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    public Customer(UUID id, String name, String lastName, User user, String instagram, String phone) {
+    public Customer(UUID id, String name, String lastName, UUID userId, String instagram, String phone) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
-        this.user = user;
+        this.userId = userId;
         this.instagram = instagram;
         this.phone = phone;
     }

@@ -2,12 +2,14 @@ package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.dtos.StatusTO;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.product.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -27,8 +29,8 @@ public class CategoryController {
     }
 
     @GetMapping
-    public Page<Category> getCategories(@RequestParam int page, @RequestParam int size) {
-        return service.getAll(page, size);
+    public Page<Category> getCategories(@RequestParam int page, @RequestParam int size, Authentication authentication) {
+        return service.getAll(page, size, (UserDetailsImpl) authentication.getPrincipal());
     }
 
     @GetMapping("/{id}")

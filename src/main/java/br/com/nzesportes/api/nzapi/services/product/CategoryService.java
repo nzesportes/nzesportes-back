@@ -6,6 +6,7 @@ import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.CategoryRepository;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,8 @@ public class CategoryService {
         return repository.save(category);
     }
 
-    public Page<Category> getAll(int page, int size) {
+    public Page<Category> getAll(int page, int size, UserDetailsImpl principal) {
+        principal.getAuthorities().forEach(grantedAuthority -> System.out.println(grantedAuthority));
         return repository.findAll(PageRequest.of(page, size));
     }
 

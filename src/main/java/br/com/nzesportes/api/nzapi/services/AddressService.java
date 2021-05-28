@@ -22,7 +22,7 @@ public class AddressService {
     private AddressRepository repository;
 
     public Address save(Address address, UserDetailsImpl user) {
-         address.setCustomer(customerService.getById(user.getId()));
+         address.setCustomerId(customerService.getByUserId(user.getId()).getId());
          return repository.save(address);
     }
 
@@ -36,7 +36,7 @@ public class AddressService {
 
     public ResponseEntity<?> deleteById(UUID id, UserDetailsImpl principal) {
         Address address = getById(id);
-        if(address.getCustomer().getId().equals(customerService.getByUserId(principal.getId()).getId())) {
+        if(address.getCustomerId().equals(customerService.getByUserId(principal.getId()).getId())) {
             repository.deleteById(id);
             return ResponseEntity.status(201).body("Endereço deletado");
         }
@@ -44,7 +44,7 @@ public class AddressService {
     }
 
     public Address update(Address address, UserDetailsImpl principal) {
-        if(address.getCustomer().getId().equals(customerService.getByUserId(principal.getId()).getId())) {
+        if(address.getCustomerId().equals(customerService.getByUserId(principal.getId()).getId())) {
             return repository.save(address);
         }
         throw new ResourceUnauthorizedException(ResponseErrorEnum.ADR002);
