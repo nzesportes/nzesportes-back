@@ -10,7 +10,7 @@ CREATE TABLE addresses (
     city text,
     district text,
     phone text,
-    costumer_id uuid,
+    customer_id uuid,
     CONSTRAINT fk_costumer
         FOREIGN KEY(costumer_id)
             REFERENCES customers(id)
