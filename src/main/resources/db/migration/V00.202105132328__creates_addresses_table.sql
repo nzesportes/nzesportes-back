@@ -12,6 +12,6 @@ CREATE TABLE addresses (
     phone text,
     customer_id uuid,
     CONSTRAINT fk_costumer
-        FOREIGN KEY(costumer_id)
+        FOREIGN KEY(customer_id)
             REFERENCES customers(id)
 );
