@@ -41,7 +41,12 @@ public class ProductController {
         return service.update(dto);
     }
 
-    @PutMapping("/detail")
+    @GetMapping("/details/{id}")
+    public ProductDetails getDetailById(@PathVariable UUID id) {
+        return service.getDetailById(id);
+    }
+
+    @PutMapping("/details")
     public ProductDetails update(@RequestBody ProductDetailUpdateTO dto) {
         return service.updateDetail(dto);
     }
