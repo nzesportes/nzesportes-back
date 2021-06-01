@@ -75,4 +75,8 @@ public class ProductService {
     public ProductDetails updateDetail(ProductDetailUpdateTO dto) {
         return detailService.update(dto);
     }
+
+    public ProductDetails getDetailById(UUID id) {
+        return detailService.getById(id);
+    }
 }
