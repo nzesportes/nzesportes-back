@@ -1,6 +1,8 @@
 package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Product;
+import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,8 +37,13 @@ public class ProductController {
     }
 
     @PutMapping
-    public Product update(@RequestBody Product product) {
-        return service.update(product);
+    public Product update(@RequestBody ProductUpdateTO dto) {
+        return service.update(dto);
+    }
+
+    @PutMapping("/detail")
+    public ProductDetails update(@RequestBody ProductDetailUpdateTO dto) {
+        return service.updateDetail(dto);
     }
 
     @PutMapping("/{id}/category/{categoryId}")
