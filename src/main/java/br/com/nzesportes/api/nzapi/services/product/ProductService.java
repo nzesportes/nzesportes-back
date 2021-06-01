@@ -1,7 +1,10 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.controllers.product.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
+import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
 import br.com.nzesportes.api.nzapi.dtos.StatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
@@ -14,10 +17,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+import static org.springframework.beans.BeanUtils.copyProperties;
+
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository repository;
+
+    @Autowired
+    private ProductDetailsService detailService;
 
     @Autowired
     private CategoryService categoryService;
@@ -36,7 +44,9 @@ public class ProductService {
         return repository.findAll(PageRequest.of(page, size));
     }
 
-    public Product update(Product product) {
+    public Product update(ProductUpdateTO dto) {
+        Product product = getById(dto.getId());
+        copyProperties(dto, product);
         return repository.save(product);
     }
 
@@ -60,5 +70,9 @@ public class ProductService {
         }
         product.getCategory().add(category);
         return repository.save(product);
+    }
+
+    public ProductDetails updateDetail(ProductDetailUpdateTO dto) {
+        return detailService.update(dto);
     }
 }
