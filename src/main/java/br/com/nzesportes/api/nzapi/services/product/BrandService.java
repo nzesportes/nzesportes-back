@@ -18,7 +18,7 @@ public class BrandService {
     private BrandRepository repository;
 
     @Autowired
-    private ProductDetailsService productDetailsService;
+    private ProductService productService;
 
     public Brand save(Brand brand) {
         if(repository.existsByName(brand.getName()))
@@ -35,7 +35,7 @@ public class BrandService {
     }
 
     public void delete(UUID brandId) {
-        if(productDetailsService.existsByBrandId(brandId))
+        if(productService.existsByBrandId(brandId))
             throw new ResourceConflictException(ResponseErrorEnum.BRD002);
         repository.deleteById(brandId);
     }

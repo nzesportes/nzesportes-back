@@ -83,4 +83,8 @@ public class ProductService {
     public ProductDetails saveDetail(ProductDetails details) {
         return detailService.save(details);
     }
+
+    public boolean existsByBrandId(UUID brandId) {
+        return repository.existsByBrandId(brandId);
+    }
 }

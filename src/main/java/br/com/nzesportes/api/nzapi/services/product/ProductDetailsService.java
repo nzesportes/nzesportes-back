@@ -17,10 +17,6 @@ public class ProductDetailsService {
     @Autowired
     private ProductDetailRepository repository;
 
-    Boolean existsByBrandId(UUID brandId) {
-        return repository.existsByBrandId(brandId);
-    }
-
     public ProductDetails getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PDT001));
     }

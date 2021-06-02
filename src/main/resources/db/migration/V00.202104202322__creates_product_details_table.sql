@@ -4,7 +4,6 @@ CREATE TABLE products_details(
     size text,
     price decimal,
     niche text,
-    brand_id UUID,
     sale_id uuid,
     gender char(1),
     status boolean,
@@ -13,9 +12,6 @@ CREATE TABLE products_details(
     CONSTRAINT fk_products
         FOREIGN KEY(product_id)
             REFERENCES products(id),
-    CONSTRAINT fk_brands
-        FOREIGN KEY(brand_id)
-            REFERENCES brands(id),
     CONSTRAINT fk_sales
         FOREIGN KEY(sale_id)
             REFERENCES sales(id)

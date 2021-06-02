@@ -19,8 +19,6 @@ public class ProductDetails {
     private BigDecimal price;
     private String niche;
     @ManyToOne
-    private Brand brand;
-    @ManyToOne
     private Sale sale;
     @Enumerated(EnumType.STRING)
     private Gender gender;

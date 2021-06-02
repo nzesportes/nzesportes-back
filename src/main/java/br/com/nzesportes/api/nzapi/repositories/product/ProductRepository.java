@@ -9,4 +9,6 @@ import java.util.UUID;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID> {
     Boolean existsByModel(String model);
+
+    boolean existsByBrandId(UUID brandId);
 }
