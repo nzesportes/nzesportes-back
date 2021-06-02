@@ -15,6 +15,8 @@ public class Product {
     public UUID id;
     private String description;
     private String model;
+    @ManyToOne
+    private Brand brand;
     @ManyToMany
     @JoinTable(
             name = "product_categories",
