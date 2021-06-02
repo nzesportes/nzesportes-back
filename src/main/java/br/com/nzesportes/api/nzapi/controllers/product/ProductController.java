@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,16 +42,6 @@ public class ProductController {
         return service.update(dto);
     }
 
-    @GetMapping("/details/{id}")
-    public ProductDetails getDetailById(@PathVariable UUID id) {
-        return service.getDetailById(id);
-    }
-
-    @PutMapping("/details")
-    public ProductDetails update(@RequestBody ProductDetailUpdateTO dto) {
-        return service.updateDetail(dto);
-    }
-
     @PutMapping("/{id}/category/{categoryId}")
     public Product updateCategories(@PathVariable UUID id, @PathVariable UUID categoryId) {
         return service.updateCategories(id, categoryId);
@@ -60,4 +51,16 @@ public class ProductController {
     public ResponseEntity<?> changeStatus(@PathVariable UUID id) {
         return ResponseEntity.ok(service.changeStatus(id));
     }
+
+
+    @PostMapping("/details")
+    public ProductDetails saveDetail(@RequestBody ProductDetails details) {
+        return service.saveDetail(details);
+    }
+
+    @GetMapping("/details/{id}")
+    public ProductDetails getDetailById(@PathVariable UUID id) {
+        return service.getDetailById(id);
+    }
+
 }

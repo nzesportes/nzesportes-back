@@ -1,6 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.controllers.product.ProductDetailUpdateTO;
+import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
@@ -78,5 +78,9 @@ public class ProductService {
 
     public ProductDetails getDetailById(UUID id) {
         return detailService.getById(id);
+    }
+
+    public ProductDetails saveDetail(ProductDetails details) {
+        return detailService.save(details);
     }
 }

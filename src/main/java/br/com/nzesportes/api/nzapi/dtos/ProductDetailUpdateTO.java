@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.controllers.product;
+package br.com.nzesportes.api.nzapi.dtos;
 
 import br.com.nzesportes.api.nzapi.domains.product.Gender;
 import lombok.Getter;
