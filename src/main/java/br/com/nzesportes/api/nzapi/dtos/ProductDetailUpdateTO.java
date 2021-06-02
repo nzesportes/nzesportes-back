@@ -10,6 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ProductDetailUpdateTO {
+    private UUID id;
     private String color;
     private String size;
     private BigDecimal price;
