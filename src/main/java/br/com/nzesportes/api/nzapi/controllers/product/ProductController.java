@@ -58,6 +58,11 @@ public class ProductController {
         return service.saveDetail(details);
     }
 
+    @PutMapping("/details")
+    public ProductDetails updateDetails(@RequestBody ProductDetailUpdateTO details) {
+        return service.updateDetail(details);
+    }
+
     @GetMapping("/details/{id}")
     public ProductDetails getDetailById(@PathVariable UUID id) {
         return service.getDetailById(id);
