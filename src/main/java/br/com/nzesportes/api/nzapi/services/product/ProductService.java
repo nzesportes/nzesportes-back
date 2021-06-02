@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
@@ -80,8 +81,11 @@ public class ProductService {
         return detailService.getById(id);
     }
 
-    public ProductDetails saveDetail(ProductDetails details) {
-        return detailService.save(details);
+    public ProductDetails saveDetail(ProductDetailSaveTO details) {
+        ProductDetails productDetails = new ProductDetails();
+        copyProperties(details, productDetails);
+        productDetails.setProduct(getById(details.getProductId()));
+        return detailService.save(productDetails);
     }
 
     public boolean existsByBrandId(UUID brandId) {
