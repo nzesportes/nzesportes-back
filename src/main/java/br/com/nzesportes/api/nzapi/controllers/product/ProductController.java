@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
@@ -54,7 +55,7 @@ public class ProductController {
 
 
     @PostMapping("/details")
-    public ProductDetails saveDetail(@RequestBody ProductDetails details) {
+    public ProductDetails saveDetail(@RequestBody ProductDetailSaveTO details) {
         return service.saveDetail(details);
     }
 

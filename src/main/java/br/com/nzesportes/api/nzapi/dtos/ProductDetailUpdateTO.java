@@ -18,4 +18,5 @@ public class ProductDetailUpdateTO {
     private Gender gender;
     private Boolean status;
     private Integer quantity;
+    private UUID productId;
 }
