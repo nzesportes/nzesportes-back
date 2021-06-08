@@ -1,10 +1,10 @@
 package br.com.nzesportes.api.nzapi.domains.product;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -15,7 +15,6 @@ public class ProductDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String color;
-    private String size;
     private BigDecimal price;
     private String niche;
     @ManyToOne
@@ -23,12 +22,11 @@ public class ProductDetails {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Boolean status;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn
-    @JsonIgnore
-    private Product product;
-    private Integer quantity;
-
+    private UUID productId;
+    private Boolean onStock;
+    @OneToMany(mappedBy = "productDetailId", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    private List<Stock> stock;
     @PrePersist
     private void prePersist() {
         this.status = false;

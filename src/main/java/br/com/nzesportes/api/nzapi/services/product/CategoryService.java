@@ -26,9 +26,8 @@ public class CategoryService {
         return repository.save(category);
     }
 
-    public Page<Category> getAll(int page, int size, UserDetailsImpl principal) {
-        principal.getAuthorities().forEach(grantedAuthority -> System.out.println(grantedAuthority));
-        return repository.findAll(PageRequest.of(page, size));
+    public Page<Category> getAll(int page, int size, Boolean status, String type, String name) {
+        return repository.findAllByStatusAndTypeContainingAndNameContaining(status, type, name, PageRequest.of(page, size));
     }
 
     public HttpStatus deleteById(UUID id) {
