@@ -5,6 +5,7 @@ import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
+import br.com.nzesportes.api.nzapi.dtos.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -53,6 +54,14 @@ public class ProductController {
         return ResponseEntity.ok(service.changeStatus(id));
     }
 
+    @GetMapping("/category/{id}")
+    public Page<Product> getByCategoryId(@PathVariable("id") UUID categoryId, @RequestParam int page, @RequestParam int size) {
+        return service.getByCategoryId(categoryId, page, size);
+    }
+
+    /*
+    * DETALHES DE PRODUTO
+    * */
 
     @PostMapping("/details")
     public ProductDetails saveDetail(@RequestBody ProductDetailSaveTO details) {
@@ -67,6 +76,16 @@ public class ProductController {
     @GetMapping("/details/{id}")
     public ProductDetails getDetailById(@PathVariable UUID id) {
         return service.getDetailById(id);
+    }
+
+    @DeleteMapping("/details/{id}")
+    public void deleteById(@PathVariable UUID id) {
+        service.deleteById(id);
+    }
+
+    @PutMapping("/details/stock")
+    public Product updateStock(@RequestBody UpdateStockTO dto) {
+        return service.updateStock(dto);
     }
 
 }

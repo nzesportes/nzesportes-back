@@ -23,8 +23,8 @@ public class BrandController {
     }
 
     @GetMapping
-    public Page<Brand> getAll(@RequestParam int page, @RequestParam int size) {
-        return service.getAll(page, size);
+    public Page<Brand> getAll(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) String name) {
+        return service.getAll(name, page, size);
     }
 
     @GetMapping("/{id}")

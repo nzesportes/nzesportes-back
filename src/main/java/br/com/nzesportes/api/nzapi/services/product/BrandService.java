@@ -30,8 +30,8 @@ public class BrandService {
         return repository.save(brand);
     }
 
-    public Page<Brand> getAll(int page, int size) {
-        return repository.findAll(PageRequest.of(page, size));
+    public Page<Brand> getAll(String name, int page, int size) {
+        return repository.findAllByNameContaining(name, PageRequest.of(page, size));
     }
 
     public void delete(UUID brandId) {

@@ -18,7 +18,8 @@ public enum ResponseErrorEnum {
     PRD001("PRD001 - Produto não encontrado"),
     PRD002("PRD002 - Produto com esse modelo já existente"),
     ADR001("ADR001 - Endereço não encontrado"),
-    ADR002("ADR002 - Você não pode fazer isso");
+    ADR002("ADR002 - Você não pode fazer isso"),
+    STK001("STK001 - Stock não encontrado");
 
 
     private final String text;

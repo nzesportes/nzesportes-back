@@ -1,12 +1,9 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
+import br.com.nzesportes.api.nzapi.dtos.*;
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
-import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
-import br.com.nzesportes.api.nzapi.dtos.StatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -30,6 +27,9 @@ public class ProductService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private StockService stockService;
 
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
@@ -84,11 +84,24 @@ public class ProductService {
     public ProductDetails saveDetail(ProductDetailSaveTO details) {
         ProductDetails productDetails = new ProductDetails();
         copyProperties(details, productDetails);
-        productDetails.setProduct(getById(details.getProductId()));
+        productDetails.setProductId(getById(details.getProductId()).getId());
         return detailService.save(productDetails);
     }
 
     public boolean existsByBrandId(UUID brandId) {
         return repository.existsByBrandId(brandId);
+    }
+
+    public void deleteById(UUID id) {
+        detailService.deleteById(id);
+    }
+
+    public Page<Product> getByCategoryId(UUID categoryId, int page, int size) {
+        return repository.findAllByCategoryId(categoryId, PageRequest.of(page, size));
+    }
+
+    public Product updateStock(UpdateStockTO dto) {
+        stockService.updateQuantity(dto);
+        return getById(dto.getProductDetailId());
     }
 }

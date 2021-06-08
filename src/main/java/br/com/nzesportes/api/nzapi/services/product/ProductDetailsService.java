@@ -25,10 +25,13 @@ public class ProductDetailsService {
         ProductDetails details = getById(dto.getId());
         copyProperties(dto, details);
         return repository.save(details);
-
     }
 
     public ProductDetails save(ProductDetails details) {
         return repository.save(details);
+    }
+
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
     }
 }
