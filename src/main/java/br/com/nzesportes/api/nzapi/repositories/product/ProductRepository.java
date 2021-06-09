@@ -15,4 +15,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
     boolean existsByBrandId(UUID brandId);
 
     Page<Product> findAllByCategoryId(UUID categoryId, PageRequest page);
+
+//    @Query(value = "SELECT * FROM productsp ORDER BY difference(p.model, :model) /*#{#of}*/", nativeQuery = true)
+//    Page<Product> findByFilter(String model, Pageable of);
 }

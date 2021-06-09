@@ -16,10 +16,10 @@ import java.util.UUID;
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
     Boolean existsByName(String name);
 
-    @Query(value = "SELECT * FROM categories c WHERE (:type = 'null' OR c.type LIKE %:type%) ORDER BY difference(c.name, :name) /*#{#of}*/", nativeQuery = true)
+    @Query(value = "SELECT * FROM categories c WHERE (:type = 'null' OR c.type LIKE %:type%) ORDER BY difference(c.name, :name) /*#{#of}*/ DESC", nativeQuery = true)
     Page<Category> findByFilter(@Param("type") String type, @Param("name") String name, Pageable of);
 
 
-    @Query(value = "SELECT * FROM categories c WHERE c.status = :status AND (:type = 'null' OR c.type LIKE %:type%) ORDER BY difference(c.name, :name) /*#{#of}*/", nativeQuery = true)
+    @Query(value = "SELECT * FROM categories c WHERE c.status = :status AND (:type = 'null' OR c.type LIKE %:type%) ORDER BY difference(c.name, :name) DESC /*#{#of}*/", nativeQuery = true)
     Page<Category> findByFilterAndStatus(@Param("status") Boolean status, @Param("type") String type, @Param("name") String name, Pageable of);
 }

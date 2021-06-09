@@ -35,8 +35,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<Product> getAll(@RequestParam int page, @RequestParam int size) {
-        return service.getAll(page, size);
+    public Page<Product> getAll(@RequestParam(required = false) String category,
+                                @RequestParam(required = false) Boolean status,
+                                @RequestParam(required = false) String name,
+                                @RequestParam int page,
+                                @RequestParam int size) {
+        return service.getAll(category, status, name, page, size);
     }
 
     @PutMapping

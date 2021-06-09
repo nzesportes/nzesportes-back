@@ -12,6 +12,6 @@ import java.util.UUID;
 public interface BrandRepository extends JpaRepository<Brand, UUID> {
     Boolean existsByName(String name);
 
-    @Query(value = "SELECT * FROM brands b ORDER BY difference(b.name, ?1)", nativeQuery = true)
+    @Query(value = "SELECT * FROM brands b ORDER BY difference(b.name, ?1) DESC", nativeQuery = true)
     Page<Brand> findByFilter(String name, Pageable pageable);
 }
