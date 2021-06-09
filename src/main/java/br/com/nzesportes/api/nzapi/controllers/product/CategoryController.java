@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -31,8 +33,8 @@ public class CategoryController {
                                         @RequestParam int size,
                                         @RequestParam(required = false) Boolean status,
                                         @RequestParam(required = false) String type,
-                                        @RequestParam(required = false) String name) {
-        return service.getAll(page, size, status, type, name);
+                                        @RequestParam(required = false) String name, Authentication auth) {
+        return service.getAll(page, size, status, type, name, (UserDetails) auth.getPrincipal());
     }
 
     @GetMapping("/{id}")

@@ -31,7 +31,7 @@ public class BrandService {
     }
 
     public Page<Brand> getAll(String name, int page, int size) {
-        return repository.findAllByNameContaining(name, PageRequest.of(page, size));
+        return repository.findByFilter(name == null ? "" : name, PageRequest.of(page, size));
     }
 
     public void delete(UUID brandId) {
