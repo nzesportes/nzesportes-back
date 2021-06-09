@@ -41,7 +41,7 @@ public class ProductService {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRD001));
     }
 
-    public Page<Product> getAll(int page, int size) {
+    public Page<Product> getAll(String category, Boolean status, String name, int page, int size) {
         return repository.findAll(PageRequest.of(page, size));
     }
 
