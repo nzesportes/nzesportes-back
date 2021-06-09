@@ -1,20 +1,46 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
+import br.com.nzesportes.api.nzapi.domains.User;
+import br.com.nzesportes.api.nzapi.dtos.AdminSaveTO;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
+import br.com.nzesportes.api.nzapi.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/users")
 @CrossOrigin("${nz.allowed.origin}")
 public class UsersController {
+    @Autowired
+    private UserService service;
+
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> saveUser(AdminSaveTO dto) {
+        return ResponseEntity.status(201).body(service.save(dto));
+    }
+
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> toBeImplemented() {
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body("To be implemented");
+    @PreAuthorize("hasRole('ADMIN')")
+    public Page<User> getAdmins(@RequestParam int page, @RequestParam int size) {
+        return service.getAdmins(page, size);
+    }
+
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public User update(AdminSaveTO dto) {
+        return service.update(dto);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteById(@PathVariable UUID id, Authentication authentication) {
+        service.deleteById(id, (UserDetailsImpl) authentication.getPrincipal());
     }
 }

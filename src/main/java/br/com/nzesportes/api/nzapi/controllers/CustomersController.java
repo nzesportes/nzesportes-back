@@ -37,7 +37,7 @@ public class CustomersController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<Page<Customer>> getById(@RequestParam String search, @RequestParam int page, @RequestParam int size) {
+    ResponseEntity<Page<Customer>> search(@RequestParam(required = false) String search, @RequestParam int page, @RequestParam int size) {
         return ResponseEntity.ok(service.search(search, page, size));
     }
 
