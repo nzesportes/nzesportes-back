@@ -9,7 +9,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@Table(name = "stocks")
+@Table(name = "stock")
 public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
