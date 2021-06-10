@@ -14,8 +14,9 @@ public class Stock {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    @ManyToOne
     @JoinColumn(name = "product_detail_id")
-    private UUID productDetailId;
+    private ProductDetails productDetail;
     private String size;
     private Integer quantity;
 }

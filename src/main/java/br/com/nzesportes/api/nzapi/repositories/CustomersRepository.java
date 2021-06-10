@@ -15,7 +15,7 @@ import java.util.UUID;
 public interface CustomersRepository extends JpaRepository<Customer, UUID> {
     Boolean existsByUserId(UUID userId);
 
-    @Query(value = "select * from profiles p ORDER BY difference(p.name || ' ' || p.last_name, :search) DESC;", nativeQuery = true)
+    @Query(value = "select * from customers c ORDER BY difference(c.name || ' ' || c.last_name, :search) DESC;", nativeQuery = true)
     Page<Customer> search(@Param("search") String search, Pageable pageable);
 
     Optional<Customer> findByUserId(UUID uuid);

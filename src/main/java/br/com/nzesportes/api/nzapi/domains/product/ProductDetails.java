@@ -29,5 +29,6 @@ public class ProductDetails {
     @PrePersist
     private void prePersist() {
         this.status = false;
+        this.stock.forEach(s -> s.setProductDetail(this));
     }
 }
