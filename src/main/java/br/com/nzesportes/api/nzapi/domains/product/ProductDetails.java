@@ -24,7 +24,7 @@ public class ProductDetails {
     @JoinColumn
     private UUID productId;
     private Boolean onStock;
-    @OneToMany(mappedBy = "productDetailId", orphanRemoval = true, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "productDetail", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Stock> stock;
     @PrePersist
     private void prePersist() {
