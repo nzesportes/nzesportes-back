@@ -13,7 +13,6 @@ public class ProductDetailSaveTO {
     private String color;
     private String size;
     private BigDecimal price;
-    private String niche;
     private Gender gender;
     private Boolean status;
     private UUID productId;

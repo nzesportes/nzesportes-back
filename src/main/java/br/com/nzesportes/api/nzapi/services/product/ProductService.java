@@ -34,7 +34,10 @@ public class ProductService {
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
             throw new ResourceConflictException(ResponseErrorEnum.PRD002);
-        return repository.save(product);
+        Product saved = repository.save(product);
+        saved.getProductDetails().parallelStream().forEach(detail -> detail.setProductId(saved.getId()));
+        detailService.saveAll(saved.getProductDetails());
+        return getById(saved.getId());
     }
 
     public Product getById(UUID id) {

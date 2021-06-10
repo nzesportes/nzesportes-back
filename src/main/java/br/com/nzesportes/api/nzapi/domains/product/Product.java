@@ -31,6 +31,10 @@ public class Product {
     @PrePersist
     private void prePersist() {
         this.status = false;
-        this.getProductDetails().forEach(detail -> detail.setProductId(this.getId()));
+    }
+
+    @PostPersist
+    private void postPersist() {
+
     }
 }

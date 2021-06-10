@@ -3,7 +3,6 @@ CREATE TABLE products_details(
     color text,
     size text,
     price decimal,
-    niche text,
     sale_id uuid,
     gender char(1),
     status boolean,

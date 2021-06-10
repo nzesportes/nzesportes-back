@@ -8,6 +8,7 @@ import br.com.nzesportes.api.nzapi.repositories.product.ProductDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
@@ -29,6 +30,10 @@ public class ProductDetailsService {
 
     public ProductDetails save(ProductDetails details) {
         return repository.save(details);
+    }
+
+    public List<ProductDetails> saveAll(List<ProductDetails> details) {
+        return repository.saveAll(details);
     }
 
     public void deleteById(UUID id) {

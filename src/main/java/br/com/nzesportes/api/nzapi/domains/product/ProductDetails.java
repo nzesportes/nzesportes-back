@@ -16,7 +16,6 @@ public class ProductDetails {
     private UUID id;
     private String color;
     private BigDecimal price;
-    private String niche;
     @ManyToOne
     private Sale sale;
     @Enumerated(EnumType.STRING)
