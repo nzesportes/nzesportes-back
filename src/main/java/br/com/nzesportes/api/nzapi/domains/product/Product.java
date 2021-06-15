@@ -13,7 +13,6 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public UUID id;
-    private String description;
     private String model;
     @ManyToOne
     private Brand brand;

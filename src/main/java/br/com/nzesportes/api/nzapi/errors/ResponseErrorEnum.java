@@ -1,6 +1,9 @@
 package br.com.nzesportes.api.nzapi.errors;
 
 public enum ResponseErrorEnum {
+    //ABSTRACT RESPONSE
+    NOT_AUTH("NOT_AUTH - Não autorizado"),
+    NOT_FOUND("NOT_FOUND - Não encontrado"),
     //Authentication
     AUTH001("AUTH001 - Usuário já registrado"),
     //PROFILE

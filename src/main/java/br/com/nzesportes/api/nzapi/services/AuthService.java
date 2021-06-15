@@ -2,8 +2,10 @@ package br.com.nzesportes.api.nzapi.services;
 
 import br.com.nzesportes.api.nzapi.domains.Role;
 import br.com.nzesportes.api.nzapi.domains.User;
-import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
 import br.com.nzesportes.api.nzapi.dtos.AuthenticationRequest;
+import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
+import br.com.nzesportes.api.nzapi.dtos.ChangePasswordTO;
+import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.UsersRepository;
 import br.com.nzesportes.api.nzapi.security.jwt.JwtUtils;
@@ -61,5 +63,15 @@ public class AuthService {
 
         repository.save(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(this.authenticateUser(authenticationRequest));
+    }
+
+    public ResponseEntity<?> changePassword(ChangePasswordTO dto, UserDetailsImpl principal) {
+        User user = repository.findById(principal.getId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+        if(bCryptPasswordEncoder.matches(dto.getCurrentPassword(), user.getPassword())){
+            user.setPassword(bCryptPasswordEncoder.encode(dto.getNewPassword()));
+            repository.save(user);
+            return  ResponseEntity.ok(authenticateUser(new AuthenticationRequest(principal.getUsername(), dto.getNewPassword())));
+        }
+        return ResponseEntity.status(409).body("Senha atual inválida");
     }
 }

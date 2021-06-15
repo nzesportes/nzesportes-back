@@ -2,6 +2,7 @@ CREATE TABLE products_details(
     id uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
     color text,
     size text,
+    description text,
     price decimal,
     sale_id uuid,
     gender char(1),
