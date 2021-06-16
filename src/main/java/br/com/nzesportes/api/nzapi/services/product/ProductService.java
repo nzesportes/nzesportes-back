@@ -100,7 +100,7 @@ public class ProductService {
     }
 
     public Page<Product> getByCategoryId(UUID categoryId, int page, int size) {
-        return repository.findAllByCategoryId(categoryId, PageRequest.of(page, size));
+        return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
     }
 
     public Product updateStock(UpdateStockTO dto) {

@@ -31,7 +31,7 @@ public class AuthController {
     }
 
     @PutMapping("/change-password")
-    public ResponseEntity<?> changePassword(Authentication authentication, ChangePasswordTO dto) {
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordTO dto, Authentication authentication) {
         return service.changePassword(dto, (UserDetailsImpl) authentication.getPrincipal());
     }
 }
