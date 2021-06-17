@@ -27,6 +27,12 @@ public class UsersController {
         return ResponseEntity.status(201).body(service.save(dto));
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public User getById(UUID id) {
+        return service.getById(id);
+    }
+
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
     public Page<User> getAdmins(@RequestParam int page, @RequestParam int size) {
