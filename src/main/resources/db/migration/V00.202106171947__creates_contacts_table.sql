@@ -4,5 +4,6 @@ CREATE TABLE contacts(
     email text,
     phone text,
     instagram text,
-    message text
+    message text,
+    read boolean
 );
