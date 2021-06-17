@@ -1,0 +1,8 @@
+CREATE TABLE contacts(
+    id uuid PRIMARY KEY NOT NULL DEFAULT uuid_generate_v4(),
+    fullName text,
+    email text,
+    phone text,
+    instagram text,
+    message text
+);
