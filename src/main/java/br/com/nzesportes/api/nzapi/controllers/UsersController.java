@@ -23,7 +23,7 @@ public class UsersController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> saveUser(AdminSaveTO dto) {
+    public ResponseEntity<?> saveUser(@RequestBody AdminSaveTO dto) {
         return ResponseEntity.status(201).body(service.save(dto));
     }
 
@@ -35,7 +35,7 @@ public class UsersController {
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public User update(AdminSaveTO dto) {
+    public User update(@RequestBody AdminSaveTO dto) {
         return service.update(dto);
     }
 
