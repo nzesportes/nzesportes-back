@@ -29,7 +29,7 @@ public class UsersController {
 
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public User getById(UUID id) {
+    public User getById(@PathVariable UUID id) {
         return service.getById(id);
     }
 

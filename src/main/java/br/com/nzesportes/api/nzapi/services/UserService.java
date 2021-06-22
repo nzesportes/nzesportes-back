@@ -44,7 +44,7 @@ public class UserService {
     public User update(AdminSaveTO dto) {
         User user = getById(dto.getId());
         user.setUsername(dto.getUsername());
-        dto.setRole(dto.getRole());
+        user.setRole(dto.getRole());
         return repository.save(user);
     }
 }
