@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ResourceConflictException extends RuntimeException {
     private static final long serialVersionUID = 2952659171804391823L;
 
-    private ResponseErrorEnum error;
+    private ResponseErrorEnum errorEnum;
     public ResourceConflictException(ResponseErrorEnum error) {
         super(error.getText());
-        this.error = error;
+        this.errorEnum = error;
     }
 }
