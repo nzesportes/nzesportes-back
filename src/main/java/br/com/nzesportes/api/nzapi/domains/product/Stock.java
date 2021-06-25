@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.domains.product;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class Stock {
     private UUID id;
     @ManyToOne
     @JoinColumn(name = "product_detail_id")
+    @JsonIgnore
     private ProductDetails productDetail;
     private String size;
     private Integer quantity;
