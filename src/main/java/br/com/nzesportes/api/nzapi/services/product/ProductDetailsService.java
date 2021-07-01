@@ -18,6 +18,9 @@ public class ProductDetailsService {
     @Autowired
     private ProductDetailRepository repository;
 
+    @Autowired
+    private StockService stockService;
+
     public ProductDetails getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PDT001));
     }
@@ -25,6 +28,13 @@ public class ProductDetailsService {
     public ProductDetails update(ProductDetailUpdateTO dto) {
         ProductDetails details = getById(dto.getId());
         copyProperties(dto, details);
+        if(dto.getStockToAdd().size() > 0) {
+            dto.getStockToAdd().forEach(stock -> stock.setProductDetail(details));
+            stockService.saveAll(dto.getStockToAdd());
+        }
+        if(dto.getStockToRemove().size() > 0) {
+            stockService.deleteAll(dto.getStockToRemove());
+        }
         return repository.save(details);
     }
 

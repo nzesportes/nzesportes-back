@@ -9,7 +9,6 @@ import java.util.UUID;
 @Setter
 public class ProductUpdateTO {
     private UUID id;
-    private String description;
     private String model;
     private Boolean status;
 }

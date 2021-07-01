@@ -8,6 +8,7 @@ import br.com.nzesportes.api.nzapi.repositories.product.StockRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -15,7 +16,11 @@ public class StockService {
     @Autowired
     private StockRepository repository;
 
-    private Stock getById(UUID id) {
+    public List<Stock> saveAll(List<Stock> stocks) {
+        return repository.saveAll(stocks);
+    }
+
+    public Stock getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.STK001));
     }
 
@@ -23,5 +28,9 @@ public class StockService {
         Stock stock = getById(dto.getId());
         stock.setQuantity(stock.getQuantity() + dto.getQuantityToAdd());
         return repository.save(stock);
+    }
+
+    public void deleteAll(List<UUID> stockToRemove) {
+        repository.deleteAll(repository.findAllById(stockToRemove));
     }
 }
