@@ -32,9 +32,6 @@ public class ProductDetailsService {
             dto.getStockToAdd().forEach(stock -> stock.setProductDetail(details));
             stockService.saveAll(dto.getStockToAdd());
         }
-        if(dto.getStockToRemove().size() > 0) {
-            stockService.deleteAll(dto.getStockToRemove());
-        }
         return repository.save(details);
     }
 
