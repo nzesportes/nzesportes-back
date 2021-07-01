@@ -18,6 +18,21 @@ spring:
     password: 12345
   jpa:
     databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${NZ_EMAIL:''}
+    password: ${NZ_PASSWORD:''}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+      test-connection: true
 flyway:
   locations: filesystem:db/migration
   password: 12345
