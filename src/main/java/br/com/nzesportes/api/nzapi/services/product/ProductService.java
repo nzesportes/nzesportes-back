@@ -45,7 +45,23 @@ public class ProductService {
     }
 
     public Page<Product> getAll(String category, Boolean status, String name, int page, int size) {
-        return repository.findAll(PageRequest.of(page, size));
+        PageRequest pageRequest = PageRequest.of(page, size);
+        if(category != null) {
+            try {
+                Category cat = categoryService.getByName(category);
+                if(name == null)
+                    name = "";
+                if(status != null)
+                    return repository.findByModelContainingAndCategoryContainingAndStatus(name, cat, status, pageRequest);
+                else
+                    return repository.findByModelContainingAndCategoryContaining(name, cat, pageRequest);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+        if(status != null)
+            return repository.findByStatus(pageRequest);
+        return repository.findAll(pageRequest);
     }
 
     public Product update(ProductUpdateTO dto) {

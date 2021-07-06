@@ -28,6 +28,10 @@ public class CategoryService {
         return repository.save(category);
     }
 
+    public Category getByName(String name) {
+        return repository.findByNameContaining(name).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
+    }
+
     public Page<Category> getAll(int page, int size, Boolean status, String type, String name, UserDetails principal) {
         if(type == null)
             type = "";

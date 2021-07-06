@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.repositories.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,12 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     Page<Product> findByCategoryId(UUID categoryId, Pageable page);
 
-//    @Query(value = "SELECT * FROM productsp ORDER BY difference(p.model, :model) /*#{#of}*/", nativeQuery = true)
-//    Page<Product> findByFilter(String model, Pageable of);
+
+    Page<Product> findByModelContaining(String model, Pageable of);
+
+    Page<Product> findByModelContainingAndCategoryContaining(String model, Category category, Pageable of);
+
+    Page<Product> findByModelContainingAndCategoryContainingAndStatus(String model, Category category, Boolean status, Pageable of);
+
+    Page<Product> findByStatus(PageRequest pageRequest);
 }
