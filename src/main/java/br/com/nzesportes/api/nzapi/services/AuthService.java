@@ -1,16 +1,21 @@
 package br.com.nzesportes.api.nzapi.services;
 
+import br.com.nzesportes.api.nzapi.domains.RecoveryRequest;
+import br.com.nzesportes.api.nzapi.domains.RecoveryType;
 import br.com.nzesportes.api.nzapi.domains.Role;
 import br.com.nzesportes.api.nzapi.domains.User;
 import br.com.nzesportes.api.nzapi.dtos.AuthenticationRequest;
 import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
 import br.com.nzesportes.api.nzapi.dtos.ChangePasswordTO;
+import br.com.nzesportes.api.nzapi.dtos.RecoveryTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
+import br.com.nzesportes.api.nzapi.repositories.RecoveryRequestRepository;
 import br.com.nzesportes.api.nzapi.repositories.UsersRepository;
 import br.com.nzesportes.api.nzapi.security.jwt.JwtUtils;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,6 +26,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 
@@ -28,8 +34,17 @@ import java.util.stream.Collectors;
 public class AuthService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+    @Value("${nz.recovery.url}")
+    private String url;
+
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private RecoveryRequestRepository recoveryRequestRepository;
+
+    @Autowired
+    private MailService mailService;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -73,5 +88,36 @@ public class AuthService {
             return  ResponseEntity.ok(authenticateUser(new AuthenticationRequest(principal.getUsername(), dto.getNewPassword())));
         }
         return ResponseEntity.status(409).body("Senha atual inválida");
+    }
+
+    public ResponseEntity<?> createFirstAccess(AuthenticationRequest authenticationRequest) {
+        User user = repository.findByUsername(authenticationRequest.getUsername()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+        RecoveryRequest request = recoveryRequestRepository.findByUserIdAndType(user.getId(), RecoveryType.FIRST_ACCESS.getText());
+
+        if(request != null && request.getStatus())
+            throw new ResourceNotFoundException(ResponseErrorEnum.COMPLETED);
+        else if (request != null)
+            return ResponseEntity.ok(new RecoveryTO(request.getId()));
+
+        request = new RecoveryRequest();
+        request.setType(RecoveryType.FIRST_ACCESS);
+        request.setUserId(user.getId());
+        request.setStatus(false);
+
+        request = recoveryRequestRepository.save(request);
+
+        mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("created");
+    }
+
+    public ResponseEntity<AuthenticationResponse> firstAccess(UUID id, ChangePasswordTO dto) {
+        RecoveryRequest request = recoveryRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+
+        User user = repository.findById(request.getUserId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+        user.setPassword(bCryptPasswordEncoder.encode(dto.getNewPassword()));
+        user = repository.save(user);
+
+        return ResponseEntity.ok(authenticateUser(new AuthenticationRequest(user.getUsername(), dto.getNewPassword())));
     }
 }

@@ -39,6 +39,8 @@ flyway:
   url: jdbc:postgresql://localhost:5432/
   user: postgres
 nz:
+  recovery:
+    url: 'http://localhost:4200/first-access/'
   email:
     from: 'nao-responda@nzesportes'
   allowed:

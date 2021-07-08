@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.Stock;
 import br.com.nzesportes.api.nzapi.dtos.*;
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
@@ -119,8 +120,4 @@ public class ProductService {
         return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
     }
 
-    public Product updateStock(UpdateStockTO dto) {
-        stockService.updateQuantity(dto);
-        return getById(dto.getProductDetailId());
-    }
 }
