@@ -4,6 +4,7 @@ public enum ResponseErrorEnum {
     //ABSTRACT RESPONSE
     NOT_AUTH("NOT_AUTH - Não autorizado"),
     NOT_FOUND("NOT_FOUND - Não encontrado"),
+    COMPLETED("COMPLETED - ação já realizada"),
     //Authentication
     AUTH001("AUTH001 - Usuário já registrado"),
     //PROFILE

@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/auth")
@@ -28,6 +30,16 @@ public class AuthController {
     @PostMapping("/sign-up")
     public ResponseEntity<?> registerUser(@RequestBody AuthenticationRequest authenticationRequest) {
         return service.registerUser(authenticationRequest);
+    }
+
+    @PostMapping("/first-access")
+    public ResponseEntity<?> createFirstAccess(@RequestBody AuthenticationRequest authenticationRequest) {
+        return service.createFirstAccess(authenticationRequest);
+    }
+
+    @PutMapping("/first-access/{id}")
+    public ResponseEntity<AuthenticationResponse> firstAccess(@PathVariable UUID id, @RequestBody ChangePasswordTO dto) {
+        return service.firstAccess(id, dto);
     }
 
     @PutMapping("/change-password")
