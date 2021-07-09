@@ -3,18 +3,19 @@ package br.com.nzesportes.api.nzapi.domains;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Getter
 @Setter
+@Entity
 @Table(name = "recovery_request")
 public class RecoveryRequest {
-    private UUID userId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private RecoveryType type;
+    private UUID userId;
     @Enumerated(EnumType.STRING)
+    private RecoveryType type;
     private Boolean status;
 }

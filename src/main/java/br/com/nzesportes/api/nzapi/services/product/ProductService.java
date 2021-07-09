@@ -62,7 +62,7 @@ public class ProductService {
         }
         if(status != null)
             return repository.findByStatus(pageRequest);
-        return repository.findAll(pageRequest);
+        return repository.findByModelContaining(name, pageRequest);
     }
 
     public Product update(ProductUpdateTO dto) {

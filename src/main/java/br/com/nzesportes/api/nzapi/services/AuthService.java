@@ -92,13 +92,14 @@ public class AuthService {
 
     public ResponseEntity<?> createFirstAccess(AuthenticationRequest authenticationRequest) {
         User user = repository.findByUsername(authenticationRequest.getUsername()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
-        RecoveryRequest request = recoveryRequestRepository.findByUserIdAndType(user.getId(), RecoveryType.FIRST_ACCESS.getText());
+        RecoveryRequest request = recoveryRequestRepository.findByUserIdAndType(user.getId(), RecoveryType.FIRST_ACCESS);
 
         if(request != null && request.getStatus())
             throw new ResourceNotFoundException(ResponseErrorEnum.COMPLETED);
-        else if (request != null)
+        else if (request != null) {
+            mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
             return ResponseEntity.ok(new RecoveryTO(request.getId()));
-
+        }
         request = new RecoveryRequest();
         request.setType(RecoveryType.FIRST_ACCESS);
         request.setUserId(user.getId());
