@@ -32,14 +32,14 @@ public class AuthController {
         return service.registerUser(authenticationRequest);
     }
 
-    @PostMapping("/first-access")
-    public ResponseEntity<?> createFirstAccess(@RequestBody AuthenticationRequest authenticationRequest) {
-        return service.createFirstAccess(authenticationRequest);
+    @PostMapping("/{flow}")
+    public ResponseEntity<?> createFlow(@RequestBody AuthenticationRequest authenticationRequest, @PathVariable String flow) {
+        return service.createFlow(authenticationRequest, flow);
     }
 
-    @PutMapping("/first-access/{id}")
-    public ResponseEntity<AuthenticationResponse> firstAccess(@PathVariable UUID id, @RequestBody ChangePasswordTO dto) {
-        return service.firstAccess(id, dto);
+    @PutMapping("/{flow}/{id}")
+    public ResponseEntity<AuthenticationResponse> firstAccess(@PathVariable UUID id, @RequestBody ChangePasswordTO dto, @PathVariable String flow) {
+        return service.performFlow(id, dto, flow);
     }
 
     @PutMapping("/change-password")
