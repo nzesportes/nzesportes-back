@@ -8,6 +8,7 @@ import br.com.nzesportes.api.nzapi.dtos.AuthenticationRequest;
 import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
 import br.com.nzesportes.api.nzapi.dtos.ChangePasswordTO;
 import br.com.nzesportes.api.nzapi.dtos.RecoveryTO;
+import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.RecoveryRequestRepository;
@@ -34,8 +35,13 @@ import java.util.stream.Collectors;
 public class AuthService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
+    private final static String FIRST_ACCESS = "first-access";
+    private final static String PASSWORD_RECOVERY = "first-access";
+
     @Value("${nz.recovery.url}")
-    private String url;
+    private String recoveryUrl;
+    @Value("${nz.first-access.url}")
+    private String firstAccessUrl;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -90,29 +96,42 @@ public class AuthService {
         return ResponseEntity.status(409).body("Senha atual inválida");
     }
 
-    public ResponseEntity<?> createFirstAccess(AuthenticationRequest authenticationRequest) {
+    public ResponseEntity<?> createFlow(AuthenticationRequest authenticationRequest, String flow) {
         User user = repository.findByUsername(authenticationRequest.getUsername()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
         RecoveryRequest request = recoveryRequestRepository.findByUserIdAndType(user.getId(), RecoveryType.FIRST_ACCESS);
-
+        String url;
         if(request != null && request.getStatus())
             throw new ResourceNotFoundException(ResponseErrorEnum.COMPLETED);
         else if (request != null) {
+            url = request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? url = recoveryUrl : firstAccessUrl;
             mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
             return ResponseEntity.ok(new RecoveryTO(request.getId()));
         }
         request = new RecoveryRequest();
-        request.setType(RecoveryType.FIRST_ACCESS);
+        if (FIRST_ACCESS.equals(flow)) {
+            request.setType(RecoveryType.FIRST_ACCESS);
+            url = firstAccessUrl;
+        }   else if (PASSWORD_RECOVERY.equals(flow)) {
+            request.setType(RecoveryType.PASSWORD_RECOVERY);
+            url = recoveryUrl;
+        }
+        else
+            throw new ResourceConflictException(ResponseErrorEnum.NOT_AUTH);
         request.setUserId(user.getId());
         request.setStatus(false);
 
         request = recoveryRequestRepository.save(request);
+
 
         mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
 
         return ResponseEntity.status(HttpStatus.CREATED).body("created");
     }
 
-    public ResponseEntity<AuthenticationResponse> firstAccess(UUID id, ChangePasswordTO dto) {
+    public ResponseEntity<AuthenticationResponse> performFlow(UUID id, ChangePasswordTO dto, String flow) {
+        if((FIRST_ACCESS.equals(flow) || PASSWORD_RECOVERY.equals(flow)))
+            throw new ResourceConflictException(ResponseErrorEnum.NOT_AUTH);
+
         RecoveryRequest request = recoveryRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
 
         User user = repository.findById(request.getUserId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
