@@ -36,7 +36,7 @@ public class AuthService {
     private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
     private final static String FIRST_ACCESS = "first-access";
-    private final static String PASSWORD_RECOVERY = "first-access";
+    private final static String PASSWORD_RECOVERY = "recovery";
 
     @Value("${nz.recovery.url}")
     private String recoveryUrl;
