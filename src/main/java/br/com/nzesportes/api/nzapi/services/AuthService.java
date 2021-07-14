@@ -100,10 +100,11 @@ public class AuthService {
         User user = repository.findByUsername(authenticationRequest.getUsername()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
         RecoveryRequest request = recoveryRequestRepository.findByUserIdAndType(user.getId(), RecoveryType.FIRST_ACCESS);
         String url;
+
         if(request != null && request.getStatus())
             throw new ResourceNotFoundException(ResponseErrorEnum.COMPLETED);
         else if (request != null) {
-            url = request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? url = recoveryUrl : firstAccessUrl;
+            url = request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? recoveryUrl : firstAccessUrl;
             mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
             return ResponseEntity.ok(new RecoveryTO(request.getId()));
         }
@@ -117,11 +118,11 @@ public class AuthService {
         }
         else
             throw new ResourceConflictException(ResponseErrorEnum.NOT_AUTH);
+
         request.setUserId(user.getId());
         request.setStatus(false);
 
         request = recoveryRequestRepository.save(request);
-
 
         mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
 
