@@ -130,7 +130,7 @@ public class AuthService {
     }
 
     public ResponseEntity<AuthenticationResponse> performFlow(UUID id, ChangePasswordTO dto, String flow) {
-        if((FIRST_ACCESS.equals(flow) || PASSWORD_RECOVERY.equals(flow)))
+        if(!(FIRST_ACCESS.equals(flow) || PASSWORD_RECOVERY.equals(flow)))
             throw new ResourceConflictException(ResponseErrorEnum.NOT_AUTH);
 
         RecoveryRequest request = recoveryRequestRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
