@@ -40,9 +40,9 @@ flyway:
   user: postgres
 nz:
   first-access:
-    url: 'http://localhost:4200/first-access/'
+    url: 'http://localhost:4200/auth/first-access/'
   recovery:
-    url: 'http://localhost:4200/first-access/'
+    url: 'http://localhost:4200/auth/recovery/'
   email:
     from: 'nao-responda@nzesportes'
   allowed:
