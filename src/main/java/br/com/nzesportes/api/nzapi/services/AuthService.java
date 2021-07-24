@@ -103,7 +103,7 @@ public class AuthService {
 
         if(request != null && request.getStatus())
             throw new ResourceNotFoundException(ResponseErrorEnum.COMPLETED);
-        else if (request != null) {
+        else if (request != null && (request.getStatus() == null || request.getStatus() == false)) {
             url = request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? recoveryUrl : firstAccessUrl;
             mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
             return ResponseEntity.ok(new RecoveryTO(request.getId()));
@@ -138,6 +138,9 @@ public class AuthService {
         User user = repository.findById(request.getUserId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
         user.setPassword(bCryptPasswordEncoder.encode(dto.getNewPassword()));
         user = repository.save(user);
+
+        request.setStatus(true);
+        recoveryRequestRepository.save(request);
 
         return ResponseEntity.ok(authenticateUser(new AuthenticationRequest(user.getUsername(), dto.getNewPassword())));
     }

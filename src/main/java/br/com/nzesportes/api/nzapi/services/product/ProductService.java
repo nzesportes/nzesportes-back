@@ -47,11 +47,11 @@ public class ProductService {
 
     public Page<Product> getAll(String category, Boolean status, String name, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
+        if(name == null)
+            name = "";
         if(category != null) {
             try {
                 Category cat = categoryService.getByName(category);
-                if(name == null)
-                    name = "";
                 if(status != null)
                     return repository.findByModelContainingAndCategoryContainingAndStatus(name, cat, status, pageRequest);
                 else
