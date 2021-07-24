@@ -61,7 +61,7 @@ public class ProductService {
             }
         }
         if(status != null)
-            return repository.findByStatus(pageRequest);
+            return repository.findByStatus(status, pageRequest);
         return repository.findByModelContaining(name, pageRequest);
     }
 
