@@ -1,16 +1,16 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.*;
 import br.com.nzesportes.api.nzapi.dtos.*;
-import br.com.nzesportes.api.nzapi.domains.product.Category;
-import br.com.nzesportes.api.nzapi.domains.product.Product;
-import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
+import br.com.nzesportes.api.nzapi.repositories.product.ProductDetailRepository;
 import br.com.nzesportes.api.nzapi.repositories.product.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -21,6 +21,9 @@ import static org.springframework.beans.BeanUtils.copyProperties;
 public class ProductService {
     @Autowired
     private ProductRepository repository;
+
+    @Autowired
+    private ProductDetailRepository detailRepository;
 
     @Autowired
     private ProductDetailsService detailService;
@@ -106,5 +109,14 @@ public class ProductService {
     public Product updateStock(UpdateStockTO dto) {
         stockService.updateQuantity(dto);
         return getById(dto.getProductDetailId());
+    }
+
+    public Page<ProductDetails> getAllProductDetails(Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+//        if(Order.CHEAP.equals(order))
+//        else if(Order.EXPENSIVE.equals(order))
+//        else if(Order.SALE.equals(order))
+//        else
+        return detailRepository.findByFilter(gender, pageable);
     }
 }

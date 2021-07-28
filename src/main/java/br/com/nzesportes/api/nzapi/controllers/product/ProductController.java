@@ -1,5 +1,7 @@
 package br.com.nzesportes.api.nzapi.controllers.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.Gender;
+import br.com.nzesportes.api.nzapi.domains.product.Order;
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
@@ -75,6 +77,18 @@ public class ProductController {
     @PutMapping("/details")
     public ProductDetails updateDetails(@RequestBody ProductDetailUpdateTO details) {
         return service.updateDetail(details);
+    }
+
+    @GetMapping("/details")
+    public Page<ProductDetails> getAll(@RequestParam(required = false) Gender gender,
+                                       @RequestParam(required = false) String category,
+                                       @RequestParam(required = false) String productSize,
+                                       @RequestParam(required = false) String color,
+                                       @RequestParam(required = false) String brand,
+                                       @RequestParam(required = false) Order order,
+                                       @RequestParam int page,
+                                       @RequestParam int size) {
+        return service.getAllProductDetails(gender, category, productSize, color, brand, order, page, size);
     }
 
     @GetMapping("/details/{id}")
