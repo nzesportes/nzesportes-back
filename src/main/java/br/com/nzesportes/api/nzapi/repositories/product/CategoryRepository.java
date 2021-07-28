@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -22,4 +23,6 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
     @Query(value = "SELECT * FROM categories c WHERE c.status = :status AND (:type = 'null' OR c.type LIKE %:type%) ORDER BY difference(c.name, :name) DESC /*#{#of}*/", nativeQuery = true)
     Page<Category> findByFilterAndStatus(@Param("status") Boolean status, @Param("type") String type, @Param("name") String name, Pageable of);
+
+    Optional<Category> findByNameContaining(String name);
 }

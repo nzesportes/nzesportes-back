@@ -21,8 +21,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${NZ_EMAIL:''}
-    password: ${NZ_PASSWORD:''}
+    username: 'nzesportes.site@gmail.com'
+    password: 'r54%Kc%*L2nV'
     properties:
       mail:
         smtp:
@@ -31,7 +31,7 @@ spring:
             enable: true
             required: true
           ssl:
-            enable: true
+            enable: false
       test-connection: true
 flyway:
   locations: filesystem:db/migration
@@ -39,6 +39,12 @@ flyway:
   url: jdbc:postgresql://localhost:5432/
   user: postgres
 nz:
+  first-access:
+    url: 'http://localhost:4200/auth/first-access/'
+  recovery:
+    url: 'http://localhost:4200/auth/recovery/'
+  email:
+    from: 'nao-responda@nzesportes'
   allowed:
     origin: '*'
   jwt:
