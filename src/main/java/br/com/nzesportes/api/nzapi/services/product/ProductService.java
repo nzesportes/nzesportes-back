@@ -32,6 +32,9 @@ public class ProductService {
     private CategoryService categoryService;
 
     @Autowired
+    private BrandService brandService;
+
+    @Autowired
     private StockService stockService;
 
     public Product save(Product product) {
@@ -128,11 +131,20 @@ public class ProductService {
     }
 
     public Page<ProductDetails> getAllProductDetails(Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
+        Category cat = null;
+        Brand bran = null;
+        try {
+            cat = categoryService.getByName(category);
+            bran = brandService.getByName(brand);
+        } catch (Exception e) {
+
+        }
         Pageable pageable = PageRequest.of(page, size);
-//        if(Order.CHEAP.equals(order))
-//        else if(Order.EXPENSIVE.equals(order))
-//        else if(Order.SALE.equals(order))
-//        else
-        return detailRepository.findByFilter(gender, pageable);
+        if (Order.CHEAP.equals(order))
+            return detailRepository.findByFilterASC(gender, cat, productSize, color, bran, pageable);
+        else if (Order.EXPENSIVE.equals(order))
+            return detailRepository.findByFilterDESC(gender, cat, productSize, color, bran, pageable);
+        else
+            return detailRepository.findByFilter(gender, cat, productSize, color, bran, pageable);
     }
 }

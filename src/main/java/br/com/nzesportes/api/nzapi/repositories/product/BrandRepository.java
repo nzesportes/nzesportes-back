@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public interface BrandRepository extends JpaRepository<Brand, UUID> {
@@ -14,4 +15,6 @@ public interface BrandRepository extends JpaRepository<Brand, UUID> {
 
     @Query(value = "SELECT * FROM brands b ORDER BY difference(b.name, ?1) DESC", nativeQuery = true)
     Page<Brand> findByFilter(String name, Pageable pageable);
+
+    Optional<Brand> findByName(String name);
 }

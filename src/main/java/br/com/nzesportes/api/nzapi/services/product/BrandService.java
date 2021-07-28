@@ -43,4 +43,8 @@ public class BrandService {
     public Brand getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.BRD003));
     }
+
+    public Brand getByName(String brand) {
+        return repository.findByName(brand).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.BRD003));
+    }
 }
