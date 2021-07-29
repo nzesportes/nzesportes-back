@@ -30,7 +30,7 @@ public class ContactController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    private Page<Contact> getAll(@RequestParam(required = false) Boolean read, @RequestParam int page, @RequestParam int size) {
+    public Page<Contact> getAll(@RequestParam(required = false) Boolean read, @RequestParam int page, @RequestParam int size) {
         return service.getAll(read, page, size);
     }
 

@@ -133,6 +133,10 @@ public class ProductService {
     public Page<ProductDetails> getAllProductDetails(Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
         Category cat = null;
         Brand bran = null;
+        if(productSize == null)
+            productSize = "";
+        if(color == null)
+            color = "";
         try {
             cat = categoryService.getByName(category);
             bran = brandService.getByName(brand);
@@ -140,11 +144,17 @@ public class ProductService {
 
         }
         Pageable pageable = PageRequest.of(page, size);
-        if (Order.CHEAP.equals(order))
-            return detailRepository.findByFilterASC(gender, cat, productSize, color, bran, pageable);
+        if (Order.CHEAP.equals(order)) {
+            if (cat != null)
+                return detailRepository.findByFilterASC(gender, cat, productSize, color, bran, pageable);
+            return detailRepository.findByFilterASC(gender, productSize, color, bran, pageable);
+        }
         else if (Order.EXPENSIVE.equals(order))
             return detailRepository.findByFilterDESC(gender, cat, productSize, color, bran, pageable);
-        else
-            return detailRepository.findByFilter(gender, cat, productSize, color, bran, pageable);
+        else {
+            if (cat != null)
+                return detailRepository.findByFilter(gender, cat, productSize, color, bran, pageable);
+            return detailRepository.findByFilter(gender, productSize, color, bran, pageable);
+        }
     }
 }

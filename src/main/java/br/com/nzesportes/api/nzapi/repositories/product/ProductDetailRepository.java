@@ -32,6 +32,19 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
             "WHERE pd.productId = p.id " +
             "AND s.productDetail.id = pd.id " +
             "AND (p.brand = :brand OR :brand IS NULL) " +
+            "AND (:productSize  = '' OR s.size = :productSize ) " +
+            "AND (pd.gender = :gender or :gender IS NULL) " +
+            "AND (pd.color = :color or :color = '') ")
+    Page<ProductDetails> findByFilter(@Param("gender") Gender gender,
+                                      String productSize,
+                                      @Param("color") String color,
+                                      @Param("brand") Brand brand,
+                                      Pageable pageable);
+
+    @Query("SELECT pd FROM ProductDetails pd, Product p, Stock s " +
+            "WHERE pd.productId = p.id " +
+            "AND s.productDetail.id = pd.id " +
+            "AND (p.brand = :brand OR :brand IS NULL) " +
             "AND (s.size = :productSize OR :productSize IS NULL) " +
             "AND (:category MEMBER OF p.category OR :category IS NULL) " +
             "AND (pd.gender = :gender or :gender IS NULL) " +
@@ -43,6 +56,20 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
                                       @Param("color") String color,
                                       @Param("brand") Brand brand,
                                       Pageable pageable);
+
+    @Query("SELECT pd FROM ProductDetails pd, Product p, Stock s " +
+            "WHERE pd.productId = p.id " +
+            "AND s.productDetail.id = pd.id " +
+            "AND (:brand IS NULL OR p.brand = :brand) " +
+            "AND (s.size = :productSize OR :productSize IS NULL) " +
+            "AND (pd.gender = :gender or :gender IS NULL) " +
+            "AND (pd.color = :color or :color IS NULL) " +
+            "ORDER BY pd.price ASC")
+    Page<ProductDetails> findByFilterASC(@Param("gender") Gender gender,
+                                         @Param("productSize") String productSize,
+                                         @Param("color") String color,
+                                         @Param("brand") Brand brand,
+                                         Pageable pageable);
 
     @Query("SELECT pd FROM ProductDetails pd, Product p, Stock s " +
             "WHERE pd.productId = p.id " +
