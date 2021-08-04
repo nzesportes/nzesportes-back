@@ -25,7 +25,7 @@ public class ProductController {
     private ProductService service;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public Product create(@RequestBody Product product) {
         return service.save(product);
     }
@@ -45,16 +45,19 @@ public class ProductController {
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public Product update(@RequestBody ProductUpdateTO dto) {
         return service.update(dto);
     }
 
     @PutMapping("/{id}/category/{categoryId}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public Product updateCategories(@PathVariable UUID id, @PathVariable UUID categoryId) {
         return service.updateCategories(id, categoryId);
     }
 
     @PutMapping("/{id}/status")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> changeStatus(@PathVariable UUID id) {
         return ResponseEntity.ok(service.changeStatus(id));
     }
@@ -69,11 +72,13 @@ public class ProductController {
     * */
 
     @PostMapping("/details")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ProductDetails saveDetail(@RequestBody ProductDetailSaveTO details) {
         return service.saveDetail(details);
     }
 
     @PutMapping("/details")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ProductDetails updateDetails(@RequestBody ProductDetailUpdateTO details) {
         return service.updateDetail(details);
     }
@@ -96,6 +101,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/details/{id}")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public void deleteById(@PathVariable UUID id) {
         service.deleteById(id);
     }

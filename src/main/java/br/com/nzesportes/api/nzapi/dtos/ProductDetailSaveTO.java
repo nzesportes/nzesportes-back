@@ -14,6 +14,7 @@ import java.util.UUID;
 public class ProductDetailSaveTO {
     private String color;
     private String size;
+    private String description;
     private BigDecimal price;
     private Gender gender;
     private Boolean status;

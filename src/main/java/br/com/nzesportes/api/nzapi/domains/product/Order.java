@@ -1,10 +1,10 @@
 package br.com.nzesportes.api.nzapi.domains.product;
 
 public enum Order {
-    RELEVANT("RELEVANT"),
-    CHEAP("CHEAP"),
-    EXPENSIVE("EXPENSIVE"),
-    SALE("SALE");
+//    RELEVANT("RELEVANT"),
+//    EXPENSIVE("EXPENSIVE"),
+    DESC("DESC"),
+    ASC("ASC");
 
     private final String text;
 
