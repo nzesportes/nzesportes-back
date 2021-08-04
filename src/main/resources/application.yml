@@ -15,7 +15,7 @@ spring:
     driverClassName: org.postgresql.Driver
     url: jdbc:postgresql://localhost:5432/
     username: postgres
-    password: 12345
+    password: postgres
   jpa:
     databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
   mail:
@@ -35,7 +35,7 @@ spring:
       test-connection: true
 flyway:
   locations: filesystem:db/migration
-  password: 12345
+  password: postgres
   url: jdbc:postgresql://localhost:5432/
   user: postgres
 nz:

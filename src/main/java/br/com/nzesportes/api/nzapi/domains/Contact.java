@@ -20,4 +20,9 @@ public class Contact {
     private String instagram;
     private String message;
     private Boolean read;
+
+    @PrePersist
+    private void prePersist() {
+        this.read = false;
+    }
 }
