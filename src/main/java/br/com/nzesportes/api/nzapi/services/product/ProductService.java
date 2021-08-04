@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -125,36 +126,22 @@ public class ProductService {
         return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
     }
 
-    public Product updateStock(UpdateStockTO dto) {
-        stockService.updateQuantity(dto);
-        return getById(dto.getProductDetailId());
-    }
-
     public Page<ProductDetails> getAllProductDetails(Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
-        Category cat = null;
-        Brand bran = null;
+        Pageable pageable;
+        if(brand == null)
+            brand = "null";
+        if(category == null)
+            category = "null";
         if(productSize == null)
-            productSize = "";
+            productSize = "null";
         if(color == null)
-            color = "";
+            color = "null";
         try {
-            cat = categoryService.getByName(category);
-            bran = brandService.getByName(brand);
-        } catch (Exception e) {
-
+            Sort sort = Sort.by(Sort.Direction.fromString(order.getText()), "price");
+            pageable = PageRequest.of(page, size, sort);
+        }   catch (Exception e) {
+            pageable = PageRequest.of(page, size);
         }
-        Pageable pageable = PageRequest.of(page, size);
-        if (Order.CHEAP.equals(order)) {
-            if (cat != null)
-                return detailRepository.findByFilterASC(gender, cat, productSize, color, bran, pageable);
-            return detailRepository.findByFilterASC(gender, productSize, color, bran, pageable);
-        }
-        else if (Order.EXPENSIVE.equals(order))
-            return detailRepository.findByFilterDESC(gender, cat, productSize, color, bran, pageable);
-        else {
-            if (cat != null)
-                return detailRepository.findByFilter(gender, cat, productSize, color, bran, pageable);
-            return detailRepository.findByFilter(gender, productSize, color, bran, pageable);
-        }
+        return detailRepository.filter(brand, category, productSize, color, gender == null ? "null" : gender.getText(), pageable);
     }
 }
