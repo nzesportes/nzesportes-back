@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface ProductDetailRepository extends JpaRepository<ProductDetails, UUID> {
 
-    @Query(value = "SELECT * FROM products_details pd , products p, stock s, brands b, categories c, product_categories pc " +
+    @Query(value = "SELECT DISTINCT(pd.id), pd.* FROM products_details pd , products p, stock s, brands b, categories c, product_categories pc " +
             "WHERE pd.product_id = p.id AND s.product_detail_id = pd.id AND b.id = p.brand_id " +
             "AND pc.category_id = c.id AND pc.product_id = p.id " +
             "AND (:brand = 'null' or b.name = :brand) " +
