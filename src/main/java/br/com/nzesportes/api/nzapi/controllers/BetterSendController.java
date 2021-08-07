@@ -25,4 +25,10 @@ public class BetterSendController {
     public ResponseEntity<?> calculateShipping(@RequestBody Object request) {
         return this.service.calculateShipping(request);
     }
+
+    @GetMapping("/validation")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> isTokenValid(){
+        return this.service.isValidToken();
+    }
 }

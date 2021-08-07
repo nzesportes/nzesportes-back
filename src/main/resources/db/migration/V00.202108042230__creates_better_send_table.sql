@@ -3,5 +3,6 @@ CREATE TABLE better_send(
     token_type text,
     expires_in int,
     access_token text,
-    refresh_token text
+    refresh_token text,
+    creation_date date
 );
