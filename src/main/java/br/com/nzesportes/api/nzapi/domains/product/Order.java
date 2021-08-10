@@ -2,7 +2,7 @@ package br.com.nzesportes.api.nzapi.domains.product;
 
 public enum Order {
 //    RELEVANT("RELEVANT"),
-//    EXPENSIVE("EXPENSIVE"),
+    SALE("SALE"),
     DESC("DESC"),
     ASC("ASC");
 

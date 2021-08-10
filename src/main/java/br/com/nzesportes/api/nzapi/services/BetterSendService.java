@@ -6,6 +6,7 @@ import br.com.nzesportes.api.nzapi.errors.ResourceUnauthorizedException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.BetterSendRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,8 +18,21 @@ import java.util.*;
 
 @Service
 public class BetterSendService {
-    private static final String URI = "https://sandbox.melhorenvio.com.br/";
     private static String TOKEN;
+    @Value("${nz.melhor-envio.url}")
+    private String URI;
+
+    @Value("${nz.melhor-envio.client-id}")
+    private String CLIENT_ID;
+
+    @Value("${nz.melhor-envio.client-secret}")
+    private String CLIENT_SECRET;
+
+    @Value("${nz.melhor-envio.user-agent}")
+    private String USER_AGENT;
+
+    @Value("${nz.melhor-envio.user-agent}")
+    private String REDIRECT_URI;
 
     @Autowired
     private BetterSendRepository repository;
@@ -27,14 +41,14 @@ public class BetterSendService {
 
         // request headers parameters
         HttpHeaders headers = new HttpHeaders();
-        headers.add("User-Agent", "nzesportes-dev (andrelive.05@hotmail.com");
+        headers.add("User-Agent", USER_AGENT);
 
         // request body parameters
         Map<String, Object> body = new HashMap<>();
         body.put("grant_type", "authorization_code");
-        body.put("client_id", "2040");
-        body.put("client_secret", "jbiIaXntsiQ0slcrl8XowPybEQtV1KT4uXqMfmeb");
-        body.put("redirect_uri", "https://nzesportes-dev-front.herokuapp.com/painel/melhor-envio/codigo");
+        body.put("client_id", CLIENT_ID);
+        body.put("client_secret", CLIENT_SECRET);
+        body.put("redirect_uri", REDIRECT_URI);
         body.put("code", code);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
@@ -67,7 +81,7 @@ public class BetterSendService {
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", "application/json");
         headers.add("Content-Type", "application/json");
-        headers.add("User-Agent", "nzesportes-dev (andrelive.05@hotmail.com");
+        headers.add("User-Agent", USER_AGENT);
         headers.add("Authorization", "Bearer " + TOKEN);
 
 
@@ -133,13 +147,13 @@ public class BetterSendService {
 
         // request headers parameters
         HttpHeaders headers = new HttpHeaders();
-        headers.add("User-Agent", "nzesportes-dev (andrelive.05@hotmail.com");
+        headers.add("User-Agent", USER_AGENT);
 
         // request body parameters
         Map<String, Object> body = new HashMap<>();
         body.put("grant_type", "refresh_token");
-        body.put("client_id", "2040");
-        body.put("client_secret", "jbiIaXntsiQ0slcrl8XowPybEQtV1KT4uXqMfmeb");
+        body.put("client_id", CLIENT_ID);
+        body.put("client_secret", CLIENT_SECRET);
         body.put("refresh_token", tokens.get(0).refreshToken);
 
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
