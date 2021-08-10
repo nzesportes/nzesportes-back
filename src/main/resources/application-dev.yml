@@ -41,6 +41,18 @@ flyway:
   url: jdbc:h2:mem:DATABASE
   user: $JDBC_DATABASE_USERNAME
 nz:
+  melhor-envio:
+    url: $MELHOR_ENVIO_URL
+    client-id: $CLIENT_ID
+    client-secret: $CLIENT_SECRET
+    user-agent: $USER_AGENT
+    redirect-uri: $REDIRECT_URI
+  first-access:
+    url: $FIRST_ACCESS_URL
+  recovery:
+    url: $RECOVERY_URL
+  email:
+    from: $EMAIL_FROM
   allowed:
     origin: '*'
   jwt:

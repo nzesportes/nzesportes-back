@@ -126,8 +126,10 @@ public class ProductService {
         return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
     }
 
-    public Page<ProductDetails> getAllProductDetails(Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
+    public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
         Pageable pageable;
+        if(name == null)
+            name = "";
         if(brand == null)
             brand = "null";
         if(category == null)
@@ -136,12 +138,13 @@ public class ProductService {
             productSize = "null";
         if(color == null)
             color = "null";
-        try {
-            Sort sort = Sort.by(Sort.Direction.fromString(order.getText()), "price");
-            pageable = PageRequest.of(page, size, sort);
-        }   catch (Exception e) {
-            pageable = PageRequest.of(page, size);
-        }
-        return detailRepository.filter(brand, category, productSize, color, gender == null ? "null" : gender.getText(), pageable);
+        pageable = PageRequest.of(page, size);
+
+        if(order == null)
+            return null;
+        else if (!order.equals(Order.SALE))
+            return detailRepository.filter(name, brand, category, productSize, color, gender == null ? "null" : gender.getText(), pageable);
+        else
+            return null;
     }
 }

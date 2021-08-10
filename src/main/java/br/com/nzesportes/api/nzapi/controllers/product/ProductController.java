@@ -85,6 +85,7 @@ public class ProductController {
 
     @GetMapping("/details")
     public Page<ProductDetails> getAll(@RequestParam(required = false) Gender gender,
+                                       @RequestParam(required = false) String name,
                                        @RequestParam(required = false) String category,
                                        @RequestParam(required = false) String productSize,
                                        @RequestParam(required = false) String color,
@@ -92,7 +93,7 @@ public class ProductController {
                                        @RequestParam(required = false) Order order,
                                        @RequestParam int page,
                                        @RequestParam int size) {
-        return service.getAllProductDetails(gender, category, productSize, color, brand, order, page, size);
+        return service.getAllProductDetails(name, gender, category, productSize, color, brand, order, page, size);
     }
 
     @GetMapping("/details/{id}")
