@@ -1,5 +1,5 @@
-CREATE TABLE product_categories(
-    product_id uuid NOT NULL REFERENCES products,
-    category_id uuid NOT NULL REFERENCES categories,
-    PRIMARY KEY (product_id, category_id)
+CREATE TABLE product_details_sub_categories(
+    product_details_id uuid NOT NULL REFERENCES products,
+    sub_category_id uuid NOT NULL REFERENCES sub_categories,
+    PRIMARY KEY (product_details_id, sub_category_id)
 );

@@ -27,6 +27,14 @@ public class ProductDetails {
     private Boolean onStock;
     @OneToMany(mappedBy = "productDetail", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Stock> stock;
+
+    @ManyToMany
+    @JoinTable(
+            name = "product_details_sub_categories",
+            joinColumns = @JoinColumn(name = "product_details_id"),
+            inverseJoinColumns = @JoinColumn(name = "sub_category_id")
+    )
+    private List<SubCategory> subCategories;
     @PrePersist
     private void prePersist() {
         this.status = false;
