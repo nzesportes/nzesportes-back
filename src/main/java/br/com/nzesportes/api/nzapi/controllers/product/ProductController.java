@@ -50,11 +50,11 @@ public class ProductController {
         return service.update(dto);
     }
 
-    @PutMapping("/{id}/category/{categoryId}")
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public Product updateCategories(@PathVariable UUID id, @PathVariable UUID categoryId) {
-        return service.updateCategories(id, categoryId);
-    }
+//    @PutMapping("/{id}/category/{categoryId}")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+//    public Product updateCategories(@PathVariable UUID id, @PathVariable UUID categoryId) {
+//        return service.updateCategories(id, categoryId);
+//    }
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
@@ -62,10 +62,10 @@ public class ProductController {
         return ResponseEntity.ok(service.changeStatus(id));
     }
 
-    @GetMapping("/category/{id}")
-    public Page<Product> getByCategoryId(@PathVariable("id") UUID categoryId, @RequestParam int page, @RequestParam int size) {
-        return service.getByCategoryId(categoryId, page, size);
-    }
+//    @GetMapping("/category/{id}")
+//    public Page<Product> getByCategoryId(@PathVariable("id") UUID categoryId, @RequestParam int page, @RequestParam int size) {
+//        return service.getByCategoryId(categoryId, page, size);
+//    }
 
     /*
     * DETALHES DE PRODUTO

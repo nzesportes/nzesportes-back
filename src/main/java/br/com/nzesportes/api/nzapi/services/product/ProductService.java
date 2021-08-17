@@ -58,10 +58,10 @@ public class ProductService {
         if(category != null) {
             try {
                 Category cat = categoryService.getByName(category);
-                if(status != null)
-                    return repository.findByModelContainingAndCategoryContainingAndStatus(name, cat, status, pageRequest);
-                else
-                    return repository.findByModelContainingAndCategoryContaining(name, cat, pageRequest);
+//                if(status != null)
+//                    return repository.findByModelContainingAndCategoryContainingAndStatus(name, cat, status, pageRequest);
+//                else
+//                    return repository.findByModelContainingAndCategoryContaining(name, cat, pageRequest);
             } catch (Exception e) {
                 return null;
             }
@@ -88,17 +88,6 @@ public class ProductService {
         return new StatusTO(product.getStatus());
     }
 
-    public Product updateCategories(UUID id, UUID categoryId) {
-        Category category = categoryService.getById(categoryId);
-        Product product = this.getById(id);
-        if(product.getCategory().contains(category)) {
-            product.getCategory().remove(category);
-            return repository.save(product);
-        }
-        product.getCategory().add(category);
-        return repository.save(product);
-    }
-
     public ProductDetails updateDetail(ProductDetailUpdateTO dto) {
         return detailService.update(dto);
     }
@@ -121,10 +110,10 @@ public class ProductService {
     public void deleteById(UUID id) {
         detailService.deleteById(id);
     }
-
-    public Page<Product> getByCategoryId(UUID categoryId, int page, int size) {
-        return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
-    }
+//
+//    public Page<Product> getByCategoryId(UUID categoryId, int page, int size) {
+//        return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
+//    }
 
     public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
         Pageable pageable;

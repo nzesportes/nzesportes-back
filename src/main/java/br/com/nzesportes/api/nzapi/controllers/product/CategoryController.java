@@ -32,9 +32,8 @@ public class CategoryController {
     public Page<Category> getCategories(@RequestParam int page,
                                         @RequestParam int size,
                                         @RequestParam(required = false) Boolean status,
-                                        @RequestParam(required = false) String type,
                                         @RequestParam(required = false) String name, Authentication auth) {
-        return service.getAll(page, size, status, type, name, (UserDetails) auth.getPrincipal());
+        return service.getAll(page, size, status, name, (UserDetails) auth.getPrincipal());
     }
 
     @GetMapping("/{id}")
