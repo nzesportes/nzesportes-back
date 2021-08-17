@@ -22,7 +22,7 @@ public class SubCategoryController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public ResponseEntity<SubCategory> create(SubCategory subCategory) {
+    public ResponseEntity<SubCategory> create(@RequestBody SubCategory subCategory) {
         return ResponseEntity.ok(service.save(subCategory));
     }
 
@@ -37,7 +37,7 @@ public class SubCategoryController {
                                     @RequestParam(required = false) Boolean status,
                                     @RequestParam int page,
                                     @RequestParam int size, Authentication auth) {
-        return service.getAll(name, gender, status, page, size, (UserDetails) auth.getPrincipal());
+        return service.getAll(name, gender, status, page, size, auth);
     }
 
 }

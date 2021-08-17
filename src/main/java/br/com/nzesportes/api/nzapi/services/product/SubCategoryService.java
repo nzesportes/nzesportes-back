@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -24,7 +26,7 @@ public class SubCategoryService {
     private SubCategoryRepository repository;
 
     public SubCategory save(SubCategory subCategory) {
-        if(repository.existsByName(subCategory.getName()))
+        if(repository.existsByName(subCategory.getName()) && Objects.nonNull(subCategory))
             throw new ResourceConflictException(ResponseErrorEnum.SCT001);
         return repository.save(subCategory);
     }
@@ -33,12 +35,12 @@ public class SubCategoryService {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.SCT002));
     }
 
-    public Page<SubCategory> getAll(String name, Gender gender, Boolean status, int page, int size, UserDetails principal) {
+    public Page<SubCategory> getAll(String name, Gender gender, Boolean status, int page, int size, Authentication auth) {
         String genderSearch = gender == null ? "null" : gender.getText();
         Pageable pageable = PageRequest.of(page, size);
         if(name == null)
             name = "";
-        if(principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_USER.getText())))
+        if(auth == null || ((UserDetails) auth.getPrincipal()).getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_USER.getText())))
             return repository.findAllFilterAndStatus(name, genderSearch, true, pageable);
         else if (status == null)
             return repository.findAllFilter(name, genderSearch, pageable);
