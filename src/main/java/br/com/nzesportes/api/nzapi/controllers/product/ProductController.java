@@ -50,22 +50,12 @@ public class ProductController {
         return service.update(dto);
     }
 
-//    @PutMapping("/{id}/category/{categoryId}")
-//    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-//    public Product updateCategories(@PathVariable UUID id, @PathVariable UUID categoryId) {
-//        return service.updateCategories(id, categoryId);
-//    }
 
     @PutMapping("/{id}/status")
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public ResponseEntity<?> changeStatus(@PathVariable UUID id) {
         return ResponseEntity.ok(service.changeStatus(id));
     }
-
-//    @GetMapping("/category/{id}")
-//    public Page<Product> getByCategoryId(@PathVariable("id") UUID categoryId, @RequestParam int page, @RequestParam int size) {
-//        return service.getByCategoryId(categoryId, page, size);
-//    }
 
     /*
     * DETALHES DE PRODUTO
@@ -87,13 +77,14 @@ public class ProductController {
     public Page<ProductDetails> getAll(@RequestParam(required = false) Gender gender,
                                        @RequestParam(required = false) String name,
                                        @RequestParam(required = false) String category,
+                                       @RequestParam(required = false) String subcategory,
                                        @RequestParam(required = false) String productSize,
                                        @RequestParam(required = false) String color,
                                        @RequestParam(required = false) String brand,
                                        @RequestParam(required = false) Order order,
                                        @RequestParam int page,
                                        @RequestParam int size) {
-        return service.getAllProductDetails(name, gender, category, productSize, color, brand, order, page, size);
+        return service.getAllProductDetails(name, gender, category, subcategory, productSize, color, brand, order, page, size);
     }
 
     @GetMapping("/details/{id}")

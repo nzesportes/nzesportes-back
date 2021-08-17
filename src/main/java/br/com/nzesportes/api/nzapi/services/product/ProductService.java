@@ -115,7 +115,7 @@ public class ProductService {
 //        return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
 //    }
 
-    public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String productSize, String color, String brand, Order order, int page, int size) {
+    public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
         Pageable pageable;
         if(name == null)
             name = "";
