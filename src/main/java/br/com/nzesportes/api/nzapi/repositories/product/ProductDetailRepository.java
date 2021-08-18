@@ -23,5 +23,4 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
             "/*#{#pageable}*/", nativeQuery = true)
     Page<ProductDetails> filter(String name, String brand, String category, String productSize, String color, String gender, Pageable pageable);
 
-//    Page<ProductDetails> filter(String name, String brand, String category, String productSize, String color, String s, Pageable pageable);
 }

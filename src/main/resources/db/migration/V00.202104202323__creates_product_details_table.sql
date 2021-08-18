@@ -8,7 +8,6 @@ CREATE TABLE products_details(
     gender char(1),
     status boolean,
     product_id uuid,
-    on_stock boolean,
     quantity integer,
     CONSTRAINT fk_products
         FOREIGN KEY(product_id)

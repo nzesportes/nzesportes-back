@@ -32,16 +32,14 @@ public class CategoryService {
         return repository.findByNameContaining(name).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
     }
 
-    public Page<Category> getAll(int page, int size, Boolean status, String type, String name, UserDetails principal) {
-        if(type == null)
-            type = "";
+    public Page<Category> getAll(int page, int size, Boolean status, String name, UserDetails principal) {
         if(name == null)
             name = "";
         if(principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_USER.getText())))
-            return repository.findByFilterAndStatus(true, type, name, PageRequest.of(page, size));
+            return repository.findByFilterAndStatus(true, name, PageRequest.of(page, size));
         if(status != null && principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getText())))
-            return repository.findByFilterAndStatus(status, type, name, PageRequest.of(page, size));
-        return repository.findByFilter(type, name, PageRequest.of(page, size));
+            return repository.findByFilterAndStatus(status, name, PageRequest.of(page, size));
+        return repository.findByName(name, PageRequest.of(page, size));
     }
 
     public HttpStatus deleteById(UUID id) {

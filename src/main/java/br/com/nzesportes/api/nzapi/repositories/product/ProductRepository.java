@@ -16,15 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     boolean existsByBrandId(UUID brandId);
 
-    Page<Product> findByCategoryId(UUID categoryId, Pageable page);
-
     Page<Product> findByModelContaining(String model, Pageable of);
 
-    @Query("SELECT p FROM Product p where p.model LIKE CONCAT('%', :model ,'%') AND :category MEMBER OF p.category")
-    Page<Product> findByModelContainingAndCategoryContaining(String model, Category category, Pageable of);
-
-    @Query("SELECT p FROM Product p where p.model LIKE CONCAT('%', :model ,'%') AND :category MEMBER OF p.category AND p.status = :status")
-    Page<Product> findByModelContainingAndCategoryContainingAndStatus(String model, Category category, Boolean status, Pageable of);
-
-    Page<Product> findByStatus(Boolean status, Pageable pageRequest);
+    Page<Product> findByModelContainingAndStatus(String model,Boolean status, Pageable of);
 }

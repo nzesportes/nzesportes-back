@@ -16,13 +16,6 @@ public class Product {
     private String model;
     @ManyToOne
     private Brand brand;
-    @ManyToMany
-    @JoinTable(
-            name = "product_categories",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> category;
     @OneToMany(mappedBy = "productId", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductDetails> productDetails;
     private Boolean status;
@@ -32,8 +25,4 @@ public class Product {
         this.status = false;
     }
 
-    @PostPersist
-    private void postPersist() {
-
-    }
 }
