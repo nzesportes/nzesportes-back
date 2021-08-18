@@ -19,6 +19,7 @@ public class Stock {
     @JoinColumn(name = "product_detail_id")
     @JsonIgnore
     private ProductDetails productDetail;
+    private Boolean onStock;
     private String size;
     private Integer quantity;
 }

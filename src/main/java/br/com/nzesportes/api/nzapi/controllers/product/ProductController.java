@@ -36,12 +36,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public Page<Product> getAll(@RequestParam(required = false) String category,
-                                @RequestParam(required = false) Boolean status,
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    public Page<Product> getAll(@RequestParam(required = false) Boolean status,
                                 @RequestParam(required = false) String name,
                                 @RequestParam int page,
                                 @RequestParam int size) {
-        return service.getAll(category, status, name, page, size);
+        return service.getAll(name, status, page, size);
     }
 
     @PutMapping

@@ -19,6 +19,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -30,6 +31,7 @@ public class SubCategoryService {
     @Autowired
     private SubCategoryRepository repository;
 
+    @Autowired
     private CategoryRepository categoryRepository;
 
     public SubCategory save(SubCategorySaveTO dto) {
@@ -38,6 +40,8 @@ public class SubCategoryService {
 
         if(repository.existsByName(subCategory.getName()) && Objects.nonNull(subCategory))
             throw new ResourceConflictException(ResponseErrorEnum.SCT001);
+        if(subCategory.getCategories() == null)
+            subCategory.setCategories(new ArrayList<>());
         subCategory.getCategories().addAll(categoryRepository.findAllById(dto.getCategoriesToAdd()));
         return repository.save(subCategory);
     }
@@ -62,6 +66,9 @@ public class SubCategoryService {
     public SubCategory update(SubCategorySaveTO dto) {
         SubCategory subCategory = getById(dto.getId());
         copyProperties(dto, subCategory);
+
+        if(subCategory.getCategories() == null)
+            subCategory.setCategories(new ArrayList<>());
 
         if (dto.getCategoriesToAdd() != null && dto.getCategoriesToAdd().size() > 0) {
             List<Category> categories = categoryRepository.findAllById(dto.getCategoriesToAdd());

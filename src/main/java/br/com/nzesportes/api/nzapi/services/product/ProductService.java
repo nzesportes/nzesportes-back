@@ -7,6 +7,7 @@ import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.ProductDetailRepository;
 import br.com.nzesportes.api.nzapi.repositories.product.ProductRepository;
+import br.com.nzesportes.api.nzapi.repositories.product.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,13 +31,7 @@ public class ProductService {
     private ProductDetailsService detailService;
 
     @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private BrandService brandService;
-
-    @Autowired
-    private StockService stockService;
+    private SubCategoryRepository subCategoryRepository;
 
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
@@ -51,23 +46,12 @@ public class ProductService {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRD001));
     }
 
-    public Page<Product> getAll(String category, Boolean status, String name, int page, int size) {
+    public Page<Product> getAll(String name, Boolean status, int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
         if(name == null)
             name = "";
-        if(category != null) {
-            try {
-                Category cat = categoryService.getByName(category);
-//                if(status != null)
-//                    return repository.findByModelContainingAndCategoryContainingAndStatus(name, cat, status, pageRequest);
-//                else
-//                    return repository.findByModelContainingAndCategoryContaining(name, cat, pageRequest);
-            } catch (Exception e) {
-                return null;
-            }
-        }
         if(status != null)
-            return repository.findByStatus(status, pageRequest);
+            return repository.findByModelContainingAndStatus(name ,status, pageRequest);
         return repository.findByModelContaining(name, pageRequest);
     }
 
@@ -75,10 +59,6 @@ public class ProductService {
         Product product = getById(dto.getId());
         copyProperties(dto, product);
         return repository.save(product);
-    }
-
-    public void delete(UUID id) {
-        repository.deleteById(id);
     }
 
     public StatusTO changeStatus(UUID id) {
@@ -100,6 +80,8 @@ public class ProductService {
         ProductDetails productDetails = new ProductDetails();
         copyProperties(details, productDetails);
         productDetails.setProductId(getById(details.getProductId()).getId());
+        if(details.getSubCategoriesToAdd() != null && details.getSubCategoriesToAdd().size() > 0)
+            productDetails.setSubCategories(subCategoryRepository.findAllById(details.getSubCategoriesToAdd()));
         return detailService.save(productDetails);
     }
 
@@ -110,10 +92,6 @@ public class ProductService {
     public void deleteById(UUID id) {
         detailService.deleteById(id);
     }
-//
-//    public Page<Product> getByCategoryId(UUID categoryId, int page, int size) {
-//        return repository.findByCategoryId(categoryId, PageRequest.of(page, size));
-//    }
 
     public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
         Pageable pageable;

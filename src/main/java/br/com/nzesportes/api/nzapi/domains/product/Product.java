@@ -16,7 +16,6 @@ public class Product {
     private String model;
     @ManyToOne
     private Brand brand;
-
     @OneToMany(mappedBy = "productId", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductDetails> productDetails;
     private Boolean status;
@@ -26,8 +25,4 @@ public class Product {
         this.status = false;
     }
 
-    @PostPersist
-    private void postPersist() {
-
-    }
 }

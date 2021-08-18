@@ -13,12 +13,12 @@ import java.util.UUID;
 @Setter
 public class ProductDetailSaveTO {
     private String color;
-    private String size;
     private String description;
     private BigDecimal price;
     private Gender gender;
     private Boolean status;
     private UUID productId;
-    private Integer quantity;
     private List<Stock> stock;
+    private List<UUID> subCategoriesToAdd;
+    private List<UUID> subCategoriesToRemove;
 }
