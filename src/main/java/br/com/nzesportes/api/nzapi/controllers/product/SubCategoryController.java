@@ -8,7 +8,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -22,7 +21,7 @@ public class SubCategoryController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public ResponseEntity<SubCategory> create(@RequestBody SubCategory subCategory) {
+    public ResponseEntity<SubCategory> create(@RequestBody SubCategorySaveTO subCategory) {
         return ResponseEntity.ok(service.save(subCategory));
     }
 
