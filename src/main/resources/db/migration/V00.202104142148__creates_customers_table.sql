@@ -9,7 +9,7 @@ CREATE TABLE customers (
     phone text,
     birth_date date,
     cpf varchar(14) UNIQUE NOT NULL,
-    gender char(1),
+    gender varchar(8),
     CONSTRAINT fk_users
         FOREIGN KEY(user_id)
             REFERENCES users(id)
