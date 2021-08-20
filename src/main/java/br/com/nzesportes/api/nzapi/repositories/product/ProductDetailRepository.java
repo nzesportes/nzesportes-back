@@ -14,9 +14,11 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
     @Query("SELECT pd FROM ProductDetails pd, Product p " +
             "INNER JOIN pd.subCategories subCategory " +
             "INNER JOIN subCategory.categories category " +
+            "INNER JOIN pd.stock stock " +
             "WHERE (:gender IS NULL OR subCategory.gender = 'BOTH' OR subCategory.gender = :gender) " +
             "AND (:subcategory IS NULL OR subCategory.name = :subcategory) " +
             "AND (:category IS NULL OR category.name = :category) " +
+            "AND (:productSize IS NULL OR stock.size = :productSize) " +
             "AND pd.productId = p.id " +
             "AND p IN (:nameSearch) " +
             "AND (:color IS NULL OR pd.color = :color)")

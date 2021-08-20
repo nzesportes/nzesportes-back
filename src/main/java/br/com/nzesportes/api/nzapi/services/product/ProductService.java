@@ -1,10 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.*;
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
-import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
-import br.com.nzesportes.api.nzapi.dtos.StatusTO;
+import br.com.nzesportes.api.nzapi.dtos.*;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -15,7 +12,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
