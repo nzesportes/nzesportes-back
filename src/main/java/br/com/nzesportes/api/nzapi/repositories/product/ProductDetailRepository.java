@@ -20,8 +20,22 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
             "AND (:category IS NULL OR category.name = :category) " +
             "AND (:productSize IS NULL OR stock.size = :productSize) " +
             "AND pd.productId = p.id " +
-            "AND p IN (:nameSearch) " +
+            "AND (:nameSearch IS NULL OR p IN (:nameSearch)) " +
+            "AND (:brand IS NULL OR p.brand.name = :brand) " +
             "AND (:color IS NULL OR pd.color = :color)")
-    Page<ProductDetails> findByFilter(List<Product> nameSearch, Gender gender, String category, String subcategory, String productSize, String color, Pageable pageable);
+    Page<ProductDetails> findByFilter(List<Product> nameSearch, Gender gender, String category, String subcategory, String productSize, String brand, String color, Pageable pageable);
+
+    @Query("SELECT pd FROM ProductDetails pd, Product p " +
+            "INNER JOIN pd.subCategories subCategory " +
+            "INNER JOIN subCategory.categories category " +
+            "INNER JOIN pd.stock stock " +
+            "WHERE (:gender IS NULL OR subCategory.gender = 'BOTH' OR subCategory.gender = :gender) " +
+            "AND (:subcategory IS NULL OR subCategory.name = :subcategory) " +
+            "AND (:category IS NULL OR category.name = :category) " +
+            "AND (:productSize IS NULL OR stock.size = :productSize) " +
+            "AND pd.productId = p.id " +
+            "AND (:brand IS NULL OR p.brand.name = :brand) " +
+            "AND (:color IS NULL OR pd.color = :color)")
+    Page<ProductDetails> findByFilter(Gender gender, String category, String subcategory, String productSize, String brand, String color, Pageable pageable);
 
 }

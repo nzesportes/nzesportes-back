@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -101,19 +102,23 @@ public class ProductService {
     }
 
     public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable;
+        if(order != null)
+            if (order.equals(Order.ASC) || order.equals(Order.DESC))
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(order.getText()), "price"));
+            else
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sale.percentage"));
+        else
+            pageable = PageRequest.of(page, size);
+
         List<Product> nameSearch;
         if(name != null) {
             nameSearch = repository.findByProductName(name);
             if(nameSearch != null && nameSearch.size() > 0);
-                return detailRepository.findByFilter(nameSearch, gender, category, subcategory, productSize, color, pageable);
+                return detailRepository.findByFilter(nameSearch, gender, category, subcategory, productSize, brand, color, pageable);
         }
-        Category categorySearch = categoryRepository.findByName(category);
-        Brand brandSearch = brandRepository.findByName(brand).orElse(null);
-        SubCategory subCategorySearch = subCategoryRepository.findByName(subcategory);
-//        return detailRepository.findByFilter(name, gender, color, categorySearch, subCategorySearch, productSize, brandSearch, pageable);
-//        return detailRepository.findByFilter(name, color, pageable);
-        return null;
+
+        return detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable);
     }
 
     public Stock updateStock(UpdateStockTO dto) {
