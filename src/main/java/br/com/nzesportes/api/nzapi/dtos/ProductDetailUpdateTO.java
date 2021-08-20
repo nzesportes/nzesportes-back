@@ -23,4 +23,6 @@ public class ProductDetailUpdateTO {
     private UUID productId;
     private List<Stock> stockToAdd;
     private List<UUID> stockToRemove;
+    private List<UUID> subCategoriesToAdd;
+    private List<UUID> subCategoriesToRemove;
 }
