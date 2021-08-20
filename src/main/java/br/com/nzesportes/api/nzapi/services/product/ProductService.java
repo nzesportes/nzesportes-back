@@ -33,6 +33,9 @@ public class ProductService {
     @Autowired
     private SubCategoryRepository subCategoryRepository;
 
+    @Autowired
+    private StockService stockService;
+
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
             throw new ResourceConflictException(ResponseErrorEnum.PRD002);
@@ -113,5 +116,9 @@ public class ProductService {
             return detailRepository.filter(name, brand, category, productSize, color, gender == null ? "null" : gender.getText(), pageable);
         else
             return null;
+    }
+
+    public Stock updateStock(UpdateStockTO dto) {
+        return stockService.updateQuantity(dto);
     }
 }
