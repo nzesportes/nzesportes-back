@@ -41,6 +41,9 @@ public class ProductService {
     @Autowired
     private BrandRepository brandRepository;
 
+    @Autowired
+    private StockService stockService;
+
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
             throw new ResourceConflictException(ResponseErrorEnum.PRD002);
@@ -115,5 +118,9 @@ public class ProductService {
 //        return detailRepository.findByFilter(name, gender, color, categorySearch, subCategorySearch, productSize, brandSearch, pageable);
 //        return detailRepository.findByFilter(name, color, pageable);
         return null;
+    }
+
+    public Stock updateStock(UpdateStockTO dto) {
+        return stockService.updateQuantity(dto);
     }
 }

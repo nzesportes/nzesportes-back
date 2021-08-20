@@ -1,12 +1,10 @@
 package br.com.nzesportes.api.nzapi.controllers.product;
 
-import br.com.nzesportes.api.nzapi.domains.product.Gender;
-import br.com.nzesportes.api.nzapi.domains.product.Order;
-import br.com.nzesportes.api.nzapi.domains.product.Product;
-import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.domains.product.*;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
+import br.com.nzesportes.api.nzapi.dtos.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -98,4 +96,8 @@ public class ProductController {
         service.deleteById(id);
     }
 
+    @PutMapping("/details/stock")
+    public Stock updateStock(@RequestBody UpdateStockTO dto) {
+        return service.updateStock(dto);
+    }
 }
