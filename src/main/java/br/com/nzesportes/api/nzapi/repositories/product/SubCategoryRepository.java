@@ -20,4 +20,5 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, UUID> 
     @Query(value = "SELECT * FROM sub_categories sc WHERE (:gender = 'null' or sc.gender = :gender) AND sc.status = :status ORDER BY difference(sc.name, :name) DESC /*#{#pageable}*/", nativeQuery = true)
     Page<SubCategory> findAllFilterAndStatus(String name, String gender, Boolean status, Pageable pageable);
 
+    SubCategory findByName(String subcategory);
 }

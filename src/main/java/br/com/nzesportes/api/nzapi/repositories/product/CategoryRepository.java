@@ -25,4 +25,6 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     Page<Category> findByFilterAndStatus(@Param("status") Boolean status, @Param("name") String name, Pageable of);
 
     Optional<Category> findByNameContaining(String name);
+
+    Category findByName(String name);
 }

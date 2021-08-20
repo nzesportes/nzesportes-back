@@ -19,8 +19,6 @@ public class ProductDetails {
     private String description;
     @ManyToOne
     private Sale sale;
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
     private Boolean status;
     @JoinColumn
     private UUID productId;

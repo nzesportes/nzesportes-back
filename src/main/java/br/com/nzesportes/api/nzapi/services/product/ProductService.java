@@ -5,9 +5,7 @@ import br.com.nzesportes.api.nzapi.dtos.*;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
-import br.com.nzesportes.api.nzapi.repositories.product.ProductDetailRepository;
-import br.com.nzesportes.api.nzapi.repositories.product.ProductRepository;
-import br.com.nzesportes.api.nzapi.repositories.product.SubCategoryRepository;
+import br.com.nzesportes.api.nzapi.repositories.product.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
@@ -32,6 +31,15 @@ public class ProductService {
 
     @Autowired
     private SubCategoryRepository subCategoryRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
+
+    @Autowired
+    private BrandRepository brandRepository;
+
+    @Autowired
+    private StockService stockService;
 
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
@@ -95,23 +103,25 @@ public class ProductService {
 
     public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
         Pageable pageable;
-        if(name == null)
-            name = "";
-        if(brand == null)
-            brand = "null";
-        if(category == null)
-            category = "null";
-        if(productSize == null)
-            productSize = "null";
-        if(color == null)
-            color = "null";
-        pageable = PageRequest.of(page, size);
-
-        if(order == null)
-            return null;
-        else if (!order.equals(Order.SALE))
-            return detailRepository.filter(name, brand, category, productSize, color, gender == null ? "null" : gender.getText(), pageable);
+        if(order != null)
+            if (order.equals(Order.ASC) || order.equals(Order.DESC))
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(order.getText()), "price"));
+            else
+                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sale.percentage"));
         else
-            return null;
+            pageable = PageRequest.of(page, size);
+
+        List<Product> nameSearch;
+        if(name != null) {
+            nameSearch = repository.findByProductName(name);
+            if(nameSearch != null && nameSearch.size() > 0);
+                return detailRepository.findByFilter(nameSearch, gender, category, subcategory, productSize, brand, color, pageable);
+        }
+
+        return detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable);
+    }
+
+    public Stock updateStock(UpdateStockTO dto) {
+        return stockService.updateQuantity(dto);
     }
 }
