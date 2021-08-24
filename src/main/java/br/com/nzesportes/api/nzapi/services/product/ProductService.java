@@ -33,12 +33,6 @@ public class ProductService {
     private SubCategoryRepository subCategoryRepository;
 
     @Autowired
-    private CategoryRepository categoryRepository;
-
-    @Autowired
-    private BrandRepository brandRepository;
-
-    @Autowired
     private StockService stockService;
 
     public Product save(Product product) {

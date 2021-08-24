@@ -1,10 +1,12 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
 import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.ProductDetailRepository;
+import br.com.nzesportes.api.nzapi.repositories.product.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,9 @@ public class ProductDetailsService {
     @Autowired
     private StockService stockService;
 
+    @Autowired
+    private SubCategoryRepository subCategoryRepository;
+
     public ProductDetails getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PDT001));
     }
@@ -31,6 +36,15 @@ public class ProductDetailsService {
         if(dto.getStockToAdd().size() > 0) {
             dto.getStockToAdd().forEach(stock -> stock.setProductDetail(details));
             stockService.saveAll(dto.getStockToAdd());
+        }
+        if(dto.getSubCategoriesToAdd() != null && dto.getSubCategoriesToAdd().size() > 0) {
+            details.setSubCategories(subCategoryRepository.findAllById(dto.getSubCategoriesToAdd()));
+        }
+        if(dto.getSubCategoriesToRemove() != null && dto.getSubCategoriesToRemove().size() > 0) {
+            List<SubCategory> subCategories = subCategoryRepository.findAllById(dto.getSubCategoriesToRemove());
+            subCategories.forEach(subCategory -> {
+                if (details.getSubCategories().contains(subCategory)) details.getSubCategories().remove(subCategory);
+            });
         }
         return repository.save(details);
     }
