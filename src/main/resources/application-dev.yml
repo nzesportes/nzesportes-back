@@ -4,8 +4,6 @@ server:
     include-message: always
     include-binding-errors: always
 spring:
-  profiles:
-    active: dev
   datasource:
     hikari:
       maximumPoolSize: 20
