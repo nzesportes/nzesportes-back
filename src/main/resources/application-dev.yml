@@ -36,7 +36,7 @@ spring:
 flyway:
   locations: filesystem:db/migration
   password: $JDBC_DATABASE_PASSWORD
-  url: jdbc:h2:mem:DATABASE
+  url: $JDBC_DATABASE_URL
   user: $JDBC_DATABASE_USERNAME
 nz:
   melhor-envio:
