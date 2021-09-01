@@ -13,9 +13,9 @@ spring:
       idleTimeout: 600000
       maxLifetime: 1800000
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://dbpostgresql:5432/postgres
-    username: postgres
-    password: 12345
+    url: $JDBC_DATABASE_URL
+    username: $JDBC_DATABASE_USERNAME
+    password: $JDBC_DATABASE_PASSWORD
   jpa:
     databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
   mail:
@@ -35,9 +35,9 @@ spring:
       test-connection: true
 flyway:
   locations: filesystem:db/migration
-  password: 12345
-  url: jdbc:postgresql://dbpostgresql:5432/postgres
-  user: postgres
+  password: $JDBC_DATABASE_PASSWORD
+  url: $JDBC_DATABASE_URL
+  user: $JDBC_DATABASE_USERNAME
 nz:
   melhor-envio:
     url: $MELHOR_ENVIO_URL
