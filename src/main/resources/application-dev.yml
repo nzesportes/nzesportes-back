@@ -13,9 +13,9 @@ spring:
       idleTimeout: 600000
       maxLifetime: 1800000
     driverClassName: org.postgresql.Driver
-    url: $JDBC_DATABASE_URL
-    username: $JDBC_DATABASE_USERNAME
-    password: $JDBC_DATABASE_PASSWORD
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
   jpa:
     databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
   mail:
@@ -35,24 +35,24 @@ spring:
       test-connection: true
 flyway:
   locations: filesystem:db/migration
-  password: $JDBC_DATABASE_PASSWORD
-  url: $JDBC_DATABASE_URL
-  user: $JDBC_DATABASE_USERNAME
+  password: ${JDBC_DATABASE_PASSWORD}
+  url: ${JDBC_DATABASE_URL}
+  user: ${JDBC_DATABASE_USERNAME}
 nz:
   melhor-envio:
-    url: $MELHOR_ENVIO_URL
-    client-id: $CLIENT_ID
-    client-secret: $CLIENT_SECRET
-    user-agent: $USER_AGENT
-    redirect-uri: $REDIRECT_URI
+    url: ${MELHOR_ENVIO_URL}
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
+    user-agent: ${USER_AGENT}
+    redirect-uri: ${REDIRECT_URI}
   first-access:
-    url: $FIRST_ACCESS_URL
+    url: ${FIRST_ACCESS_URL}
   recovery:
-    url: $RECOVERY_URL
+    url: ${RECOVERY_URL}
   email:
-    from: $EMAIL_FROM
+    from: ${EMAIL_FROM}
   allowed:
     origin: '*'
   jwt:
-    secret: $JWT_SECRET
+    secret: ${JWT_SECRET}
     expiration: 86400000
