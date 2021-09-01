@@ -16,6 +16,7 @@ services:
       REDIRECT_URI: ${REDIRECT_URI}
       USER_AGENT: ${USER_AGENT}
       JDBC_DATABASE_URL: ${JDBC_DATABASE_URL}
+      MELHOR_ENVIO_URL: ${MELHOR_ENVIO_URL}
     depends_on:
       - dbpostgresql
   dbpostgresql:
