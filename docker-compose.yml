@@ -19,6 +19,7 @@ services:
       MELHOR_ENVIO_URL: ${MELHOR_ENVIO_URL}
       RECOVERY_URL: ${RECOVERY_URL}
       EMAIL_FROM: ${EMAIL_FROM}
+      FIRST_ACCESS_URL: ${FIRST_ACCESS_URL}
     depends_on:
       - dbpostgresql
   dbpostgresql:
