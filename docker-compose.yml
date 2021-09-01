@@ -6,6 +6,16 @@ services:
     build: ./
     ports:
       - "8080:8080"
+    environment:
+      CLIENT_SECRET: ${CLIENT_SECRET}
+      CLIENT_ID: ${CLIENT_ID}
+      JDBC_DATABASE_PASSWORD: ${JDBC_DATABASE_PASSWORD}
+      JDBC_DATABASE_USERNAME: ${JDBC_DATABASE_USERNAME}
+      JWT_SECRET: ${JWT_SECRET}
+      MELHOR_IO_URL: ${MELHOR_IO_URL}
+      REDIRECT_URI: ${REDIRECT_URI}
+      USER_AGENT: ${USER_AGENT}
+      JDBC_DATABASE_URL: ${JDBC_DATABASE_URL}
     depends_on:
       - dbpostgresql
   dbpostgresql:
