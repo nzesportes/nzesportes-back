@@ -17,6 +17,8 @@ services:
       USER_AGENT: ${USER_AGENT}
       JDBC_DATABASE_URL: ${JDBC_DATABASE_URL}
       MELHOR_ENVIO_URL: ${MELHOR_ENVIO_URL}
+      RECOVERY_URL: ${RECOVERY_URL}
+      EMAIL_FROM: ${EMAIL_FROM}
     depends_on:
       - dbpostgresql
   dbpostgresql:
