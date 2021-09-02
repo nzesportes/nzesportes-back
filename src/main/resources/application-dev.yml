@@ -1,5 +1,10 @@
 server:
   port: 8080
+  ssl:
+    key-store: classpath:keystore.p12
+    key-alias: keystore
+    key-store-password: ${KEY_STORE_PASSWORD}
+    key-store-type: PKCS12
   error:
     include-message: always
     include-binding-errors: always
@@ -13,7 +18,7 @@ spring:
       idleTimeout: 600000
       maxLifetime: 1800000
     driverClassName: org.postgresql.Driver
-    url: ${JDBC_DATABASE_URL:'teste'}
+    url: ${JDBC_DATABASE_URL}
     username: ${JDBC_DATABASE_USERNAME}
     password: ${JDBC_DATABASE_PASSWORD}
   jpa:

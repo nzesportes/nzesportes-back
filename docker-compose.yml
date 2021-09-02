@@ -20,6 +20,7 @@ services:
       RECOVERY_URL: ${RECOVERY_URL}
       EMAIL_FROM: ${EMAIL_FROM}
       FIRST_ACCESS_URL: ${FIRST_ACCESS_URL}
+      KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD}
     depends_on:
       - dbpostgresql
   dbpostgresql:
