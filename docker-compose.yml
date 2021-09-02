@@ -5,7 +5,7 @@ services:
     image: app-nzapi
     build: ./
     ports:
-      - "443:443"
+      - "8080:8080"
     environment:
       CLIENT_SECRET: ${CLIENT_SECRET}
       CLIENT_ID: ${CLIENT_ID}
