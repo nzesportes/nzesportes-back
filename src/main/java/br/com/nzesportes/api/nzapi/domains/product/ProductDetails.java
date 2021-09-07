@@ -20,6 +20,7 @@ public class ProductDetails {
     @ManyToOne
     private Sale sale;
     private Boolean status;
+    private String images;
     @JoinColumn
     private UUID productId;
     @OneToMany(mappedBy = "productDetail", orphanRemoval = true, cascade = CascadeType.PERSIST)

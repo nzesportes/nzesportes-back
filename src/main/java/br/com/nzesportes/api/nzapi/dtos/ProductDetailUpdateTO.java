@@ -21,6 +21,7 @@ public class ProductDetailUpdateTO {
     private Boolean status;
     private Integer quantity;
     private UUID productId;
+    private String images;
     private List<Stock> stockToAdd;
     private List<UUID> stockToRemove;
     private List<UUID> subCategoriesToAdd;
