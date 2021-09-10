@@ -36,7 +36,7 @@ public class AddressController {
     }
 
     @PutMapping
-    public Address update(Address address, Authentication authentication) {
+    public Address update(@RequestBody Address address, Authentication authentication) {
         return service.update(address, (UserDetailsImpl) authentication.getPrincipal());
     }
 
