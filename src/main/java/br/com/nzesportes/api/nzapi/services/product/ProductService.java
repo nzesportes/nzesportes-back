@@ -6,6 +6,7 @@ import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.*;
+import br.com.nzesportes.api.nzapi.utils.ProductUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +32,9 @@ public class ProductService {
 
     @Autowired
     private SubCategoryRepository subCategoryRepository;
+
+    @Autowired
+    private ProductUtils utils;
 
     @Autowired
     private StockService stockService;
@@ -95,7 +99,7 @@ public class ProductService {
         detailService.deleteById(id);
     }
 
-    public Page<ProductDetails> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
+    public Page<ProductDetailsTO> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
         Pageable pageable;
         if(order != null)
             if (order.equals(Order.ASC) || order.equals(Order.DESC))
@@ -109,10 +113,10 @@ public class ProductService {
         if(name != null) {
             nameSearch = repository.findByProductName(name);
             if(nameSearch != null && nameSearch.size() > 0);
-                return detailRepository.findByFilter(nameSearch, gender, category, subcategory, productSize, brand, color, pageable);
+                return utils.toProductDetailsPage(detailRepository.findByFilter(nameSearch, gender, category, subcategory, productSize, brand, color, pageable));
         }
 
-        return detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable);
+        return utils.toProductDetailsPage(detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable));
     }
 
     public Stock updateStock(UpdateStockTO dto) {
