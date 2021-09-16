@@ -38,7 +38,7 @@ public class AddressService {
         Address address = getById(id);
         if(address.getCustomerId().equals(customerService.getByUserId(principal.getId()).getId())) {
             repository.deleteById(id);
-            return ResponseEntity.status(201).body("Endereço deletado");
+            return ResponseEntity.status(201).body(null);
         }
         throw new ResourceUnauthorizedException(ResponseErrorEnum.ADR002);
     }
