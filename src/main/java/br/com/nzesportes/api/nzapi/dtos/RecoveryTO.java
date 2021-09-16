@@ -8,5 +8,5 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class RecoveryTO {
-    public UUID id;
+    private UUID id;
 }
