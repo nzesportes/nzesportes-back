@@ -60,6 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/first-access/**").permitAll().and()
                 .authorizeRequests().antMatchers("/contact").permitAll().and()
                 .authorizeRequests().antMatchers("/products/*").permitAll().and()
+                .authorizeRequests().antMatchers("/products").permitAll().and()
                 .authorizeRequests().antMatchers("/better-send/calculate").permitAll()
 
                 // PRODUCTS
