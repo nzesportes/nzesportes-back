@@ -5,6 +5,7 @@ import br.com.nzesportes.api.nzapi.dtos.BetterSendTokenStatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceUnauthorizedException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.BetterSendRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -20,6 +21,7 @@ import java.util.*;
 
 @Service
 @EnableScheduling
+@Slf4j
 public class BetterSendService {
     private static String TOKEN;
     @Value("${nz.melhor-envio.url}")
@@ -57,6 +59,8 @@ public class BetterSendService {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(body, headers);
 
         RestTemplate rest = new RestTemplate();
+        log.info("melhor envio URI: ", URI);
+
         // send POST request
         ResponseEntity<BetterSend> response = rest.postForEntity(URI + "oauth/token", entity, BetterSend.class);
 
