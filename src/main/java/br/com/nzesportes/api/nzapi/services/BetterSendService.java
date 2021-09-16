@@ -11,12 +11,15 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
 @Service
+@EnableScheduling
 public class BetterSendService {
     private static String TOKEN;
     @Value("${nz.melhor-envio.url}")
@@ -170,4 +173,29 @@ public class BetterSendService {
         }
         throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
     }
+
+    @Scheduled(cron = "* 35 23 * * *")
+    public void scheduledRefreshToken() {
+        List<BetterSend> tokens = repository.findTop10ByOrderByCreationDateDesc();
+
+        if(tokens.size() > 0) {
+
+            Date actualDate = Calendar.getInstance().getTime();
+
+            BetterSend token = tokens.get(0);
+
+            Calendar creationDate28 = Calendar.getInstance();
+            creationDate28.setTime(token.getCreationDate());
+            creationDate28.add(Calendar.DAY_OF_MONTH, 28);
+
+            if(actualDate.after(creationDate28.getTime())){
+                System.out.println("Invalid token, refreshing token..." + Calendar.getInstance().getTime());
+                this.refreshToken();
+            }else{
+                System.out.println("valid better send Token verification" + Calendar.getInstance().getTime());
+            }
+        }
+        System.out.println("Token better send not found");
+    }
+
 }
