@@ -24,6 +24,6 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, UUID> 
     Page<SubCategory> findAllFilterAndStatus(String name, String gender, Boolean status, Pageable pageable);
 
 
-    @Query(value = "SELECT sc FROM SubCategory sc WHERE sc.category = :category")
+    @Query(value = "SELECT sc FROM SubCategory sc WHERE sc.category = :category AND sc.status = true")
     List<SubCategory> findByCategory(Category category);
 }
