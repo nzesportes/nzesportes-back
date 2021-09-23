@@ -38,11 +38,9 @@ public class SubCategoryService {
         SubCategory subCategory = new SubCategory();
         copyProperties(dto, subCategory);
 
-        if(repository.existsByName(subCategory.getName()) && Objects.nonNull(subCategory))
+        if(repository.existsByNameAndGender(subCategory.getName(), dto.getGender()) && Objects.nonNull(subCategory))
             throw new ResourceConflictException(ResponseErrorEnum.SCT001);
-        if(subCategory.getCategories() == null)
-            subCategory.setCategories(new ArrayList<>());
-        subCategory.getCategories().addAll(categoryRepository.findAllById(dto.getCategoriesToAdd()));
+        subCategory.setCategory(categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND)));
         return repository.save(subCategory);
     }
 
@@ -67,22 +65,6 @@ public class SubCategoryService {
         SubCategory subCategory = getById(dto.getId());
         copyProperties(dto, subCategory);
 
-        if(subCategory.getCategories() == null)
-            subCategory.setCategories(new ArrayList<>());
-
-        if (dto.getCategoriesToAdd() != null && dto.getCategoriesToAdd().size() > 0) {
-            List<Category> categories = categoryRepository.findAllById(dto.getCategoriesToAdd());
-            categories.forEach(category -> {
-                if(!subCategory.getCategories().contains(category)) subCategory.getCategories().add(category);
-            });
-        }
-
-        if (dto.getCategoriesToRemove() != null && dto.getCategoriesToRemove().size() > 0) {
-            List<Category> categories = categoryRepository.findAllById(dto.getCategoriesToRemove());
-            categories.forEach(category -> {
-                if (subCategory.getCategories().contains(category)) subCategory.getCategories().remove(category);
-            });
-        }
         return repository.save(subCategory);
     }
 

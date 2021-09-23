@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -17,6 +16,5 @@ public class SubCategorySaveTO {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Boolean status;
-    private List<UUID> categoriesToAdd;
-    private List<UUID> categoriesToRemove;
+    private UUID categoryId;
 }

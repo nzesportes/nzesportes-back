@@ -24,6 +24,8 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     @Query(value = "SELECT * FROM categories c WHERE c.status = :status ORDER BY difference(c.name, :name) DESC /*#{#of}*/", nativeQuery = true)
     Page<Category> findByFilterAndStatus(@Param("status") Boolean status, @Param("name") String name, Pageable of);
 
+//    @Query(value = "SELECT ")
+//    List<Category> findMenuCategories();
     Optional<Category> findByNameContaining(String name);
 
     Category findByName(String name);

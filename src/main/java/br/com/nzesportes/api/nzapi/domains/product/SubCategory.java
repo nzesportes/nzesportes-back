@@ -18,13 +18,8 @@ public class SubCategory {
     private Gender gender;
     private Boolean status;
 
-    @ManyToMany
-    @JoinTable(
-            name = "categories_sub_categories",
-            joinColumns = @JoinColumn(name = "sub_category_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categories;
+    @ManyToOne
+     private Category category;
 
     @PrePersist
     private void prePersist() {
