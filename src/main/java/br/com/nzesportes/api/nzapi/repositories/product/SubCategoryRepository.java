@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.repositories.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.domains.product.Gender;
 import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
 import org.springframework.data.domain.Page;
@@ -8,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -22,7 +24,6 @@ public interface SubCategoryRepository extends JpaRepository<SubCategory, UUID> 
     Page<SubCategory> findAllFilterAndStatus(String name, String gender, Boolean status, Pageable pageable);
 
 
-    @Query(value = "")
-
-    SubCategory findByName(String subcategory);
+    @Query(value = "SELECT sc FROM SubCategory sc WHERE sc.category = :category")
+    List<SubCategory> findByCategory(Category category);
 }

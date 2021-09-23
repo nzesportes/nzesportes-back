@@ -1,10 +1,14 @@
 package br.com.nzesportes.api.nzapi.dtos;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
-@Data
+@AllArgsConstructor
+@Getter
+@Setter
 public class MenuCategory {
     public String name;
     public List<SubCategoryMenuTO> subCategory;
