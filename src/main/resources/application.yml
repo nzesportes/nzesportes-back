@@ -35,12 +35,12 @@ spring:
       test-connection: true
 flyway:
   locations: filesystem:db/migration
-  password: 12345
+  password: postgres
   url: jdbc:postgresql://localhost:5432/postgres
   user: postgres
 nz:
   melhor-envio:
-    url: $$MELHOR_ENVIO_URL
+    url: $MELHOR_ENVIO_URL
     client-id: $CLIENT_ID
     client-secret: $CLIENT_SECRET
     user-agent: $USER_AGENT

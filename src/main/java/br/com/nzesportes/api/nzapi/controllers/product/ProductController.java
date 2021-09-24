@@ -1,10 +1,7 @@
 package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.*;
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailSaveTO;
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
-import br.com.nzesportes.api.nzapi.dtos.ProductUpdateTO;
-import br.com.nzesportes.api.nzapi.dtos.UpdateStockTO;
+import br.com.nzesportes.api.nzapi.dtos.*;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -72,16 +69,16 @@ public class ProductController {
     }
 
     @GetMapping("/details")
-    public Page<ProductDetails> getAll(@RequestParam(required = false) Gender gender,
-                                       @RequestParam(required = false) String name,
-                                       @RequestParam(required = false) String category,
-                                       @RequestParam(required = false) String subcategory,
-                                       @RequestParam(required = false) String productSize,
-                                       @RequestParam(required = false) String color,
-                                       @RequestParam(required = false) String brand,
-                                       @RequestParam(required = false) Order order,
-                                       @RequestParam int page,
-                                       @RequestParam int size) {
+    public Page<ProductDetailsTO> getAll(@RequestParam(required = false) Gender gender,
+                                         @RequestParam(required = false) String name,
+                                         @RequestParam(required = false) String category,
+                                         @RequestParam(required = false) String subcategory,
+                                         @RequestParam(required = false) String productSize,
+                                         @RequestParam(required = false) String color,
+                                         @RequestParam(required = false) String brand,
+                                         @RequestParam(required = false) Order order,
+                                         @RequestParam int page,
+                                         @RequestParam int size) {
         return service.getAllProductDetails(name, gender, category, subcategory, productSize, color, brand, order, page, size);
     }
 
