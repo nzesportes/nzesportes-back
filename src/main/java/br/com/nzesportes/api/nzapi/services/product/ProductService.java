@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.*;
 import br.com.nzesportes.api.nzapi.dtos.*;
+import br.com.nzesportes.api.nzapi.dtos.product.*;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;

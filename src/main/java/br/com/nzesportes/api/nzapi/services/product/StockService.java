@@ -1,7 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
-import br.com.nzesportes.api.nzapi.dtos.UpdateStockTO;
+import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.StockRepository;
@@ -29,6 +29,7 @@ public class StockService {
         stock.setQuantity(stock.getQuantity() + dto.getQuantityToAdd());
         return repository.save(stock);
     }
+
 
     public void deleteAll(List<UUID> stockToRemove) {
         repository.deleteAll(repository.findAllById(stockToRemove));

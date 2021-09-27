@@ -1,7 +1,7 @@
 package br.com.nzesportes.api.nzapi.security.services;
 
-import br.com.nzesportes.api.nzapi.domains.User;
-import br.com.nzesportes.api.nzapi.repositories.UsersRepository;
+import br.com.nzesportes.api.nzapi.domains.customer.User;
+import br.com.nzesportes.api.nzapi.repositories.customer.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

@@ -14,9 +14,5 @@ public class Category {
     private UUID id;
     private String name;
     private Boolean status;
-
-    @PrePersist
-    private void prePersist() {
-        this.status = false;
-    }
+    private Boolean onMenu;
 }

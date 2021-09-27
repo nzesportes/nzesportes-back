@@ -1,6 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.domains.Role;
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.dtos.StatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;

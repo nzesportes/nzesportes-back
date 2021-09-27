@@ -1,10 +1,10 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
-import br.com.nzesportes.api.nzapi.dtos.AuthenticationRequest;
-import br.com.nzesportes.api.nzapi.dtos.AuthenticationResponse;
-import br.com.nzesportes.api.nzapi.dtos.ChangePasswordTO;
+import br.com.nzesportes.api.nzapi.dtos.customer.AuthenticationRequest;
+import br.com.nzesportes.api.nzapi.dtos.customer.AuthenticationResponse;
+import br.com.nzesportes.api.nzapi.dtos.customer.ChangePasswordTO;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
-import br.com.nzesportes.api.nzapi.services.AuthService;
+import br.com.nzesportes.api.nzapi.services.customer.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

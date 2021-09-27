@@ -1,6 +1,5 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
-import br.com.nzesportes.api.nzapi.services.AddressService;
 import br.com.nzesportes.api.nzapi.services.BetterSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

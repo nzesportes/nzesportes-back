@@ -25,7 +25,7 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     @Query(value = "SELECT * FROM categories c WHERE c.status = :status ORDER BY difference(c.name, :name) DESC /*#{#of}*/", nativeQuery = true)
     Page<Category> findByFilterAndStatus(@Param("status") Boolean status, @Param("name") String name, Pageable of);
 
-    @Query(value = "SELECT c FROM Category c, SubCategory sc WHERE sc.category = c AND sc.gender = :gender")
+    @Query(value = "SELECT DISTINCT (c) FROM Category c, SubCategory sc WHERE sc.category = c AND (sc.gender = :gender OR sc.gender = 'BOTH') AND c.onMenu = true AND c.status = true")
     List<Category> findCategoriesBySubCategoryGender(@Param("gender") Gender gender);
 
     Optional<Category> findByNameContaining(String name);

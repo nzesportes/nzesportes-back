@@ -1,6 +1,6 @@
 package br.com.nzesportes.api.nzapi.security.services;
 
-import br.com.nzesportes.api.nzapi.domains.User;
+import br.com.nzesportes.api.nzapi.domains.customer.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

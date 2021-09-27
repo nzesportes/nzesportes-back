@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class MenuService {
@@ -33,13 +32,14 @@ public class MenuService {
 
     public MenuTO buildMenu(List<Category> male, List<Category> female) {
         MenuTO menuTO = new MenuTO();
-        male.forEach(m -> menuTO.getMasculino().add(new MenuCategory(m.getName(), getMaleSubCategory(m))));
+        male.forEach(m -> menuTO.getMasculino().add(new MenuCategory(m.getName(), getSubCategory(m, Gender.MALE))));
+        female.forEach(m -> menuTO.getFeminino().add(new MenuCategory(m.getName(), getSubCategory(m, Gender.FEMALE))));
         return menuTO;
     }
 
-    private List<SubCategoryMenuTO> getMaleSubCategory(Category m) {
+    private List<SubCategoryMenuTO> getSubCategory(Category c, Gender gender) {
         List<SubCategoryMenuTO> subCategoryMenu = new ArrayList<>();
-        List<SubCategory> subCategories = subCategoryRepository.findByCategory(m);
+        List<SubCategory> subCategories = subCategoryRepository.findByCategoryMenu(c, gender);
         subCategories.parallelStream().forEach(subCategory -> subCategoryMenu.add(new SubCategoryMenuTO(subCategory.getId(), subCategory.getName())));
         return subCategoryMenu;
     }

@@ -21,7 +21,8 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
             "AND pd.productId = p.id " +
             "AND (p IN :nameSearch) " +
             "AND (:brand IS NULL OR p.brand.name = :brand) " +
-            "AND (:color IS NULL OR pd.color = :color)")
+            "AND (:color IS NULL OR pd.color = :color) " +
+            "AND p.status = true AND pd.status = true")
     Page<ProductDetails> findByFilter(List<Product> nameSearch, Gender gender, String category, String subcategory, String productSize, String brand, String color, Pageable pageable);
 
     @Query("SELECT DISTINCT (pd) FROM ProductDetails pd, Product p " +
@@ -33,7 +34,8 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
             "AND (:productSize IS NULL OR stock.size = :productSize) " +
             "AND pd.productId = p.id " +
             "AND (:brand IS NULL OR p.brand.name = :brand) " +
-            "AND (:color IS NULL OR pd.color = :color)")
+            "AND (:color IS NULL OR pd.color = :color) " +
+            "AND p.status = true AND pd.status = true")
     Page<ProductDetails> findByFilter(Gender gender, String category, String subcategory, String productSize, String brand, String color, Pageable pageable);
 
 }
