@@ -17,4 +17,5 @@ public class SubCategorySaveTO {
     private Gender gender;
     private Boolean status;
     private UUID categoryId;
+    private Boolean onMenu;
 }
