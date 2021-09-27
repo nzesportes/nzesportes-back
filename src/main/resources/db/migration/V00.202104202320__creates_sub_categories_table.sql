@@ -4,5 +4,5 @@ CREATE TABLE sub_categories (
     category_id uuid,
     gender text,
     status boolean,
-    onMenu boolean
+    on_menu boolean
 );
