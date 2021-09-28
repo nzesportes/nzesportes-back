@@ -120,7 +120,11 @@ public class ProductService {
         return utils.toProductDetailsPage(detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable));
     }
 
-    public Stock updateStock(UpdateStockTO dto) {
+    public Stock updateQuantity(UpdateStockTO dto) {
         return stockService.updateQuantity(dto);
+    }
+
+    public Stock updateStatus(UpdateStockTO dto) {
+        return stockService.updateStatus(dto);
     }
 }

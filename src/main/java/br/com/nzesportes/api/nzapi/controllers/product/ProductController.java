@@ -93,8 +93,13 @@ public class ProductController {
         service.deleteById(id);
     }
 
-    @PutMapping("/details/stock")
-    public Stock updateStock(@RequestBody UpdateStockTO dto) {
-        return service.updateStock(dto);
+    @PutMapping("/details/stock/quantity")
+    public Stock updateQuantity(@RequestBody UpdateStockTO dto) {
+        return service.updateQuantity(dto);
+    }
+
+    @PutMapping("/details/stock/status")
+    public Stock updateStatus(@RequestBody UpdateStockTO dto) {
+        return service.updateStatus(dto);
     }
 }

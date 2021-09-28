@@ -3,6 +3,7 @@ package br.com.nzesportes.api.nzapi.domains.purchase;
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
 public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,4 +25,6 @@ public class Purchase {
     private BigDecimal totalCost;
     @Enumerated(EnumType.STRING)
     private PurchaseStatus status;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private PaymentRequest paymentRequest;
 }

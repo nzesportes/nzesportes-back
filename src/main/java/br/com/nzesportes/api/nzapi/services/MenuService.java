@@ -6,6 +6,7 @@ import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
 import br.com.nzesportes.api.nzapi.dtos.MenuCategory;
 import br.com.nzesportes.api.nzapi.dtos.MenuTO;
 import br.com.nzesportes.api.nzapi.dtos.SubCategoryMenuTO;
+import br.com.nzesportes.api.nzapi.repositories.product.BrandRepository;
 import br.com.nzesportes.api.nzapi.repositories.product.CategoryRepository;
 import br.com.nzesportes.api.nzapi.repositories.product.SubCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class MenuService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private BrandRepository brandRepository;
+
     public MenuTO getMenu() {
         List<Category> male;
         male = categoryRepository.findCategoriesBySubCategoryGender(Gender.MALE);
@@ -34,6 +38,7 @@ public class MenuService {
         MenuTO menuTO = new MenuTO();
         male.forEach(m -> menuTO.getMasculino().add(new MenuCategory(m.getName(), getSubCategory(m, Gender.MALE))));
         female.forEach(m -> menuTO.getFeminino().add(new MenuCategory(m.getName(), getSubCategory(m, Gender.FEMALE))));
+        menuTO.setMarcas(brandRepository.findOnMenu());
         return menuTO;
     }
 

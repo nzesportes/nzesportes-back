@@ -1,6 +1,8 @@
 package br.com.nzesportes.api.nzapi.domains.purchase;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
 @Entity
 @Table(name = "payment_requests")
 public class PaymentRequest {
@@ -21,4 +25,5 @@ public class PaymentRequest {
     private LocalDateTime update_date;
     private LocalDateTime confirmation_date;
     private LocalDateTime cancellation_date;
+
 }
