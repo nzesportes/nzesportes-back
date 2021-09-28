@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.math.BigDecimal;
 import java.util.UUID;
 
 @Getter
@@ -21,5 +22,6 @@ public class PurchaseItems {
     @OneToMany
     private Stock item;
     private Integer quantity;
+    private BigDecimal cost;
     private boolean available;
 }

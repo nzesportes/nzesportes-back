@@ -24,6 +24,7 @@ public enum ResponseErrorEnum {
     ADR001("ADR001 - Endereço não encontrado"),
     ADR002("ADR002 - Você não pode fazer isso"),
     STK001("STK001 - Stock não encontrado"),
+    STK002("STK002 - Erro ao atualizar quantidade de estoque"),
     USR001("USR001 - Usuário não encontrado"),
     USR002("USR002 - Você não pode fazer isso"),
     SCT001("SCT001 - Já existe sub categoria com este nome"),
