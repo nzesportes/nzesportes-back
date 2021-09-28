@@ -15,7 +15,7 @@ import br.com.nzesportes.api.nzapi.repositories.RecoveryRequestRepository;
 import br.com.nzesportes.api.nzapi.repositories.customer.UsersRepository;
 import br.com.nzesportes.api.nzapi.security.jwt.JwtUtils;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
-import br.com.nzesportes.api.nzapi.services.MailService;
+import br.com.nzesportes.api.nzapi.services.email.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -51,7 +51,7 @@ public class AuthService {
     private RecoveryRequestRepository recoveryRequestRepository;
 
     @Autowired
-    private MailService mailService;
+    private EmailService mailService;
 
     @Autowired
     private JwtUtils jwtUtils;
@@ -106,7 +106,11 @@ public class AuthService {
             throw new ResourceNotFoundException(ResponseErrorEnum.COMPLETED);
         else if (request != null && (request.getStatus() == null || request.getStatus() == false)) {
             url = request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? recoveryUrl : firstAccessUrl;
-            mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
+            this.mailService.sendEmailAuth(
+                    user.getUsername(),
+                    url + request.getId(),
+                    request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? true : false
+            );
             return ResponseEntity.ok(new RecoveryTO(request.getId()));
         }
         request = new RecoveryRequest();
@@ -125,10 +129,16 @@ public class AuthService {
 
         request = recoveryRequestRepository.save(request);
 
-        mailService.sendEmail(user.getUsername(), "Para criar a sua senha acesse o link: " + url + request.getId());
+
+        this.mailService.sendEmailAuth(
+                user.getUsername(),
+                url + request.getId(),
+                request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? true : false
+        );
 
         return ResponseEntity.status(HttpStatus.CREATED).body("created");
     }
+
 
     public ResponseEntity<AuthenticationResponse> performFlow(UUID id, ChangePasswordTO dto, String flow) {
         if(!(FIRST_ACCESS.equals(flow) || PASSWORD_RECOVERY.equals(flow)))
