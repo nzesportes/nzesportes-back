@@ -44,12 +44,16 @@ flyway:
   url: ${JDBC_DATABASE_URL}
   user: ${JDBC_DATABASE_USERNAME}
 nz:
+  mercado-pago:
+    token: ${MERCADO_PAGO_TOKEN}
+    url: ${MERCADO_PAGO_URL}
   melhor-envio:
     url: ${MELHOR_ENVIO_URL}
     client-id: ${CLIENT_ID}
     client-secret: ${CLIENT_SECRET}
     user-agent: ${USER_AGENT}
     redirect-uri: ${REDIRECT_URI}
+  webhook: ${WEBHOOK_URL}
   first-access:
     url: ${FIRST_ACCESS_URL}
   recovery:

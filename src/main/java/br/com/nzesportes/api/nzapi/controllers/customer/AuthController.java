@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.controllers;
+package br.com.nzesportes.api.nzapi.controllers.customer;
 
 import br.com.nzesportes.api.nzapi.dtos.customer.AuthenticationRequest;
 import br.com.nzesportes.api.nzapi.dtos.customer.AuthenticationResponse;

@@ -26,13 +26,13 @@ public class StockService {
     }
 
     public Stock updateQuantity(UpdateStockTO dto) {
-        Stock response = repository.updateQuantity(dto.getId(), dto.getQuantityToAdd());
+        repository.updateQuantity(dto.getId(), dto.getQuantityToAdd());
+        Stock response = repository.findById(dto.getId()).get();
         if(response != null) {
             if (response.getQuantity() >= 0)
                 return response;
             repository.updateQuantity(dto.getId(), dto.getQuantityToAdd() * -1);
         }
-        repository.commit();
         throw new ResourceConflictException(ResponseErrorEnum.STK002);
     }
 

@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.controllers;
+package br.com.nzesportes.api.nzapi.controllers.customer;
 
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
 import br.com.nzesportes.api.nzapi.dtos.customer.CustomerUpdateTO;

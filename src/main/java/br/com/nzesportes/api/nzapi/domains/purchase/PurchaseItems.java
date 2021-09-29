@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.domains.purchase;
 
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -23,6 +24,7 @@ public class PurchaseItems {
     private Stock item;
     @ManyToOne
     @JoinColumn(name = "purchase_id")
+    @JsonIgnore
     private Purchase purchase;
     private Integer quantity;
     private BigDecimal cost;

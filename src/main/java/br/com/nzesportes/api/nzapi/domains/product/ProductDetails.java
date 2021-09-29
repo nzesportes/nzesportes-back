@@ -35,7 +35,6 @@ public class ProductDetails {
     private List<SubCategory> subCategories;
     @PrePersist
     private void prePersist() {
-        this.status = false;
         if(this.stock != null && this.stock.size() > 0)
             this.stock.forEach(s -> s.setProductDetail(this));
     }
