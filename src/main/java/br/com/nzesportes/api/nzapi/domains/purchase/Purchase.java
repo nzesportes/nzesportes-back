@@ -16,20 +16,21 @@ import java.util.UUID;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "payment_requests")
+@Table(name = "purchases")
 public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @ManyToOne
     private Customer customer;
-    @OneToMany
+    @OneToMany(mappedBy = "purchase", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PurchaseItems> items;
     private BigDecimal shipment;
     private BigDecimal totalCost;
     @Enumerated(EnumType.STRING)
     private PurchaseStatus status;
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne
+    @JoinColumn(name = "payment_request_id")
     private PaymentRequest paymentRequest;
 
     public Purchase() {
