@@ -178,7 +178,7 @@ public class BetterSendService {
         throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
     }
 
-    @Scheduled(cron = "30 21 00 * * *")
+    @Scheduled(cron = "30 30 03 * * *")
     public void scheduledRefreshToken() {
         List<BetterSend> tokens = repository.findTop10ByOrderByCreationDateDesc();
 
@@ -193,13 +193,13 @@ public class BetterSendService {
             creationDate28.add(Calendar.DAY_OF_MONTH, 28);
 
             if(actualDate.after(creationDate28.getTime())){
-                System.out.println("Invalid token, refreshing token..." + Calendar.getInstance().getTime());
+                log.info("Invalid token, refreshing token...", Calendar.getInstance().getTime());
                 this.refreshToken();
             }else{
-                System.out.println("valid better send Token verification" + Calendar.getInstance().getTime());
+                log.info("valid better send Token verification", Calendar.getInstance().getTime());
             }
         }
-        System.out.println("Token better send not found");
+        log.info("Token better send not found");
     }
 
 }
