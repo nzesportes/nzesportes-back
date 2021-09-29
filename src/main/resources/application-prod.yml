@@ -1,0 +1,63 @@
+server:
+  port: 8080
+  ssl:
+    key-store: ${KEY_STORE}
+    key-alias: keystore
+    key-store-password: ${KEY_STORE_PASSWORD}
+    key-store-type: PKCS12
+  error:
+    include-message: always
+    include-binding-errors: always
+spring:
+  datasource:
+    hikari:
+      maximumPoolSize: 20
+      max-active: 20
+      max-idle: 10
+      connectionTimeout: 30000
+      idleTimeout: 600000
+      maxLifetime: 1800000
+    driverClassName: org.postgresql.Driver
+    url: ${JDBC_DATABASE_URL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWORD}
+  jpa:
+    databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${NZ_EMAIL:''}
+    password: ${NZ_PASSWORD:''}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            enable: true
+      test-connection: true
+flyway:
+  locations: filesystem:db/migration
+  password: ${JDBC_DATABASE_PASSWORD}
+  url: ${JDBC_DATABASE_URL}
+  user: ${JDBC_DATABASE_USERNAME}
+nz:
+  melhor-envio:
+    url: ${MELHOR_ENVIO_URL}
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
+    user-agent: ${USER_AGENT}
+    redirect-uri: ${REDIRECT_URI}
+  first-access:
+    url: ${FIRST_ACCESS_URL}
+  recovery:
+    url: ${RECOVERY_URL}
+  email:
+    from: ${EMAIL_FROM}
+  allowed:
+    origin: '*'
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration: 86400000

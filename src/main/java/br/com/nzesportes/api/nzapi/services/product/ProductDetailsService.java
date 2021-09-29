@@ -1,7 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
+import br.com.nzesportes.api.nzapi.dtos.product.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;

@@ -1,10 +1,9 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.domains.Role;
-import br.com.nzesportes.api.nzapi.domains.product.Category;
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Gender;
 import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
-import br.com.nzesportes.api.nzapi.dtos.SubCategorySaveTO;
+import br.com.nzesportes.api.nzapi.dtos.product.SubCategorySaveTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -19,8 +18,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 

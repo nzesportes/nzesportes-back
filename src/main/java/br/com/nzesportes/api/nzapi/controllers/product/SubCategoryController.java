@@ -2,7 +2,7 @@ package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Gender;
 import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
-import br.com.nzesportes.api.nzapi.dtos.SubCategorySaveTO;
+import br.com.nzesportes.api.nzapi.dtos.product.SubCategorySaveTO;
 import br.com.nzesportes.api.nzapi.services.product.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

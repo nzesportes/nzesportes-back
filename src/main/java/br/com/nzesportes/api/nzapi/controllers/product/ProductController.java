@@ -1,7 +1,7 @@
 package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.*;
-import br.com.nzesportes.api.nzapi.dtos.*;
+import br.com.nzesportes.api.nzapi.dtos.product.*;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -93,8 +93,13 @@ public class ProductController {
         service.deleteById(id);
     }
 
-    @PutMapping("/details/stock")
-    public Stock updateStock(@RequestBody UpdateStockTO dto) {
-        return service.updateStock(dto);
+    @PutMapping("/details/stock/quantity")
+    public Stock updateQuantity(@RequestBody UpdateStockTO dto) {
+        return service.updateQuantity(dto);
+    }
+
+    @PutMapping("/details/stock/status")
+    public Stock updateStatus(@RequestBody UpdateStockTO dto) {
+        return service.updateStatus(dto);
     }
 }

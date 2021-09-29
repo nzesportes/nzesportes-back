@@ -1,12 +1,11 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
-import br.com.nzesportes.api.nzapi.domains.User;
-import br.com.nzesportes.api.nzapi.dtos.AdminSaveTO;
+import br.com.nzesportes.api.nzapi.domains.customer.User;
+import br.com.nzesportes.api.nzapi.dtos.customer.AdminSaveTO;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
-import br.com.nzesportes.api.nzapi.services.UserService;
+import br.com.nzesportes.api.nzapi.services.customer.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;

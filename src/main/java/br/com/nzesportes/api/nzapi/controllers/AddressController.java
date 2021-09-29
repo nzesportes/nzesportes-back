@@ -1,8 +1,8 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
-import br.com.nzesportes.api.nzapi.domains.Address;
+import br.com.nzesportes.api.nzapi.domains.customer.Address;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
-import br.com.nzesportes.api.nzapi.services.AddressService;
+import br.com.nzesportes.api.nzapi.services.customer.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.*;
 import br.com.nzesportes.api.nzapi.dtos.*;
+import br.com.nzesportes.api.nzapi.dtos.product.*;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -119,7 +120,11 @@ public class ProductService {
         return utils.toProductDetailsPage(detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable));
     }
 
-    public Stock updateStock(UpdateStockTO dto) {
+    public Stock updateQuantity(UpdateStockTO dto) {
         return stockService.updateQuantity(dto);
+    }
+
+    public Stock updateStatus(UpdateStockTO dto) {
+        return stockService.updateStatus(dto);
     }
 }

@@ -1,9 +1,9 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
-import br.com.nzesportes.api.nzapi.domains.Customer;
-import br.com.nzesportes.api.nzapi.dtos.CustomerUpdateTO;
+import br.com.nzesportes.api.nzapi.domains.customer.Customer;
+import br.com.nzesportes.api.nzapi.dtos.customer.CustomerUpdateTO;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
-import br.com.nzesportes.api.nzapi.services.CustomerService;
+import br.com.nzesportes.api.nzapi.services.customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;

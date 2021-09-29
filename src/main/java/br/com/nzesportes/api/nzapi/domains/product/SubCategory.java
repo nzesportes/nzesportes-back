@@ -17,12 +17,8 @@ public class SubCategory {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Boolean status;
+    private Boolean onMenu;
 
     @ManyToOne
      private Category category;
-
-    @PrePersist
-    private void prePersist() {
-        this.status = false;
-    }
 }
