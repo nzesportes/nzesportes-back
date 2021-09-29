@@ -36,7 +36,7 @@ public class BetterSendService {
     @Value("${nz.melhor-envio.user-agent}")
     private String USER_AGENT;
 
-    @Value("${nz.melhor-envio.user-agent}")
+    @Value("${nz.melhor-envio.redirect-uri}")
     private String REDIRECT_URI;
 
     @Autowired
