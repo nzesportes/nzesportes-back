@@ -178,7 +178,7 @@ public class BetterSendService {
         throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
     }
 
-    @Scheduled(cron = "30 10 00 * * *")
+    @Scheduled(cron = "30 21 00 * * *")
     public void scheduledRefreshToken() {
         List<BetterSend> tokens = repository.findTop10ByOrderByCreationDateDesc();
 
