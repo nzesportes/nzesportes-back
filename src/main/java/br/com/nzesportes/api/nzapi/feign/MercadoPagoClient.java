@@ -12,5 +12,5 @@ public interface MercadoPagoClient {
     Preference createPreference(@RequestHeader("Authorization") String token, @RequestBody Preference preference);
 
     @GetMapping("/v1/payments/{id}")
-    PaymentMPTO getPayment(@PathVariable String id);
+    PaymentMPTO getPayment(@RequestHeader("Authorization") String token, @PathVariable String id);
 }

@@ -6,13 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 @Builder
 public class PaymentMPTO {
-    public int id;
+    public BigInteger id;
     public OffsetDateTime date_created;
     public OffsetDateTime date_approved;
     public OffsetDateTime date_last_updated;

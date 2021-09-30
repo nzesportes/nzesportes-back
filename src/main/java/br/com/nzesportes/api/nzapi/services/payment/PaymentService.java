@@ -73,7 +73,7 @@ public class PaymentService {
     }
 
     public void checkPaymentStatus(Purchase purchase) {
-        PaymentMPTO payment = mercadoPagoAPI.getPayment(purchase.getPaymentRequest().getPaymentId());
+        PaymentMPTO payment = mercadoPagoAPI.getPayment("Bearer " + TOKEN, purchase.getPaymentRequest().getPaymentId());
         if(MercadoPagoPaymentStatus.cancelled.equals(payment.getStatus()))
             cancelPurchase(purchase);
         else
@@ -153,7 +153,7 @@ public class PaymentService {
         Preference preference = Preference.builder()
                 .payer(payer)
                 .items(items)
-                .notification_url(WEBHOOK_URL + purchase.getId())
+                .notification_url(WEBHOOK_URL)
                 .expires(true)
                 .expiration_date_from(OffsetDateTime.now())
                 .expiration_date_to(OffsetDateTime.now().plusMinutes(30))
