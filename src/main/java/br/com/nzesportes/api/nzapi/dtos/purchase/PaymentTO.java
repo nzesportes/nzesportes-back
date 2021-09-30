@@ -13,4 +13,5 @@ public class PaymentTO {
     private List<ProductPaymentTO> products;
     private BigDecimal shipment;
     private UUID shipmentId;
+    private Integer shipmentService;
 }
