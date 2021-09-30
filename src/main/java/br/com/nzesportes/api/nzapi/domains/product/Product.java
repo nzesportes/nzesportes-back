@@ -20,9 +20,4 @@ public class Product {
     private List<ProductDetails> productDetails;
     private Boolean status;
 
-    @PrePersist
-    private void prePersist() {
-        this.status = false;
-    }
-
 }

@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.domains.purchase;
 
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,10 +20,11 @@ public class PurchaseItems {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name = "stock_id")
+    @JoinColumn(name = "stock_id", updatable = false)
     private Stock item;
     @ManyToOne
     @JoinColumn(name = "purchase_id")
+    @JsonIgnore
     private Purchase purchase;
     private Integer quantity;
     private BigDecimal cost;

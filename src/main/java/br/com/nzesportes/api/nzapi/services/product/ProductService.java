@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.*;
 import br.com.nzesportes.api.nzapi.dtos.*;
 import br.com.nzesportes.api.nzapi.dtos.product.*;
@@ -7,12 +8,14 @@ import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.*;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.utils.ProductUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,8 +82,10 @@ public class ProductService {
         return detailService.update(dto);
     }
 
-    public ProductDetails getDetailById(UUID id) {
-        return detailService.getById(id);
+    public ProductDetails getDetailById(UUID id, UserDetailsImpl principal) {
+        if(principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getText())))
+            return detailService.getById(id);
+        return detailService.getByIdUser(id);
     }
 
     public ProductDetails saveDetail(ProductDetailSaveTO details) {

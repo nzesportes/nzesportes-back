@@ -39,12 +39,16 @@ flyway:
   url: jdbc:postgresql://localhost:5432/postgres
   user: postgres
 nz:
+  mercado-pago:
+    token: 'TEST-2088887924411804-081102-0101ba9aae17bbaf2856a5734bfc4a49-187446709'
+    url: 'https://api.mercadopago.com'
   melhor-envio:
     url: $MELHOR_ENVIO_URL
     client-id: $CLIENT_ID
     client-secret: $CLIENT_SECRET
     user-agent: $USER_AGENT
     redirect-uri: $REDIRECT_URI
+  webhook: 'https://webhook.site/f222a156-97c5-4c34-a970-5d8786b96398'
   first-access:
     url: 'http://localhost:4200/auth/first-access/'
   recovery:

@@ -20,6 +20,7 @@ public class PaymentRequest {
     private UUID buyerId;
     private String webhookStatus;
     private String paymentId;
+    private String preferenceId;
     private LocalDateTime creationDate;
     private LocalDateTime updateDate;
     private LocalDateTime confirmationDate;

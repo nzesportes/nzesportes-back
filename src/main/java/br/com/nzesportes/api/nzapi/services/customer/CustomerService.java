@@ -24,9 +24,6 @@ public class CustomerService {
     @Autowired
     private CustomersRepository repository;
 
-    @Autowired
-    private BaseUserService baseUserService;
-
     public Customer getById(UUID id) {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRO001));
     }

@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface ProductDetailRepository extends JpaRepository<ProductDetails, UUID> {
+
+    Optional<ProductDetails> findByIdAndStatusTrue(UUID id);
 
     @Query("SELECT DISTINCT (pd) FROM ProductDetails pd, Product p " +
             "INNER JOIN pd.subCategories subCategory " +

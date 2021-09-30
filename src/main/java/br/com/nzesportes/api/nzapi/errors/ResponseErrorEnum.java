@@ -28,7 +28,9 @@ public enum ResponseErrorEnum {
     USR001("USR001 - Usuário não encontrado"),
     USR002("USR002 - Você não pode fazer isso"),
     SCT001("SCT001 - Já existe sub categoria com este nome"),
-    SCT002("SCT002 - Sub categoria não encontrada");
+    SCT002("SCT002 - Sub categoria não encontrada"),
+    PAY001("PAY001 - Sem estoque"),
+    PUR001("PUR001 - Compra não encontrada");
 
 
     private final String text;

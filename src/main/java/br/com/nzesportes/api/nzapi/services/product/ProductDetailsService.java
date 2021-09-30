@@ -30,6 +30,11 @@ public class ProductDetailsService {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PDT001));
     }
 
+    public ProductDetails getByIdUser(UUID id) {
+        return repository.findByIdAndStatusTrue(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PDT001));
+    }
+
+
     public ProductDetails update(ProductDetailUpdateTO dto) {
         ProductDetails details = getById(dto.getId());
         copyProperties(dto, details);
