@@ -10,6 +10,7 @@ import java.util.UUID;
 @Service
 public class WebhookService {
     private final static String PAYMENT_CREATED = "payment.created";
+    private final static String PAYMENT_UPDATED = "payment.updated";
 
     @Autowired
     private PurchaseService purchaseService;
@@ -18,12 +19,14 @@ public class WebhookService {
     private PaymentService paymentService;
 
     public void paymentNotification(UUID id, PaymentWebhookNotificationTO webhookNotification) {
+        Purchase purchase = purchaseService.getById(id);
         if(PAYMENT_CREATED.equals(webhookNotification.getAction())){
-            Purchase purchase = purchaseService.getById(id);
             purchase.getPaymentRequest().setPaymentId(webhookNotification.getData().getId());
             purchase = purchaseService.save(purchase);
             paymentService.checkPaymentStatus(purchase);
-        }
+        } else if (PAYMENT_UPDATED.equals(webhookNotification.getAction()))
+            paymentService.checkPaymentStatus(purchase);
+
     }
 
 }

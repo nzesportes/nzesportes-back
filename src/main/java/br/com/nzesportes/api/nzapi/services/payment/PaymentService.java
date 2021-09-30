@@ -5,8 +5,7 @@ import br.com.nzesportes.api.nzapi.domains.product.Stock;
 import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
-import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseStatus;
-import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.MercadoPagoPaymentStatus;
+import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentMPTO;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
@@ -76,7 +75,9 @@ public class PaymentService {
     public void checkPaymentStatus(Purchase purchase) {
         PaymentMPTO payment = mercadoPagoAPI.getPayment(purchase.getPaymentRequest().getPaymentId());
         if(MercadoPagoPaymentStatus.cancelled.equals(payment.getStatus()))
-            cancelPurchase(purchase);//chamar função para colocar de volta no estoque
+            cancelPurchase(purchase);
+        else
+            updateStatus(purchase, payment.getStatus());
     }
 
     private PaymentPurchaseTO createPurchase(PaymentTO dto, UserDetailsImpl principal) {
@@ -85,7 +86,7 @@ public class PaymentService {
                 .customer(customer)
                 .shipment(dto.getShipment())
                 .totalCost(dto.getShipment())
-                .status(PurchaseStatus.PENDING_PAYMENT)
+                .status(MercadoPagoPaymentStatus.pending)
                 .paymentRequest(PaymentRequest.builder().buyerId(customer.getId()).build())
                 .shipmentAddress(addressService.getById(dto.getShipmentId()))
                 .build();
@@ -115,6 +116,7 @@ public class PaymentService {
             }
         });
         purchase.setItems(items);
+
         if(purchase.getTotalCost().equals(purchase.getShipment()))
             throw new ResourceConflictException(ResponseErrorEnum.PAY001);
         Purchase saved = purchaseRepository.save(purchase);
@@ -136,6 +138,8 @@ public class PaymentService {
                         .quantity(purchaseItem.getQuantity())
                         .unit_price(purchaseItem.getCost())
                         .build()));
+
+        items.add(Item.builder().unit_price(purchase.getShipment()).quantity(1).description("Taxa de frete").title("Entrega").build());
 
         Payer payer = Payer.builder()
                 .name(purchase.getCustomer().getName())
@@ -162,9 +166,14 @@ public class PaymentService {
     }
 
     private void cancelPurchase(Purchase purchase) {
-        purchase.setStatus(PurchaseStatus.CANCELED);
+        purchase.setStatus(MercadoPagoPaymentStatus.cancelled);
         purchase.getItems().parallelStream().forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));
+        purchaseRepository.save(purchase);
+    }
 
+    private void updateStatus(Purchase purchase, MercadoPagoPaymentStatus status) {
+        purchase.setStatus(status);
+        purchaseRepository.save(purchase);
     }
 
 }

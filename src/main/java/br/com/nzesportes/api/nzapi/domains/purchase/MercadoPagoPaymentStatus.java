@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.dtos.mercadopago.payment;
+package br.com.nzesportes.api.nzapi.domains.purchase;
 
 public enum MercadoPagoPaymentStatus {
     pending("pending"), // The user has not yet completed the payment process.

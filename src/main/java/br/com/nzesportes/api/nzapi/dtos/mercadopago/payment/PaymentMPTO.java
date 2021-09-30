@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.dtos.mercadopago.payment;
 
+import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.Payer;
 import lombok.Builder;
 import lombok.Getter;

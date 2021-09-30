@@ -29,7 +29,7 @@ public class Purchase {
     private Address shipmentAddress;
     private BigDecimal totalCost;
     @Enumerated(EnumType.STRING)
-    private PurchaseStatus status;
+    private MercadoPagoPaymentStatus status;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_request_id")
     private PaymentRequest paymentRequest;
