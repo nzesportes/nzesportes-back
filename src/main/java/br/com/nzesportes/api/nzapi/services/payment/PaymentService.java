@@ -153,7 +153,7 @@ public class PaymentService {
         Preference preference = Preference.builder()
                 .payer(payer)
                 .items(items)
-                .notification_url(WEBHOOK_URL)
+                .notification_url(WEBHOOK_URL + purchase.getId().toString())
                 .expires(true)
                 .expiration_date_from(OffsetDateTime.now())
                 .expiration_date_to(OffsetDateTime.now().plusMinutes(30))
