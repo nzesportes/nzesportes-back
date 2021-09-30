@@ -76,10 +76,10 @@ public class PaymentService {
     public void checkPaymentStatus(Purchase purchase) {
         PaymentMPTO payment = mercadoPagoAPI.getPayment(purchase.getPaymentRequest().getPaymentId());
         if(MercadoPagoPaymentStatus.cancelled.equals(payment.getStatus()))
-            return;//chamar função para colocar de volta no estoque
+            cancelPurchase(purchase);//chamar função para colocar de volta no estoque
     }
 
-   private PaymentPurchaseTO createPurchase(PaymentTO dto, UserDetailsImpl principal) {
+    private PaymentPurchaseTO createPurchase(PaymentTO dto, UserDetailsImpl principal) {
         Customer customer = customerService.getByUserId(principal.getId());
         Purchase purchase = Purchase.builder()
                 .customer(customer)
@@ -159,6 +159,12 @@ public class PaymentService {
 
         Preference savedPreference = mercadoPagoAPI.createPreference("Bearer " + TOKEN, preference);
         return savedPreference;
+    }
+
+    private void cancelPurchase(Purchase purchase) {
+        purchase.setStatus(PurchaseStatus.CANCELED);
+        purchase.getItems().parallelStream().forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));
+
     }
 
 }

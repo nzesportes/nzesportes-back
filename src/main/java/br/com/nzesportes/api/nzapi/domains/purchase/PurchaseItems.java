@@ -20,7 +20,7 @@ public class PurchaseItems {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     @ManyToOne
-    @JoinColumn(name = "stock_id")
+    @JoinColumn(name = "stock_id", updatable = false)
     private Stock item;
     @ManyToOne
     @JoinColumn(name = "purchase_id")

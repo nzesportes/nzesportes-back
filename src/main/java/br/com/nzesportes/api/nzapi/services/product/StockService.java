@@ -35,13 +35,7 @@ public class StockService {
         }
         throw new ResourceConflictException(ResponseErrorEnum.STK002);
     }
-
-
-
-    public void deleteAll(List<UUID> stockToRemove) {
-        repository.deleteAll(repository.findAllById(stockToRemove));
-    }
-
+    
     public Stock updateStatus(UpdateStockTO dto) {
         return repository.updateStatus(dto.getId());
     }
