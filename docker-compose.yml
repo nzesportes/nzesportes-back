@@ -22,8 +22,16 @@ services:
       FIRST_ACCESS_URL: ${FIRST_ACCESS_URL}
       KEY_STORE_PASSWORD: ${KEY_STORE_PASSWORD}
       KEY_STORE: keystore.p12
+      REDIS_COMMAND: ${REDIS_COMMAND}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      WEBHOOK_URL: ${WEBHOOK_URL}
+      MERCADO_PAGO_URL: ${MERCADO_PAGO_URL}
+      MERCADO_PAGO_TOKEN: ${MERCADO_PAGO_TOKEN}
     depends_on:
       - dbpostgresql
+      - redis
   dbpostgresql:
     image: postgres
     ports:
@@ -32,3 +40,8 @@ services:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${JDBC_DATABASE_USERNAME}
       POSTGRES_PASSWORD: ${JDBC_DATABASE_PASSWORD}
+  redis:
+    image: redis
+    command: ${REDIS_COMMAND}
+    ports:
+      - "6379:6379"

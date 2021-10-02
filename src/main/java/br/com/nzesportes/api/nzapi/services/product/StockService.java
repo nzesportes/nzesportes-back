@@ -22,7 +22,7 @@ public class StockService {
     }
 
     public Stock getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.STK001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
     public Stock updateQuantity(UpdateStockTO dto) {
@@ -33,7 +33,7 @@ public class StockService {
                 return response;
             repository.updateQuantity(dto.getId(), dto.getQuantityToAdd() * -1);
         }
-        throw new ResourceConflictException(ResponseErrorEnum.STK002);
+        throw new ResourceConflictException(ResponseErrorEnum.STK001);
     }
     
     public Stock updateStatus(UpdateStockTO dto) {

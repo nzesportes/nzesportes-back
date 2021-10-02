@@ -1,1 +1,1 @@
-ALTER TABLE purchases ADD shipment_service_id Integer;
+ALTER TABLE payment_requests ADD preference_id text;

@@ -28,7 +28,7 @@ public class AddressService {
     }
 
     public Address getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.ADR001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
     public List<Address> getByUser(UserDetailsImpl principal) {
@@ -41,13 +41,13 @@ public class AddressService {
             repository.deleteById(id);
             return ResponseEntity.status(201).body(null);
         }
-        throw new ResourceUnauthorizedException(ResponseErrorEnum.ADR002);
+        throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
     }
 
     public Address update(Address address, UserDetailsImpl principal) {
         if(address.getCustomerId().equals(customerService.getByUserId(principal.getId()).getId())) {
             return repository.save(address);
         }
-        throw new ResourceUnauthorizedException(ResponseErrorEnum.ADR002);
+        throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
     }
 }

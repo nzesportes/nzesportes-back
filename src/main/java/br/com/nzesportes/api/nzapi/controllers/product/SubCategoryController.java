@@ -5,6 +5,7 @@ import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
 import br.com.nzesportes.api.nzapi.dtos.product.SubCategorySaveTO;
 import br.com.nzesportes.api.nzapi.services.product.SubCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class SubCategoryController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    @CacheEvict(allEntries = true, value = "menu")
     public ResponseEntity<SubCategory> create(@RequestBody SubCategorySaveTO subCategory) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(subCategory));
     }
@@ -43,12 +45,14 @@ public class SubCategoryController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     @PutMapping
+    @CacheEvict(allEntries = true, value = "menu")
     public ResponseEntity<SubCategory> update(@RequestBody SubCategorySaveTO subCategory) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.update(subCategory));
     }
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     @DeleteMapping("/{id}")
+    @CacheEvict(allEntries = true, value = "menu")
     public void deleteById(@PathVariable UUID id){
         service.deleteById(id);
     }

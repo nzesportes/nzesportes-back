@@ -53,7 +53,7 @@ public class ProductService {
     }
 
     public Product getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRD001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
     public Page<Product> getAll(String name, Boolean status, int page, int size) {
@@ -72,7 +72,7 @@ public class ProductService {
     }
 
     public StatusTO changeStatus(UUID id) {
-        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRD001));
+        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
         product.setStatus(!product.getStatus());
         repository.save(product);
         return new StatusTO(product.getStatus());

@@ -19,6 +19,10 @@ public class PurchaseService {
     }
 
     public Purchase getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PUR001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
     }
+    public Purchase getByIdAndCustomerId(UUID id, UUID customerId) {
+        return repository.findByIdAndCustomerId(id, customerId).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
+    }
+
 }
