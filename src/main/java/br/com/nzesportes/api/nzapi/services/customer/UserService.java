@@ -27,7 +27,7 @@ public class UserService {
     }
 
     public User getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.USR001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
     }
 
     public Page<User> getAdmins(int page, int size) {
@@ -37,7 +37,7 @@ public class UserService {
     public void deleteById(UUID id, UserDetailsImpl principal) {
         User user = getById(id);
         if(user.getId().equals(principal.getId()))
-            throw new ResourceConflictException(ResponseErrorEnum.USR002);
+            throw new ResourceConflictException(ResponseErrorEnum.CONFLICTED_OPERATION);
     }
 
     public User update(AdminSaveTO dto) {

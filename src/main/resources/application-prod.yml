@@ -9,6 +9,10 @@ server:
     include-message: always
     include-binding-errors: always
 spring:
+  redis:
+    host: ${NZ_SMTP_HOST:''}
+    port: ${NZ_SMTP_PORT:''}
+    password: ${REDIS_PASSWORD}
   datasource:
     hikari:
       maximumPoolSize: 20

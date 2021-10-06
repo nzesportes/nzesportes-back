@@ -33,6 +33,7 @@ public class Purchase {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_request_id")
     private PaymentRequest paymentRequest;
+    private Integer shipmentServiceId;
 
     @PrePersist
     private void prePersist() {

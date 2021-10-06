@@ -1,0 +1,1 @@
+ALTER TABLE products_details ADD creation_date date;

@@ -41,4 +41,5 @@ public interface ProductDetailRepository extends JpaRepository<ProductDetails, U
             "AND p.status = true AND pd.status = true")
     Page<ProductDetails> findByFilter(Gender gender, String category, String subcategory, String productSize, String brand, String color, Pageable pageable);
 
+    List<ProductDetails> findBySubCategoriesContaining(SubCategory id);
 }

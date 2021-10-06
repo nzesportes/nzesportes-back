@@ -22,6 +22,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -29,7 +31,8 @@ dependencies {
 	implementation 'com.mercadopago:sdk-java:1.9.0'
 	implementation 'io.jsonwebtoken:jjwt:0.9.1'
 	implementation "org.flywaydb:flyway-core:7.7.1"
-	compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '3.0.4'
+	implementation 'redis.clients:jedis:3.7.0'
+	implementation'org.springframework.cloud:spring-cloud-starter-openfeign:3.0.4'
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'

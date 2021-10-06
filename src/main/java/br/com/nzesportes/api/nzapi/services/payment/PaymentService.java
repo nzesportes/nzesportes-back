@@ -85,6 +85,7 @@ public class PaymentService {
         Purchase purchase = Purchase.builder()
                 .customer(customer)
                 .shipment(dto.getShipment())
+                .shipmentServiceId(dto.getShipmentService())
                 .totalCost(dto.getShipment())
                 .status(MercadoPagoPaymentStatus.pending)
                 .paymentRequest(PaymentRequest.builder().buyerId(customer.getId()).build())
@@ -92,7 +93,7 @@ public class PaymentService {
                 .build();
 
         List<PurchaseItems> items = new ArrayList<>();
-        dto.getProducts().stream().forEach(productPaymentTO -> {
+        dto.getProducts().parallelStream().forEach(productPaymentTO -> {
             Stock updatedStock;
             try {
                 updatedStock = stockService.updateQuantity(new UpdateStockTO(productPaymentTO.getStockId(), -productPaymentTO.getQuantity()));

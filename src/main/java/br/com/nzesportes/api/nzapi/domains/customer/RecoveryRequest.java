@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.domains;
+package br.com.nzesportes.api.nzapi.domains.customer;
 
 import lombok.Getter;
 import lombok.Setter;
