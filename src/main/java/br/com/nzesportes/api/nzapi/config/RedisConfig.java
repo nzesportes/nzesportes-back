@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +13,7 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @EnableRedisRepositories
+@Slf4j
 public class RedisConfig {
     @Value("${spring.redis.host}")
     private String HOST;
@@ -21,6 +23,7 @@ public class RedisConfig {
     private String PASSWORD;
     @Bean
     public JedisConnectionFactory connectionFactory() {
+        log.info("Redis host: " + HOST);
         RedisStandaloneConfiguration configuration = new RedisStandaloneConfiguration();
         configuration.setHostName(HOST);
         configuration.setPort(PORT);
