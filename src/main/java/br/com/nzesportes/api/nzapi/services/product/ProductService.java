@@ -106,14 +106,7 @@ public class ProductService {
     }
 
     public Page<ProductDetailsTO> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
-        Pageable pageable;
-        if(order != null)
-            if (order.equals(Order.ASC) || order.equals(Order.DESC))
-                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(order.getText()), "price"));
-            else
-                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sale.percentage"));
-        else
-            pageable = PageRequest.of(page, size);
+        Pageable pageable = pageBuilder(page, size, order);
 
         List<Product> nameSearch;
         if(name != null) {
@@ -123,6 +116,19 @@ public class ProductService {
         }
 
         return utils.toProductDetailsPage(detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable));
+    }
+
+    private Pageable pageBuilder(int page, int size, Order order) {
+        if(order != null)
+            if (order.equals(Order.ASC) || order.equals(Order.DESC))
+                return PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(order.getText()), "price"));
+            else
+                if (order.equals(Order.SALE))
+                    return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sale.percentage"));
+            else
+                return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "creationDate"));
+        else
+            return PageRequest.of(page, size);
     }
 
     public Stock updateQuantity(UpdateStockTO dto) {

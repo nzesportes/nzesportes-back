@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
-@RestController("/ratings")
+@RestController
+@RequestMapping("/ratings")
+@CrossOrigin("${nz.allowed.origin}")
 public class RatingController {
     @Autowired
     private RatingService service;

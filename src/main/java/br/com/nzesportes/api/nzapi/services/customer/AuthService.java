@@ -1,7 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.customer;
 
-import br.com.nzesportes.api.nzapi.domains.RecoveryRequest;
-import br.com.nzesportes.api.nzapi.domains.RecoveryType;
+import br.com.nzesportes.api.nzapi.domains.customer.RecoveryRequest;
+import br.com.nzesportes.api.nzapi.domains.customer.RecoveryType;
 import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.customer.User;
 import br.com.nzesportes.api.nzapi.dtos.customer.AuthenticationRequest;

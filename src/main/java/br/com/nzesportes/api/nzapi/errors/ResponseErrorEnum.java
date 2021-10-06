@@ -29,8 +29,11 @@ public enum ResponseErrorEnum {
     SCT001("SCT001 - Já existe sub categoria com este nome"),
     SCT003("SCT003 - Sub categoria já com produtos atrelados"),
     PAY001("PAY001 - Sem estoque"),
-    RAT002("RAT002 - produto não faz parte da compra");
+    RAT002("RAT002 - produto não faz parte da compra"),
 
+    //SALE
+    SAL001("SAL001 - Existe uma promoção entre essas datas ou data incorreta"),
+    SAL002("SAL002 - Não foi possível deleter promoção que já iniciou");
 
     private final String text;
 
