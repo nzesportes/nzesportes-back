@@ -1,7 +1,8 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
-import br.com.nzesportes.api.nzapi.dtos.UpdateStockTO;
+import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
+import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.StockRepository;
@@ -21,16 +22,21 @@ public class StockService {
     }
 
     public Stock getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.STK001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
     public Stock updateQuantity(UpdateStockTO dto) {
-        Stock stock = getById(dto.getId());
-        stock.setQuantity(stock.getQuantity() + dto.getQuantityToAdd());
-        return repository.save(stock);
+        repository.updateQuantity(dto.getId(), dto.getQuantityToAdd());
+        Stock response = repository.findById(dto.getId()).get();
+        if(response != null) {
+            if (response.getQuantity() >= 0)
+                return response;
+            repository.updateQuantity(dto.getId(), dto.getQuantityToAdd() * -1);
+        }
+        throw new ResourceConflictException(ResponseErrorEnum.STK001);
     }
-
-    public void deleteAll(List<UUID> stockToRemove) {
-        repository.deleteAll(repository.findAllById(stockToRemove));
+    
+    public Stock updateStatus(UpdateStockTO dto) {
+        return repository.updateStatus(dto.getId());
     }
 }

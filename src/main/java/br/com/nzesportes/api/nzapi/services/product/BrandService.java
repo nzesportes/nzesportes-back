@@ -1,13 +1,16 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Brand;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.BrandRepository;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -30,7 +33,9 @@ public class BrandService {
         return repository.save(brand);
     }
 
-    public Page<Brand> getAll(String name, int page, int size) {
+    public Page<Brand> getAll(String name, int page, int size, UserDetailsImpl principal) {
+        if(principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_USER.getText())))
+            return repository.findByFilterAndStatusTrue(name == null ? "" : name, PageRequest.of(page, size));
         return repository.findByFilter(name == null ? "" : name, PageRequest.of(page, size));
     }
 
@@ -41,10 +46,7 @@ public class BrandService {
     }
 
     public Brand getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.BRD003));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
-    public Brand getByName(String brand) {
-        return repository.findByName(brand).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.BRD003));
-    }
 }

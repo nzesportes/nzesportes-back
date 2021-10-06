@@ -4,6 +4,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -17,14 +18,15 @@ public class ProductDetails {
     private String color;
     private BigDecimal price;
     private String description;
-    @ManyToOne
-    private Sale sale;
+    @OneToMany(mappedBy = "productDetailId")
+    private List<Sale> sales;
     private Boolean status;
     private String images;
     @JoinColumn
     private UUID productId;
     @OneToMany(mappedBy = "productDetail", orphanRemoval = true, cascade = CascadeType.PERSIST)
     private List<Stock> stock;
+    private LocalDateTime creationDate;
 
     @ManyToMany
     @JoinTable(
@@ -35,7 +37,7 @@ public class ProductDetails {
     private List<SubCategory> subCategories;
     @PrePersist
     private void prePersist() {
-        this.status = false;
+        this.creationDate = LocalDateTime.now();
         if(this.stock != null && this.stock.size() > 0)
             this.stock.forEach(s -> s.setProductDetail(this));
     }

@@ -1,8 +1,8 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
-import br.com.nzesportes.api.nzapi.dtos.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
+import br.com.nzesportes.api.nzapi.dtos.product.ProductDetailUpdateTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.ProductDetailRepository;
@@ -27,7 +27,11 @@ public class ProductDetailsService {
     private SubCategoryRepository subCategoryRepository;
 
     public ProductDetails getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PDT001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+    }
+
+    public ProductDetails getByIdUser(UUID id) {
+        return repository.findByIdAndStatusTrue(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
     }
 
     public ProductDetails update(ProductDetailUpdateTO dto) {
@@ -55,6 +59,10 @@ public class ProductDetailsService {
 
     public List<ProductDetails> saveAll(List<ProductDetails> details) {
         return repository.saveAll(details);
+    }
+
+    public List<ProductDetails> getBySubCategoryId(SubCategory subCategory){
+        return repository.findBySubCategoriesContaining(subCategory);
     }
 
     public void deleteById(UUID id) {

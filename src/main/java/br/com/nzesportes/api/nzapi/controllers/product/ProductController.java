@@ -1,12 +1,14 @@
 package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.*;
-import br.com.nzesportes.api.nzapi.dtos.*;
+import br.com.nzesportes.api.nzapi.dtos.product.*;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -83,8 +85,8 @@ public class ProductController {
     }
 
     @GetMapping("/details/{id}")
-    public ProductDetails getDetailById(@PathVariable UUID id) {
-        return service.getDetailById(id);
+    public ProductDetails getDetailById(@PathVariable UUID id, Authentication authentication) {
+        return service.getDetailById(id, (UserDetailsImpl) authentication.getPrincipal());
     }
 
     @DeleteMapping("/details/{id}")
@@ -93,8 +95,13 @@ public class ProductController {
         service.deleteById(id);
     }
 
-    @PutMapping("/details/stock")
-    public Stock updateStock(@RequestBody UpdateStockTO dto) {
-        return service.updateStock(dto);
+    @PutMapping("/details/stock/quantity")
+    public Stock updateQuantity(@RequestBody UpdateStockTO dto) {
+        return service.updateQuantity(dto);
+    }
+
+    @PutMapping("/details/stock/status")
+    public Stock updateStatus(@RequestBody UpdateStockTO dto) {
+        return service.updateStatus(dto);
     }
 }

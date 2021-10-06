@@ -1,17 +1,21 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.*;
 import br.com.nzesportes.api.nzapi.dtos.*;
+import br.com.nzesportes.api.nzapi.dtos.product.*;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.*;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.utils.ProductUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -49,7 +53,7 @@ public class ProductService {
     }
 
     public Product getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRD001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
     public Page<Product> getAll(String name, Boolean status, int page, int size) {
@@ -68,7 +72,7 @@ public class ProductService {
     }
 
     public StatusTO changeStatus(UUID id) {
-        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRD001));
+        Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
         product.setStatus(!product.getStatus());
         repository.save(product);
         return new StatusTO(product.getStatus());
@@ -78,8 +82,10 @@ public class ProductService {
         return detailService.update(dto);
     }
 
-    public ProductDetails getDetailById(UUID id) {
-        return detailService.getById(id);
+    public ProductDetails getDetailById(UUID id, UserDetailsImpl principal) {
+        if(principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getText())))
+            return detailService.getById(id);
+        return detailService.getByIdUser(id);
     }
 
     public ProductDetails saveDetail(ProductDetailSaveTO details) {
@@ -100,14 +106,7 @@ public class ProductService {
     }
 
     public Page<ProductDetailsTO> getAllProductDetails(String name, Gender gender, String category, String subcategory, String productSize, String color, String brand, Order order, int page, int size) {
-        Pageable pageable;
-        if(order != null)
-            if (order.equals(Order.ASC) || order.equals(Order.DESC))
-                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(order.getText()), "price"));
-            else
-                pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sale.percentage"));
-        else
-            pageable = PageRequest.of(page, size);
+        Pageable pageable = pageBuilder(page, size, order);
 
         List<Product> nameSearch;
         if(name != null) {
@@ -119,7 +118,24 @@ public class ProductService {
         return utils.toProductDetailsPage(detailRepository.findByFilter(gender, category, subcategory, productSize, brand, color, pageable));
     }
 
-    public Stock updateStock(UpdateStockTO dto) {
+    private Pageable pageBuilder(int page, int size, Order order) {
+        if(order != null)
+            if (order.equals(Order.ASC) || order.equals(Order.DESC))
+                return PageRequest.of(page, size, Sort.by(Sort.Direction.valueOf(order.getText()), "price"));
+            else
+                if (order.equals(Order.SALE))
+                    return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "sale.percentage"));
+            else
+                return PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "creationDate"));
+        else
+            return PageRequest.of(page, size);
+    }
+
+    public Stock updateQuantity(UpdateStockTO dto) {
         return stockService.updateQuantity(dto);
+    }
+
+    public Stock updateStatus(UpdateStockTO dto) {
+        return stockService.updateStatus(dto);
     }
 }

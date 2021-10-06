@@ -1,10 +1,9 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.domains.Role;
-import br.com.nzesportes.api.nzapi.domains.product.Category;
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Gender;
 import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
-import br.com.nzesportes.api.nzapi.dtos.SubCategorySaveTO;
+import br.com.nzesportes.api.nzapi.dtos.product.SubCategorySaveTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -19,8 +18,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -34,20 +31,21 @@ public class SubCategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductDetailsService detailService;
+
     public SubCategory save(SubCategorySaveTO dto) {
         SubCategory subCategory = new SubCategory();
         copyProperties(dto, subCategory);
 
-        if(repository.existsByName(subCategory.getName()) && Objects.nonNull(subCategory))
+        if(repository.existsByNameAndGender(subCategory.getName(), dto.getGender()) && Objects.nonNull(subCategory))
             throw new ResourceConflictException(ResponseErrorEnum.SCT001);
-        if(subCategory.getCategories() == null)
-            subCategory.setCategories(new ArrayList<>());
-        subCategory.getCategories().addAll(categoryRepository.findAllById(dto.getCategoriesToAdd()));
+        subCategory.setCategory(categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND)));
         return repository.save(subCategory);
     }
 
     public SubCategory getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.SCT002));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
     }
 
     public Page<SubCategory> getAll(String name, Gender gender, Boolean status, int page, int size, Authentication auth) {
@@ -67,26 +65,13 @@ public class SubCategoryService {
         SubCategory subCategory = getById(dto.getId());
         copyProperties(dto, subCategory);
 
-        if(subCategory.getCategories() == null)
-            subCategory.setCategories(new ArrayList<>());
-
-        if (dto.getCategoriesToAdd() != null && dto.getCategoriesToAdd().size() > 0) {
-            List<Category> categories = categoryRepository.findAllById(dto.getCategoriesToAdd());
-            categories.forEach(category -> {
-                if(!subCategory.getCategories().contains(category)) subCategory.getCategories().add(category);
-            });
-        }
-
-        if (dto.getCategoriesToRemove() != null && dto.getCategoriesToRemove().size() > 0) {
-            List<Category> categories = categoryRepository.findAllById(dto.getCategoriesToRemove());
-            categories.forEach(category -> {
-                if (subCategory.getCategories().contains(category)) subCategory.getCategories().remove(category);
-            });
-        }
         return repository.save(subCategory);
     }
 
     public void deleteById(UUID id) {
+        if(detailService.getBySubCategoryId(getById(id)) != null
+                && detailService.getBySubCategoryId(getById(id)).size() > 0)
+            throw new ResourceConflictException(ResponseErrorEnum.SCT003);
         repository.deleteById(id);
     }
 }

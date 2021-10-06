@@ -17,17 +17,8 @@ public class SubCategory {
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private Boolean status;
+    private Boolean onMenu;
 
-    @ManyToMany
-    @JoinTable(
-            name = "categories_sub_categories",
-            joinColumns = @JoinColumn(name = "sub_category_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id")
-    )
-    private List<Category> categories;
-
-    @PrePersist
-    private void prePersist() {
-        this.status = false;
-    }
+    @ManyToOne
+    private Category category;
 }

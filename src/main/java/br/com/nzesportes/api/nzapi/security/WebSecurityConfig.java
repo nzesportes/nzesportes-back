@@ -58,9 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // AUTHORIZATION
                 .authorizeRequests().antMatchers("/api/auth/**").permitAll().and()
                 .authorizeRequests().antMatchers("/first-access/**").permitAll().and()
-                .authorizeRequests().antMatchers("/contact").permitAll().and()
-                .authorizeRequests().antMatchers("/products/*").permitAll().and()
-                .authorizeRequests().antMatchers("/products").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.POST, "/contact").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/products/details/**").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/products/**").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/categories").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/brands").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/menu/**").permitAll().and()
+                .authorizeRequests().antMatchers( "/webhook/**").permitAll().and()
                 .authorizeRequests().antMatchers("/better-send/calculate").permitAll()
 
                 // PRODUCTS

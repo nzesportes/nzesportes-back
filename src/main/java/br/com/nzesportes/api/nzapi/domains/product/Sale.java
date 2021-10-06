@@ -15,6 +15,7 @@ public class Sale {
     private UUID id;
     private Double percentage;
     private Integer quantity;
+    private UUID productDetailId;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private Integer quantityLeft;

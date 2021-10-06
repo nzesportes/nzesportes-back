@@ -1,0 +1,1 @@
+ALTER TABLE sales ADD product_detail_id uuid NOT NULL;

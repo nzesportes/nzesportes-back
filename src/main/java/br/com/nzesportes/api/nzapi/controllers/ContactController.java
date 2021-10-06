@@ -18,7 +18,6 @@ public class ContactController {
     private ContactService service;
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> save(@RequestBody Contact contact) {
         return ResponseEntity.status(201).body(service.save(contact));
     }

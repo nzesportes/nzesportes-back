@@ -1,14 +1,13 @@
 server:
   port: 8080
-  ssl:
-    key-store: ${KEY_STORE}
-    key-alias: keystore
-    key-store-password: ${KEY_STORE_PASSWORD}
-    key-store-type: PKCS12
   error:
     include-message: always
     include-binding-errors: always
 spring:
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT}
+    password: ${REDIS_PASSWORD}
   datasource:
     hikari:
       maximumPoolSize: 20
@@ -24,8 +23,8 @@ spring:
   jpa:
     databasePlatform: org.hibernate.dialect.PostgreSQL9Dialect
   mail:
-    host: smtp.gmail.com
-    port: 587
+    host: ${NZ_SMTP_HOST:''}
+    port: ${NZ_SMTP_PORT:''}
     username: ${NZ_EMAIL:''}
     password: ${NZ_PASSWORD:''}
     properties:
@@ -44,12 +43,16 @@ flyway:
   url: ${JDBC_DATABASE_URL}
   user: ${JDBC_DATABASE_USERNAME}
 nz:
+  mercado-pago:
+    token: ${MERCADO_PAGO_TOKEN}
+    url: ${MERCADO_PAGO_URL}
   melhor-envio:
     url: ${MELHOR_ENVIO_URL}
     client-id: ${CLIENT_ID}
     client-secret: ${CLIENT_SECRET}
     user-agent: ${USER_AGENT}
     redirect-uri: ${REDIRECT_URI}
+  webhook: ${WEBHOOK_URL}
   first-access:
     url: ${FIRST_ACCESS_URL}
   recovery:

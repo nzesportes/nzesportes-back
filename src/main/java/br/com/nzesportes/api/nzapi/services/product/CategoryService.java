@@ -1,6 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.domains.Role;
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.dtos.StatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
@@ -29,7 +29,7 @@ public class CategoryService {
     }
 
     public Category getByName(String name) {
-        return repository.findByNameContaining(name).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
+        return repository.findByNameContaining(name).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
     public Page<Category> getAll(int page, int size, Boolean status, String name, UserDetails principal) {
@@ -52,11 +52,11 @@ public class CategoryService {
     }
 
     public Category getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
     public StatusTO changeStatus(UUID id) {
-        Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.CAT002));
+        Category category = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
         category.setStatus(!category.getStatus());
         return new StatusTO(repository.save(category).getStatus());
     }
