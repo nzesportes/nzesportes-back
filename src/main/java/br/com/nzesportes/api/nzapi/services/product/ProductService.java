@@ -132,4 +132,8 @@ public class ProductService {
     public Stock updateStatus(UpdateStockTO dto) {
         return stockService.updateStatus(dto);
     }
+
+    public Product getProductById(UUID id) {
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRD001));
+    }
 }

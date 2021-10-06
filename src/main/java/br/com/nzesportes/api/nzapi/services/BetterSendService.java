@@ -1,10 +1,17 @@
 package br.com.nzesportes.api.nzapi.services;
 
 import br.com.nzesportes.api.nzapi.domains.BetterSend;
+import br.com.nzesportes.api.nzapi.domains.customer.User;
+import br.com.nzesportes.api.nzapi.domains.product.Product;
+import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.dtos.BetterSendTokenStatusTO;
+import br.com.nzesportes.api.nzapi.dtos.bettersend.BetterSendCart;
+import br.com.nzesportes.api.nzapi.dtos.bettersend.ProductCart;
 import br.com.nzesportes.api.nzapi.errors.ResourceUnauthorizedException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.BetterSendRepository;
+import br.com.nzesportes.api.nzapi.services.customer.UserService;
+import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,6 +49,12 @@ public class BetterSendService {
     @Autowired
     private BetterSendRepository repository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ProductService productService;
+
     public ResponseEntity<?> postToken(String code){
 
         // request headers parameters
@@ -76,14 +89,8 @@ public class BetterSendService {
 
     public ResponseEntity<?> calculateShipping(Object bodyRequest){
 
-        if(TOKEN == null){
-            List<BetterSend> tokens = repository.findTop10ByOrderByCreationDateDesc();
-            if(tokens.size() > 0){
-                TOKEN = tokens.get(0).accessToken;
-            }else {
-                throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
-            }
-        }
+        verifyToken();
+
         // request headers parameters
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", "application/json");
@@ -200,6 +207,52 @@ public class BetterSendService {
             }
         }
         log.info("Token better send not found");
+    }
+
+    public void sendCart(Purchase purchase){
+        BetterSendCart betterSendCart = new BetterSendCart();
+
+//        betterSendCart.setService();
+        User user = userService.getById(purchase.getCustomer().getUserId());
+        betterSendCart.setTo(purchase.getShipmentAddress() , purchase.getCustomer(), user.getUsername());
+        purchase.getItems().parallelStream().forEach(item -> {
+            Product p =  productService.getProductById(item.getItem().getProductDetail().getProductId());
+            ProductCart itemCart = new ProductCart(
+                    p.getModel() + " " + item.getItem().getSize() + " " + item.getItem().getProductDetail().getColor(),
+                    item.getQuantity(),
+                    item.getItem().getProductDetail().getPrice()
+            );
+            betterSendCart.products.add(itemCart);
+        });
+
+        verifyToken();
+        // request headers parameters
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Accept", "application/json");
+        headers.add("Content-Type", "application/json");
+        headers.add("User-Agent", USER_AGENT);
+        headers.add("Authorization", "Bearer " + TOKEN);
+
+        HttpEntity<BetterSendCart> entity = new HttpEntity<>(betterSendCart, headers);
+
+        RestTemplate rest = new RestTemplate();
+        // send POST request
+        ResponseEntity<BetterSend> response = rest.postForEntity(URI + "api/v2/me/cart", entity, BetterSend.class);
+        if(response.getStatusCode() == HttpStatus.OK){
+            return;
+        }
+        throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
+    }
+
+    private void verifyToken() {
+        if(TOKEN == null){
+            List<BetterSend> tokens = repository.findTop10ByOrderByCreationDateDesc();
+            if(tokens.size() > 0){
+                TOKEN = tokens.get(0).accessToken;
+            }else {
+                throw new ResourceUnauthorizedException(ResponseErrorEnum.NOT_AUTH);
+            }
+        }
     }
 
 }
