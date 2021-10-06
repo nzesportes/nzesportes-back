@@ -29,6 +29,8 @@ services:
       WEBHOOK_URL: ${WEBHOOK_URL}
       MERCADO_PAGO_URL: ${MERCADO_PAGO_URL}
       MERCADO_PAGO_TOKEN: ${MERCADO_PAGO_TOKEN}
+      NZ_SMTP_HOST: ${NZ_SMTP_HOST}
+      NZ_SMTP_PORT: ${NZ_SMTP_PORT}
     depends_on:
       - dbpostgresql
       - redis

@@ -10,8 +10,8 @@ server:
     include-binding-errors: always
 spring:
   redis:
-    host: ${REDIS_HOST}
-    port: ${REDIS_PORT}
+    host: ${NZ_SMTP_HOST:''}
+    port: ${NZ_SMTP_PORT:''}
     password: ${REDIS_PASSWORD}
   datasource:
     hikari:
