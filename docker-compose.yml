@@ -31,6 +31,8 @@ services:
       MERCADO_PAGO_TOKEN: ${MERCADO_PAGO_TOKEN}
       NZ_SMTP_HOST: ${NZ_SMTP_HOST}
       NZ_SMTP_PORT: ${NZ_SMTP_PORT}
+      NZ_PASSWORD: ${NZ_PASSWORD}
+      NZ_EMAIL: ${NZ_EMAIL}
     depends_on:
       - dbpostgresql
       - redis
