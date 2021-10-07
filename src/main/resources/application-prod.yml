@@ -42,7 +42,7 @@ spring:
             enable: true
             required: true
           ssl:
-            enable: false
+            enable: true
       test-connection: true
 flyway:
   locations: filesystem:db/migration
