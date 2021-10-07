@@ -42,6 +42,7 @@ spring:
             enable: true
             required: true
           ssl:
+            trust: 127.17.0.1
             enable: false
       test-connection: true
 flyway:
