@@ -37,6 +37,7 @@ spring:
     properties:
       mail:
         smtp:
+          localhost: mail.nzesportes.com.br
           auth: true
           starttls:
             enable: false
