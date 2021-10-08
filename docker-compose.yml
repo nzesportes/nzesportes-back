@@ -4,7 +4,8 @@ services:
     container_name: app-nzapi
     image: app-nzapi
     build: ./
-    network_mode: bridge
+    ports:
+      - "8080:8080"
     environment:
       CLIENT_SECRET: ${CLIENT_SECRET}
       CLIENT_ID: ${CLIENT_ID}
@@ -37,7 +38,8 @@ services:
       - redis
   dbpostgresql:
     image: postgres
-    network_mode: bridge
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${JDBC_DATABASE_USERNAME}
@@ -45,4 +47,5 @@ services:
   redis:
     image: redis
     command: ${REDIS_COMMAND}
-    network_mode: bridge
+    ports:
+      - "6379:6379"
