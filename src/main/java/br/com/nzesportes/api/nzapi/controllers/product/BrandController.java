@@ -4,6 +4,7 @@ import br.com.nzesportes.api.nzapi.domains.product.Brand;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.product.BrandService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -20,6 +21,7 @@ public class BrandController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @CacheEvict(allEntries = true, value = "menu")
     public Brand create(@RequestBody Brand brand) {
         return service.save(brand);
     }
@@ -36,12 +38,14 @@ public class BrandController {
 
     @PutMapping
     @PreAuthorize("hasRole('ADMIN')")
+    @CacheEvict(allEntries = true, value = "menu")
     public Brand update(@RequestBody Brand brand) {
         return service.update(brand);
     }
 
-    @PutMapping("/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
+    @CacheEvict(allEntries = true, value = "menu")
     public void delete(@PathVariable UUID id) {
         service.delete(id);
     }

@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.domains;
+package br.com.nzesportes.api.nzapi.domains.customer;
 
 public enum RecoveryType {
     FIRST_ACCESS("FIRST_ACCESS"),

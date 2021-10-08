@@ -1,12 +1,13 @@
 package br.com.nzesportes.api.nzapi.controllers;
 
+import br.com.nzesportes.api.nzapi.domains.LayoutImages;
 import br.com.nzesportes.api.nzapi.dtos.MenuTO;
 import br.com.nzesportes.api.nzapi.services.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/menu")
@@ -16,7 +17,19 @@ public class MenuController {
     private MenuService service;
 
     @GetMapping
+    @Cacheable("menu")
     public MenuTO getMenu() {
         return service.getMenu();
+    }
+
+    @GetMapping("/images")
+    public LayoutImages getImages() {
+        return service.getImages();
+    }
+
+    @PostMapping("/images")
+    @CacheEvict(allEntries = true, value = "menu")
+    public LayoutImages saveImages(@RequestBody LayoutImages images) {
+        return service.saveImages(images);
     }
 }

@@ -25,12 +25,12 @@ public class CustomerService {
     private CustomersRepository repository;
 
     public Customer getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRO001));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
     }
 
     public Customer save(Customer customer, UserDetailsImpl user) {
         if(repository.existsByUserId(user.getId()))
-            throw new ResourceConflictException(ResponseErrorEnum.PRO002);
+            throw new ResourceConflictException(ResponseErrorEnum.PRO001);
         customer.setUserId(user.getId());
         return repository.save(customer);
     }
@@ -46,6 +46,6 @@ public class CustomerService {
     }
 
     public Customer getByUserId(UUID id) {
-        return repository.findByUserId(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.PRO003));
+        return repository.findByUserId(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
     }
 }

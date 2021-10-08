@@ -13,8 +13,8 @@ public class PaymentWebhookNotificationTO {
     private boolean live_mode;
     private String type;
     private LocalDateTime date_created;
-    private Integer application_id;
-    private Integer user_id;
+    private BigInteger application_id;
+    private BigInteger user_id;
     private Integer version;
     private String api_version;
     private String action;

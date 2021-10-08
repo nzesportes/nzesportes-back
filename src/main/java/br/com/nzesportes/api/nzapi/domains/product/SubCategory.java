@@ -20,5 +20,5 @@ public class SubCategory {
     private Boolean onMenu;
 
     @ManyToOne
-     private Category category;
+    private Category category;
 }

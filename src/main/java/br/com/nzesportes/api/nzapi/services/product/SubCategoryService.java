@@ -31,6 +31,9 @@ public class SubCategoryService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private ProductDetailsService detailService;
+
     public SubCategory save(SubCategorySaveTO dto) {
         SubCategory subCategory = new SubCategory();
         copyProperties(dto, subCategory);
@@ -42,7 +45,7 @@ public class SubCategoryService {
     }
 
     public SubCategory getById(UUID id) {
-        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.SCT002));
+        return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
     }
 
     public Page<SubCategory> getAll(String name, Gender gender, Boolean status, int page, int size, Authentication auth) {
@@ -66,6 +69,9 @@ public class SubCategoryService {
     }
 
     public void deleteById(UUID id) {
+        if(detailService.getBySubCategoryId(getById(id)) != null
+                && detailService.getBySubCategoryId(getById(id)).size() > 0)
+            throw new ResourceConflictException(ResponseErrorEnum.SCT003);
         repository.deleteById(id);
     }
 }
