@@ -4,6 +4,7 @@ CREATE TABLE ratings(
     purchase_id uuid NOT NULL,
     rate int CHECK (rate > 0 AND rate <= 10),
     comment text,
+    title text,
     creation_date date,
     CONSTRAINT fk_customer
         FOREIGN KEY(customer_id)
