@@ -4,7 +4,7 @@ services:
     container_name: app-nzapi
     image: app-nzapi
     build: ./
-    network_mode: host
+    network_mode: bridge
     environment:
       CLIENT_SECRET: ${CLIENT_SECRET}
       CLIENT_ID: ${CLIENT_ID}
@@ -37,7 +37,7 @@ services:
       - redis
   dbpostgresql:
     image: postgres
-    network_mode: host
+    network_mode: bridge
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: ${JDBC_DATABASE_USERNAME}
@@ -45,4 +45,4 @@ services:
   redis:
     image: redis
     command: ${REDIS_COMMAND}
-    network_mode: host
+    network_mode: bridge
