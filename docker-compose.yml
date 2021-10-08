@@ -6,9 +6,7 @@ services:
     build: ./
     ports:
       - "8080:8080"
-    dns:
-      - 8.8.8.8
-      - 8.8.4.4
+    network_mode: host
     environment:
       CLIENT_SECRET: ${CLIENT_SECRET}
       CLIENT_ID: ${CLIENT_ID}
