@@ -3,6 +3,11 @@ services:
   app:
     container_name: app-nzapi
     image: app-nzapi
+    restart: always
+    dns:
+      - 8.8.8.8
+      - 4.4.4.4
+      - 192.168.9.45
     build: ./
     ports:
       - "8080:8080"
@@ -38,6 +43,7 @@ services:
       - redis
   dbpostgresql:
     image: postgres
+    restart: always
     ports:
       - "5432:5432"
     environment:
@@ -46,6 +52,7 @@ services:
       POSTGRES_PASSWORD: ${JDBC_DATABASE_PASSWORD}
   redis:
     image: redis
+    restart: always
     command: ${REDIS_COMMAND}
     ports:
       - "6379:6379"
