@@ -30,6 +30,6 @@ public interface StockRepository extends JpaRepository<Stock, UUID> {
                     "RETURNING *; ", nativeQuery = true)
     Stock updateStatus(UUID id);
 
-    @Query("SELECT DISTINCT(s.size) FROM Stock s ORDER BY s.size ASC")
+    @Query("SELECT DISTINCT new br.com.nzesportes.api.nzapi.dtos.SizeTO(s.size) FROM Stock s ORDER BY s.size ASC")
     List<SizeTO> getSizes();
 }
