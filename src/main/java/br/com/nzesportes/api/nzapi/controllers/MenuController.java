@@ -2,12 +2,14 @@ package br.com.nzesportes.api.nzapi.controllers;
 
 import br.com.nzesportes.api.nzapi.domains.LayoutImages;
 import br.com.nzesportes.api.nzapi.dtos.MenuTO;
+import br.com.nzesportes.api.nzapi.dtos.SizeTO;
 import br.com.nzesportes.api.nzapi.services.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/menu")
@@ -31,5 +33,11 @@ public class MenuController {
     @CacheEvict(allEntries = true, value = "menu")
     public LayoutImages saveImages(@RequestBody LayoutImages images) {
         return service.saveImages(images);
+    }
+
+    @GetMapping("/sizes")
+    @Cacheable("sizes")
+    public List<SizeTO> getSizes() {
+        return service.getSizes();
     }
 }

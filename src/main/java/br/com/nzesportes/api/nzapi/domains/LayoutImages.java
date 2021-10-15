@@ -9,6 +9,8 @@ import java.io.Serializable;
 @Data
 @RedisHash("LayoutImages")
 public class LayoutImages implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String id;
     private String slideImages;
     private String bannerImages;
