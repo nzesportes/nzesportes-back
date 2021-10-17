@@ -26,7 +26,6 @@ public class WebhookService {
             paymentService.checkPaymentStatus(purchase);
         } else if (PAYMENT_UPDATED.equals(webhookNotification.getAction()))
             paymentService.checkPaymentStatus(purchase);
-
     }
 
 }

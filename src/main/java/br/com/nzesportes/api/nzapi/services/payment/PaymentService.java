@@ -24,6 +24,8 @@ import br.com.nzesportes.api.nzapi.services.product.StockService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,7 @@ import java.util.List;
 
 @Service
 @Slf4j
+@EnableScheduling
 @Transactional
 public class PaymentService {
     @Value("${nz.webhook}")
@@ -177,4 +180,9 @@ public class PaymentService {
         purchaseRepository.save(purchase);
     }
 
+    @Scheduled(cron = "30 30 03 * * *")
+    public void checkPayments() {
+        List<Purchase> purchases = purchaseRepository.findByStatusNot(MercadoPagoPaymentStatus.approved);
+
+    }
 }

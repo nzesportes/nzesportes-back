@@ -80,6 +80,6 @@ public class RatingService {
     }
 
     public Page<Rating> getAllByPurchaseId(UUID id, int page, int size) {
-        return repository.findByProductId(id, PageRequest.of(page, size));
+        return repository.findByPurchaseId(id, PageRequest.of(page, size));
     }
 }
