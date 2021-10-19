@@ -4,10 +4,6 @@ services:
     container_name: app-nzapi
     image: app-nzapi
     restart: always
-    dns:
-      - 8.8.8.8
-      - 4.4.4.4
-      - 192.168.9.45
     build: ./
     ports:
       - "8080:8080"
