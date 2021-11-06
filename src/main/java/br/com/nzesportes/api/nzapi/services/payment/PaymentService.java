@@ -1,6 +1,8 @@
 package br.com.nzesportes.api.nzapi.services.payment;
 
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
+import br.com.nzesportes.api.nzapi.domains.customer.Role;
+import br.com.nzesportes.api.nzapi.domains.product.Brand;
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
 import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
@@ -11,6 +13,7 @@ import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentPurchaseTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentTO;
+import br.com.nzesportes.api.nzapi.dtos.purchase.PurchaseTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.feign.MercadoPagoClient;
@@ -21,11 +24,15 @@ import br.com.nzesportes.api.nzapi.services.customer.CustomerService;
 import br.com.nzesportes.api.nzapi.services.customer.UserService;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import br.com.nzesportes.api.nzapi.services.product.StockService;
+import br.com.nzesportes.api.nzapi.utils.PurchaseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,6 +40,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -71,8 +79,23 @@ public class PaymentService {
     @Autowired
     private MercadoPagoClient mercadoPagoAPI;
 
+    @Autowired
+    private PurchaseUtils utils;
+
     public PaymentPurchaseTO createPaymentRequest(PaymentTO dto, UserDetailsImpl principal) {
         return createPurchase(dto, principal);
+    }
+
+    public Page<PurchaseTO> getAllByCustomerId(UUID customerId, int page, int size, UserDetailsImpl principal) {
+        return utils.toPurchasePage(purchaseRepository.findAllByCustomerId(customerId, PageRequest.of(page, size)));
+    }
+
+    public Page<Purchase> getAll(int page, int size, UserDetailsImpl principal) {
+        return purchaseRepository.findAllPurchase(PageRequest.of(page, size));
+    }
+
+    public Purchase getById(UUID id) {
+        return purchaseRepository.findAllById(id);
     }
 
     public void checkPaymentStatus(Purchase purchase) {
