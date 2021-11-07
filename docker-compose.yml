@@ -34,6 +34,8 @@ services:
       NZ_SMTP_PORT: ${NZ_SMTP_PORT}
       NZ_PASSWORD: ${NZ_PASSWORD}
       NZ_EMAIL: ${NZ_EMAIL}
+      MERCADO_PAGO_AUTO_RETURN: ${MERCADO_PAGO_AUTO_RETURN}
+      PAYMENT_BACK_URL: ${PAYMENT_BACK_URL}
     depends_on:
       - dbpostgresql
       - redis

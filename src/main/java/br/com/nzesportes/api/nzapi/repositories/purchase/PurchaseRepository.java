@@ -14,4 +14,5 @@ public interface PurchaseRepository extends JpaRepository<Purchase, UUID> {
     Optional<Purchase> findByIdAndCustomerId(UUID id, UUID customerId);
 
     List<Purchase> findByStatusNot(MercadoPagoPaymentStatus status);
+    List<Purchase> findByStatus(MercadoPagoPaymentStatus status);
 }

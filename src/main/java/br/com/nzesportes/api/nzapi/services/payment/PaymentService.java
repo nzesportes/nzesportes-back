@@ -6,7 +6,9 @@ import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
 import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.Payment;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentMPTO;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentsResponse;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentPurchaseTO;
@@ -29,6 +31,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,9 +49,17 @@ public class PaymentService {
     @Value("${nz.mercado-pago.token}")
     private String TOKEN;
 
+    @Value("${nz.mercado-pago.payment.back-url}")
+    private String PAYMENT_BACK_URL;
+
+    @Value("${nz.mercado-pago.auto-return}")
+    private String AUTO_RETURN;
+
     private final static String CURRENCY = "BRL";
     private final static String IDENTIFICATION_TYPE = "CPF";
     private final static String STATEMENT = "NZESPORTES";
+    private final static String SORT_TYPE = "date_created";
+    private final static String CRITERIA = "desc";
 
 
     @Autowired
@@ -110,7 +122,8 @@ public class PaymentService {
                         .quantity(productPaymentTO.getQuantity()).build();
 
                 if(available) {
-                    purchase.setTotalCost(purchase.getTotalCost().add(updatedStock.getProductDetail().getPrice()));
+                    purchase.setTotalCost(purchase.getTotalCost().add(updatedStock.getProductDetail().getPrice()
+                            .multiply(new BigDecimal(productPaymentTO.getQuantity().toString()))));
                     pi.setCost(updatedStock.getProductDetail().getPrice());
                 }
                 items.add(pi);
@@ -163,6 +176,8 @@ public class PaymentService {
                 .expiration_date_to(OffsetDateTime.now().plusMinutes(30))
                 .statement_descriptor(STATEMENT)
                 .external_reference(purchase.getId().toString())
+                .back_urls(BackUrls.builder().success(PAYMENT_BACK_URL).failure(PAYMENT_BACK_URL).pending(PAYMENT_BACK_URL).build())
+                .auto_return(AUTO_RETURN)
                 .build();
 
         Preference savedPreference = mercadoPagoAPI.createPreference("Bearer " + TOKEN, preference);
@@ -177,12 +192,25 @@ public class PaymentService {
 
     private void updateStatus(Purchase purchase, MercadoPagoPaymentStatus status) {
         purchase.setStatus(status);
+        if(status.equals(MercadoPagoPaymentStatus.approved)){
+            purchase.getPaymentRequest().setConfirmationDate(LocalDateTime.now());
+        }
         purchaseRepository.save(purchase);
     }
 
-    @Scheduled(cron = "30 30 03 * * *")
+    @Scheduled(cron = "* * * 30 * *")
     public void checkPayments() {
-        List<Purchase> purchases = purchaseRepository.findByStatusNot(MercadoPagoPaymentStatus.approved);
+        log.info("Checking pending payments...");
 
+        List<Purchase> purchases = purchaseRepository.findByStatus(MercadoPagoPaymentStatus.pending);
+        purchases.parallelStream().forEach(purchase -> {
+            PaymentsResponse response = mercadoPagoAPI.getPayment("Bearer " + TOKEN, SORT_TYPE, CRITERIA, purchase.getId().toString());
+            Payment lastPayment = response.getResults().get(0);
+            if(MercadoPagoPaymentStatus.cancelled.equals(lastPayment.getStatus()))
+                cancelPurchase(purchase);
+            else {
+                updateStatus(purchase, lastPayment.getStatus());
+            }
+        });
     }
 }

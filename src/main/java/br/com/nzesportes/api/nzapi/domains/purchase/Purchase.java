@@ -20,16 +20,21 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
     @ManyToOne
     private Customer customer;
+
     @OneToMany(mappedBy = "purchase", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<PurchaseItems> items;
     private BigDecimal shipment;
+
     @ManyToOne
     private Address shipmentAddress;
     private BigDecimal totalCost;
+
     @Enumerated(EnumType.STRING)
     private MercadoPagoPaymentStatus status;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "payment_request_id")
     private PaymentRequest paymentRequest;

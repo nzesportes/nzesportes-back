@@ -54,6 +54,9 @@ nz:
   mercado-pago:
     token: ${MERCADO_PAGO_TOKEN}
     url: ${MERCADO_PAGO_URL}
+    auto-return: ${MERCADO_PAGO_AUTO_RETURN}
+    payment:
+      back-url: ${PAYMENT_BACK_URL}
   melhor-envio:
     url: ${MELHOR_ENVIO_URL}
     client-id: ${CLIENT_ID}
@@ -65,6 +68,8 @@ nz:
     url: ${FIRST_ACCESS_URL}
   recovery:
     url: ${RECOVERY_URL}
+  payment:
+    back-url: ${PAYMENT_BACK_URL}
   email:
     from: ${EMAIL_FROM}
   allowed:

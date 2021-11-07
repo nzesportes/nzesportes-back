@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.feign;
 
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentMPTO;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentsResponse;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.Preference;
 import feign.Param;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -16,8 +17,9 @@ public interface MercadoPagoClient {
     PaymentMPTO getPayment(@RequestHeader("Authorization") String token, @PathVariable String id);
 
     @GetMapping("/v1/payments/search")
-    PaymentMPTO getPayment(@RequestHeader("Authorization") String token,
-                           @RequestParam("sort") String sort,
-                           @RequestParam("criteria") String criteria,
-                           @RequestParam("external_reference") String external_reference);
+    PaymentsResponse getPayment(@RequestHeader("Authorization") String token,
+                                @RequestParam("sort") String sort,
+                                @RequestParam("criteria") String criteria,
+                                @RequestParam("external_reference") String external_reference);
+
 }
