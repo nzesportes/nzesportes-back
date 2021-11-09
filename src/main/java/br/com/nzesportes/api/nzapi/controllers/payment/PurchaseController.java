@@ -28,7 +28,7 @@ public class PurchaseController {
     }
 
     @GetMapping("/customers/{id}")
-    public Page<PurchaseTO> getAllByCustomerId(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) UUID customerId, Authentication auth) {
+    public Page<Purchase> getAllByCustomerId(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) UUID customerId, Authentication auth) {
         return service.getAllByCustomerId(customerId, page, size, (UserDetailsImpl) auth.getPrincipal());
     }
 

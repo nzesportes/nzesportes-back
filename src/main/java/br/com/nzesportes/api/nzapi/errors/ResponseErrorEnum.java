@@ -33,7 +33,10 @@ public enum ResponseErrorEnum {
 
     //SALE
     SAL001("SAL001 - Existe uma promoção entre essas datas ou data incorreta"),
-    SAL002("SAL002 - Não foi possível deleter promoção que já iniciou");
+    SAL002("SAL002 - Não foi possível deleter promoção que já iniciou"),
+
+    //COUPON
+    CPN001("CPN001 - Existe um cupom entre essas datas ou data incorreta");
 
     private final String text;
 

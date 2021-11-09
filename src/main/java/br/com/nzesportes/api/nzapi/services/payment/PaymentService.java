@@ -86,8 +86,8 @@ public class PaymentService {
         return createPurchase(dto, principal);
     }
 
-    public Page<PurchaseTO> getAllByCustomerId(UUID customerId, int page, int size, UserDetailsImpl principal) {
-        return utils.toPurchasePage(purchaseRepository.findAllByCustomerId(customerId, PageRequest.of(page, size)));
+    public Page<Purchase> getAllByCustomerId(UUID customerId, int page, int size, UserDetailsImpl principal) {
+        return purchaseRepository.findAllByCustomerId(customerId, PageRequest.of(page, size));
     }
 
     public Page<Purchase> getAll(int page, int size, UserDetailsImpl principal) {
