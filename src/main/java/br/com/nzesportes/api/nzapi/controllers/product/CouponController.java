@@ -18,7 +18,7 @@ public class CouponController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public Coupon create(Coupon coupon) { return service.save(coupon); }
+    public Coupon create(@RequestBody Coupon coupon) { return service.save(coupon); }
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
