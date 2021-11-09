@@ -4,7 +4,7 @@ CREATE TABLE coupons (
     discount decimal,
     quantity integer,
     status boolean,
-    start_date timestamp not null,
-    end_date timestamp not null,
+    start_date date not null,
+    end_date date not null,
     quantity_left integer
 );

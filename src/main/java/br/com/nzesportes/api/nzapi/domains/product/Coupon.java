@@ -3,6 +3,7 @@ package br.com.nzesportes.api.nzapi.domains.product;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -17,7 +18,7 @@ public class Coupon {
     private Double discount;
     private Integer quantity;
     private Boolean status;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer quantityLeft;
 }
