@@ -19,4 +19,6 @@ public class PaymentWebhookNotificationTO {
     private String api_version;
     private String action;
     private WebhookDataTO data;
+    private String resource;
+    private String topic;
 }
