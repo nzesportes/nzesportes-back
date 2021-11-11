@@ -25,4 +25,5 @@ public interface PurchaseRepository extends JpaRepository<Purchase, UUID> {
 
     @Query(value = "SELECT p.* FROM purchases p, payment_requests pr WHERE p.payment_request_id = pr.id ORDER BY pr.creation_date DESC /*#{#pageable}*/", nativeQuery = true)
     Page<Purchase> findAllPurchase(Pageable pageable);
+    List<Purchase> findByStatus(MercadoPagoPaymentStatus status);
 }

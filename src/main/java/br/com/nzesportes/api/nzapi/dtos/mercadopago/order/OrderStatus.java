@@ -1,0 +1,16 @@
+package br.com.nzesportes.api.nzapi.dtos.mercadopago.order;
+
+public enum OrderStatus {
+    opened("opened"),
+    closed("closed"),
+    expired("expired");
+    private final String text;
+
+    OrderStatus(final String text) {
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+}
