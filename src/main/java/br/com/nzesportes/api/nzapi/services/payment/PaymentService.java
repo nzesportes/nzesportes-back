@@ -6,9 +6,10 @@ import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
 import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
-import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.Payment;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPage;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPaymentStatus;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderStatus;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentMPTO;
-import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentsResponse;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentPurchaseTO;
@@ -198,18 +199,47 @@ public class PaymentService {
         purchaseRepository.save(purchase);
     }
 
-    @Scheduled(cron = "* * * 30 * *")
+    @Scheduled(cron = "* 30 * * * *")
     public void checkPayments() {
         log.info("Checking pending payments...");
-
         List<Purchase> purchases = purchaseRepository.findByStatus(MercadoPagoPaymentStatus.pending);
+
         purchases.parallelStream().forEach(purchase -> {
-            PaymentsResponse response = mercadoPagoAPI.getPayment("Bearer " + TOKEN, SORT_TYPE, CRITERIA, purchase.getId().toString());
-            Payment lastPayment = response.getResults().get(0);
-            if(MercadoPagoPaymentStatus.cancelled.equals(lastPayment.getStatus()))
-                cancelPurchase(purchase);
-            else {
-                updateStatus(purchase, lastPayment.getStatus());
+            try {
+                log.info("Getting preferences for purchase {}...", purchase.getId());
+                PreferenceSearchPage preferences = mercadoPagoAPI.getPreferences("Bearer " + TOKEN, purchase.getId().toString());
+                Preference preference = mercadoPagoAPI.getPreferenceById("Bearer " + TOKEN, preferences.getElements().get(0).getId());
+
+                log.info("Getting closed orders...");
+                OrderPage closedOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.closed.getText());
+
+                if(closedOrders.getElements() != null && closedOrders.getElements().size() > 0) {
+                    log.info("Approving purchase with at least one order closed...");
+                    closedOrders.getElements().parallelStream()
+                            .forEach(orderTO -> {
+                                if (OrderPaymentStatus.paid.equals(orderTO.getOrder_status()))
+                                    updateStatus(purchase, MercadoPagoPaymentStatus.approved);
+                                    return;});
+                }
+                else {
+                    log.info("Searching for open and closed orders...");
+                    OrderPage openOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.opened.getText());
+                    OrderPage expiredOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.expired.getText());
+
+                    if((openOrders.getElements() == null || closedOrders.getElements().size() == 0)
+                            && preference.getExpiration_date_to().isAfter(OffsetDateTime.now())) {
+                        log.info("Closing purchases with no payments...");
+                        cancelPurchase(purchase);
+                    }
+
+                    else if(openOrders.getElements() != null && closedOrders.getElements().size() > 0) {
+                        openOrders.getElements().forEach(orderTO -> {
+
+                        });
+                    }
+                }
+            } catch (Exception e) {
+                log.error("Exception while trying to check payment for purchase {}", purchase.getId());
             }
         });
     }

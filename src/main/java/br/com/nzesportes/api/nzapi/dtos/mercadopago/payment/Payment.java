@@ -5,12 +5,13 @@ import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.Payer;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
 
 @Getter
 @Setter
 public class Payment {
-    public int id;
+    public BigInteger id;
     public OffsetDateTime date_created;
     public OffsetDateTime date_approved;
     public OffsetDateTime date_last_updated;

@@ -83,7 +83,7 @@ public class ProductService {
     }
 
     public ProductDetails getDetailById(UUID id, UserDetailsImpl principal) {
-        if(principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getText())))
+        if(principal != null && principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getText())))
             return detailService.getById(id);
         return detailService.getByIdUser(id);
     }
