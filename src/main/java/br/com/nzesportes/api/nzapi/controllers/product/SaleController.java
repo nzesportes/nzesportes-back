@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/products/details/sales")
 @CrossOrigin("${nz.allowed.origin}")
@@ -24,5 +26,10 @@ public class SaleController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public Page<Sale> getAll(@RequestParam int page, @RequestParam int size) {
         return service.getAll(page, size);
+    }
+
+    @GetMapping("/{id}")
+    public Sale getById(@PathVariable UUID id) {
+        return service.getById(id);
     }
 }
