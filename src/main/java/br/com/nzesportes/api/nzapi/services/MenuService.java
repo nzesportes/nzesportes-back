@@ -6,11 +6,13 @@ import br.com.nzesportes.api.nzapi.domains.product.Gender;
 import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
 import br.com.nzesportes.api.nzapi.dtos.MenuCategory;
 import br.com.nzesportes.api.nzapi.dtos.MenuTO;
+import br.com.nzesportes.api.nzapi.dtos.SizeTO;
 import br.com.nzesportes.api.nzapi.dtos.SubCategoryMenuTO;
 import br.com.nzesportes.api.nzapi.repositories.LayoutImagesRepository;
 import br.com.nzesportes.api.nzapi.repositories.product.BrandRepository;
 import br.com.nzesportes.api.nzapi.repositories.product.CategoryRepository;
 import br.com.nzesportes.api.nzapi.repositories.product.SubCategoryRepository;
+import br.com.nzesportes.api.nzapi.services.product.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,9 @@ public class MenuService {
 
     @Autowired
     private BrandRepository brandRepository;
+
+    @Autowired
+    private StockService stockService;
 
     @Autowired
     private LayoutImagesRepository imagesRepository;
@@ -76,5 +81,9 @@ public class MenuService {
         }
         images.setId(IMAGE_ID);
         return imagesRepository.save(images);
+    }
+
+    public List<SizeTO> getSizes() {
+        return stockService.getSizes();
     }
 }

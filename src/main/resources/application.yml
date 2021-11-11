@@ -48,6 +48,9 @@ nz:
   mercado-pago:
     token: 'TEST-2088887924411804-081102-0101ba9aae17bbaf2856a5734bfc4a49-187446709'
     url: 'https://api.mercadopago.com'
+    auto-return: approved
+    payment:
+      back-url: 'http://localhost:4200/minha-conta/meus-pedidos'
   melhor-envio:
     url: $MELHOR_ENVIO_URL
     client-id: $CLIENT_ID

@@ -27,6 +27,7 @@ public class Rating {
     @IntRange(from = 1, to = 10)
     private Integer rate;
     private String comment;
+    private String title;
     private LocalDateTime creationDate;
 
     @PrePersist

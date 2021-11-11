@@ -8,6 +8,8 @@ spring:
     host: ${REDIS_HOST}
     port: ${REDIS_PORT}
     password: ${REDIS_PASSWORD}
+  cache:
+    type: redis
   datasource:
     hikari:
       maximumPoolSize: 20
@@ -46,6 +48,9 @@ nz:
   mercado-pago:
     token: ${MERCADO_PAGO_TOKEN}
     url: ${MERCADO_PAGO_URL}
+    auto-return: ${MERCADO_PAGO_AUTO_RETURN}
+    payment:
+      back-url: ${PAYMENT_BACK_URL}
   melhor-envio:
     url: ${MELHOR_ENVIO_URL}
     client-id: ${CLIENT_ID}

@@ -4,6 +4,7 @@ import br.com.nzesportes.api.nzapi.domains.customer.RecoveryRequest;
 import br.com.nzesportes.api.nzapi.domains.customer.RecoveryType;
 import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.customer.User;
+import br.com.nzesportes.api.nzapi.dtos.AbstractResponse;
 import br.com.nzesportes.api.nzapi.dtos.customer.AuthenticationRequest;
 import br.com.nzesportes.api.nzapi.dtos.customer.AuthenticationResponse;
 import br.com.nzesportes.api.nzapi.dtos.customer.ChangePasswordTO;
@@ -94,7 +95,7 @@ public class AuthService {
             repository.save(user);
             return  ResponseEntity.ok(authenticateUser(new AuthenticationRequest(principal.getUsername(), dto.getNewPassword())));
         }
-        return ResponseEntity.status(409).body("Senha atual inválida");
+        return ResponseEntity.status(409).body(new AbstractResponse("Senha atual inválida"));
     }
 
     public ResponseEntity<?> createFlow(AuthenticationRequest authenticationRequest, String flow) {
@@ -136,7 +137,7 @@ public class AuthService {
                 request.getType().equals(RecoveryType.PASSWORD_RECOVERY) ? true : false
         );
 
-        return ResponseEntity.status(HttpStatus.CREATED).body("created");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AbstractResponse("created"));
     }
 
 

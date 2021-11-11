@@ -20,7 +20,7 @@ public class SaleController {
         return service.save(sale);
     }
 
-    @PostMapping
+    @GetMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public Page<Sale> getAll(@RequestParam int page, @RequestParam int size) {
         return service.getAll(page, size);

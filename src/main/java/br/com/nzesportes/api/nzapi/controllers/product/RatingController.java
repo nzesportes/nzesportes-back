@@ -52,6 +52,11 @@ public class RatingController {
         return service.getAllByProductId(id, page, size);
     }
 
+    @GetMapping("/purchase/{id}")
+    public Page<Rating> getRatingsByPurchaseId(@PathVariable UUID id, @RequestParam int page, @RequestParam int size) {
+        return service.getAllByPurchaseId(id, page, size);
+    }
+
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable UUID id,  Authentication authentication) {
         service.deleteById(id, (UserDetailsImpl) authentication.getPrincipal());

@@ -17,4 +17,7 @@ public interface RatingRepository extends JpaRepository<Rating, UUID> {
 
     Page<Rating> findByProductId(UUID id, Pageable pageable);
 
+
+    Page<Rating> findByPurchaseId(UUID id, Pageable pageable);
+
 }

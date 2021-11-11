@@ -39,6 +39,7 @@ public class RatingService {
         if(purchase.getItems().parallelStream().anyMatch(purchaseItems -> purchaseItems.getItem().getProductDetail().getProductId().equals(dto.getProductId())))
             return repository.save(Rating.builder()
                     .rate(dto.getRate())
+                    .title(dto.getTitle())
                     .comment(dto.getComment())
                     .productId(dto.getProductId())
                     .purchaseId(purchase.getId())
@@ -76,5 +77,9 @@ public class RatingService {
             repository.deleteById(id);
 
         throw new ResourceConflictException(ResponseErrorEnum.CONFLICTED_OPERATION);
+    }
+
+    public Page<Rating> getAllByPurchaseId(UUID id, int page, int size) {
+        return repository.findByPurchaseId(id, PageRequest.of(page, size));
     }
 }

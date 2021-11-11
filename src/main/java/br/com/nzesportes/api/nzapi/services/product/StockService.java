@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
+import br.com.nzesportes.api.nzapi.dtos.SizeTO;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
@@ -38,5 +39,9 @@ public class StockService {
     
     public Stock updateStatus(UpdateStockTO dto) {
         return repository.updateStatus(dto.getId());
+    }
+
+    public List<SizeTO> getSizes() {
+        return repository.getSizes();
     }
 }

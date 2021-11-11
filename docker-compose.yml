@@ -3,6 +3,7 @@ services:
   app:
     container_name: app-nzapi
     image: app-nzapi
+    restart: always
     build: ./
     ports:
       - "8080:8080"
@@ -31,11 +32,16 @@ services:
       MERCADO_PAGO_TOKEN: ${MERCADO_PAGO_TOKEN}
       NZ_SMTP_HOST: ${NZ_SMTP_HOST}
       NZ_SMTP_PORT: ${NZ_SMTP_PORT}
+      NZ_PASSWORD: ${NZ_PASSWORD}
+      NZ_EMAIL: ${NZ_EMAIL}
+      MERCADO_PAGO_AUTO_RETURN: ${MERCADO_PAGO_AUTO_RETURN}
+      PAYMENT_BACK_URL: ${PAYMENT_BACK_URL}
     depends_on:
       - dbpostgresql
       - redis
   dbpostgresql:
     image: postgres
+    restart: always
     ports:
       - "5432:5432"
     environment:
@@ -44,6 +50,7 @@ services:
       POSTGRES_PASSWORD: ${JDBC_DATABASE_PASSWORD}
   redis:
     image: redis
+    restart: always
     command: ${REDIS_COMMAND}
     ports:
       - "6379:6379"
