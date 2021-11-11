@@ -15,11 +15,15 @@ public class CouponService {
     private CouponRepository repository;
 
     public Coupon save(Coupon coupon) {
+        coupon.setQuantityLeft(coupon.getQuantity());
+        return repository.save(coupon);
+    }
+    public Coupon update(Coupon coupon) {
         return repository.save(coupon);
     }
 
-    public Page<Coupon> getCoupons(int page, int size) {
-        return repository.findAll(PageRequest.of(page, size));
+    public Page<Coupon> getCoupons(int page, int size, String code) {
+        return repository.findByFilter(code == null ? "" : code, PageRequest.of(page, size));
     }
 
     public Coupon getById(UUID id) {
