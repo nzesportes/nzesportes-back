@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/better-send")
-@CrossOrigin(origins = "${nz.allowed.origin}")
+@CrossOrigin("${nz.allowed.origin}")
 public class BetterSendController {
 
     @Autowired
