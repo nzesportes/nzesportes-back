@@ -22,4 +22,5 @@ public class ProductDetailsTO {
     private List<Stock> stock;
     private List<SubCategory> subCategories;
     private ProductTO product;
+    private UUID purchaseStockId;
 }

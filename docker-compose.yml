@@ -5,6 +5,9 @@ services:
     image: app-nzapi
     restart: always
     build: ./
+    dns:
+      - 208.67.222.222
+      - 208.67.220.220
     ports:
       - "8080:8080"
     environment:

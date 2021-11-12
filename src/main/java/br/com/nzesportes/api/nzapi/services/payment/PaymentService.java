@@ -4,10 +4,7 @@ import br.com.nzesportes.api.nzapi.domains.customer.Customer;
 import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Brand;
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
-import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
-import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
-import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
-import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
+import br.com.nzesportes.api.nzapi.domains.purchase.*;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPage;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPaymentStatus;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderStatus;
@@ -20,6 +17,7 @@ import br.com.nzesportes.api.nzapi.dtos.purchase.PurchaseTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.feign.MercadoPagoClient;
+import br.com.nzesportes.api.nzapi.repositories.purchase.PurchaseCodeRepository;
 import br.com.nzesportes.api.nzapi.repositories.purchase.PurchaseRepository;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.customer.AddressService;
@@ -87,6 +85,9 @@ public class PaymentService {
     private UserService userService;
 
     @Autowired
+    private PurchaseCodeRepository purchaseCodeRepository;
+
+    @Autowired
     private AddressService addressService;
 
     @Autowired
@@ -99,7 +100,7 @@ public class PaymentService {
         return createPurchase(dto, principal);
     }
 
-    public Page<Purchase> getAllByCustomerId(UUID customerId, int page, int size, UserDetailsImpl principal) {
+    public Page<Purchase> getAllByCustomerId(UUID customerId, int page, int size) {
         return purchaseRepository.findAllByCustomerId(customerId, PageRequest.of(page, size));
     }
 
@@ -160,10 +161,15 @@ public class PaymentService {
 
         if(purchase.getTotalCost().equals(purchase.getShipment()))
             throw new ResourceConflictException(ResponseErrorEnum.PAY001);
+
         Purchase saved = purchaseRepository.save(purchase);
+        PurchaseCode code = purchaseCodeRepository.save(PurchaseCode.builder().purchaseId(saved.getId()).build());
         Preference preference = createPreference(saved);
+
         saved.getPaymentRequest().setPreferenceId(preference.getId());
+        saved.setCode(code.getId());
         saved = purchaseRepository.save(saved);
+
         return PaymentPurchaseTO.builder().purchaseId(saved.getId()).paymentUrl(preference.getInit_point()).build();
     }
 
