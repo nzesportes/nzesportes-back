@@ -64,6 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers(HttpMethod.GET, "/categories").permitAll().and()
                 .authorizeRequests().antMatchers(HttpMethod.GET, "/brands").permitAll().and()
                 .authorizeRequests().antMatchers(HttpMethod.GET, "/menu/**").permitAll().and()
+                .authorizeRequests().antMatchers(HttpMethod.GET, "/ratings/product/**").permitAll().and()
                 .authorizeRequests().antMatchers( "/webhook/**").permitAll().and()
                 .authorizeRequests().antMatchers("/better-send/calculate").permitAll()
 
