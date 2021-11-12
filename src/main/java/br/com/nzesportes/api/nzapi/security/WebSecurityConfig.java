@@ -17,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.StaticHeadersWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -52,7 +53,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors().and().csrf().disable()
+        http.cors().and()
+                .headers()
+                .addHeaderWriter(new StaticHeadersWriter("Content-Security-Policy","default-src 'self'; " +
+                        "style-src 'self' https://fonts.googleapis.com/, https://use.typekit.net; " +
+                        "script-src 'self' https://fonts.googleapis.com/ http://apis.google.com/ http://connect.facebook.net/ *.facebook.com; " +
+                        "connect-src *; " +
+                        "child-src 'self' https://melhorenvio.com.br https://melhorenvio.com.br https://www.googleapis.com/ https://accounts.google.com/ https://storage.googleapis.com/;"))
+                .addHeaderWriter(new StaticHeadersWriter("Permissions-Policy", "geolocation=(self), fullscreen=(self)"))
+                .addHeaderWriter(new StaticHeadersWriter("Referrer-Policy", "same-origin")).and()
+                .csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // AUTHORIZATION
