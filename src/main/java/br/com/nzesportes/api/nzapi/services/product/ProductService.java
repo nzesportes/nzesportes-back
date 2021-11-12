@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.services.product;
 
 import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.*;
+import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.dtos.*;
 import br.com.nzesportes.api.nzapi.dtos.product.*;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
@@ -9,6 +10,7 @@ import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.*;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
+import br.com.nzesportes.api.nzapi.services.payment.PurchaseService;
 import br.com.nzesportes.api.nzapi.utils.ProductUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -36,6 +39,9 @@ public class ProductService {
 
     @Autowired
     private SubCategoryRepository subCategoryRepository;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     @Autowired
     private ProductUtils utils;
@@ -137,5 +143,13 @@ public class ProductService {
 
     public Stock updateStatus(UpdateStockTO dto) {
         return stockService.updateStatus(dto);
+    }
+
+    public List<ProductDetailsTO> getAllProductDetailsByPurchaseId(UUID id) {
+        Purchase purchase = purchaseService.getById(id);
+        List<ProductDetails> details = purchase.getItems()
+                .parallelStream()
+                .map(purchaseItems -> purchaseItems.getItem().getProductDetail()).collect(Collectors.toList());
+        return utils.toProductDetailsList(details);
     }
 }
