@@ -1,6 +1,12 @@
 package br.com.nzesportes.api.nzapi.services.email;
 
 
+import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
+import br.com.nzesportes.api.nzapi.dtos.product.ProductDetailsTO;
+import br.com.nzesportes.api.nzapi.services.product.ProductService;
+import br.com.nzesportes.api.nzapi.utils.ProductUtils;
+import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
@@ -10,6 +16,8 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -21,19 +29,25 @@ public class EmailServiceImpl implements EmailService {
 
     private EmailContentBuilder emailContentBuilder;
 
+    private ProductService productService;
+
+    private ProductUtils productUtils;
+
     private String to;
     private String subject;
     private StringBuilder content;
     private String title;
     private String action;
     private String link;
-    private Object sales;
+    private List<ProductDetailsTO> products;
 
     @Autowired
-    public EmailServiceImpl(EmailContentBuilder emailContentBuilder, JavaMailSender emailSender) {
+    public EmailServiceImpl(EmailContentBuilder emailContentBuilder, JavaMailSender emailSender, ProductService productService, ProductUtils productUtils) {
         this.emailContentBuilder = emailContentBuilder;
         this.content = new StringBuilder();
         this.emailSender = emailSender;
+        this.productService = productService;
+        this.productUtils = productUtils;
     }
     public EmailServiceImpl getInstance() 	{
         this.to = "";
@@ -51,18 +65,18 @@ public class EmailServiceImpl implements EmailService {
                 this.title,
                 this.action,
                 this.link,
-                this.sales
+                this.products
         );
     }
 
     @Override
-    public boolean sendEmailTo(String to, String subject, String text, String title, String action, String link, Object sales) {
+    public boolean sendEmailTo(String to, String subject, String text, String title, String action, String link, List<ProductDetailsTO> products) {
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
             message.setTo(to);
             message.setFrom(this.from);
             message.setSubject(subject);
-            String content = emailContentBuilder.build(text, title, action, link, sales);
+            String content = emailContentBuilder.build(text, title, action, link, products);
             message.setText(content, true);
         };
 
@@ -121,8 +135,8 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public EmailService withExchangeTo(Object sales) {
-        this.sales = sales;
+    public EmailService withProducts(List<ProductDetailsTO> sales) {
+        this.products = sales;
         return this;
     }
 
@@ -169,5 +183,40 @@ public class EmailServiceImpl implements EmailService {
                         .send();
             }).start();
         }
+    }
+
+    @Override
+    public void sendEmailPurchase(String toEmail, String subject, String text, String title, String action, String link, List<PurchaseItems> purchaseItems) {
+        List<ProductDetailsTO> items = new ArrayList<>();
+        purchaseItems.parallelStream().forEach(product -> {
+            ProductDetailsTO p = new ProductDetailsTO();
+            p.setId(product.getItem().getProductDetail().getId());
+            p.setColor(product.getItem().getProductDetail().getColor());
+            p.setDescription(product.getItem().getProductDetail().getDescription());
+            p.setImages(StringUtils.split(product.getItem().getProductDetail().getImages(), ";")[0]);
+            p.setPrice(product.getItem().getProductDetail().getPrice());
+            p.setStatus(product.getItem().getProductDetail().getStatus());
+            p.setSize(product.getItem().getSize());
+            p.setQuantity(product.getItem().getQuantity());
+            p.setProduct(
+                this.productUtils.toProductTO(
+                    productService.getById(product.getItem().getProductDetail().getProductId())
+                )
+            );
+            items.add(p);
+        });
+
+        new Thread(()-> {
+            this.
+                    getInstance()
+                    .withTo(toEmail)
+                    .withTitle(title)
+                    .withAction(action)
+                    .withLink(link)
+                    .withContent(text)
+                    .withSubject(subject)
+                    .withProducts(items)
+                    .send();
+        }).start();
     }
 }

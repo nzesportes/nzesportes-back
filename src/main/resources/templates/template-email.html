@@ -318,30 +318,29 @@
                             </td>
                         </tr>
                         <div  th:if="${sales} != null">
-<!--                            <tr th:each="r : ${exchangeTO.getReceiverAds()}">-->
-<!--                                <td>-->
-<!--                                    <h4 style="text-align: center;" th:if="${exchangeTO.getReceiverAds().get(0).getId()} == ${r.getId()}">Oferta</h4>-->
-<!--                                    <div-->
-<!--                                            style="  padding: 10px;-->
-<!--								flex-direction: row;-->
-<!--								display: flex;-->
-<!--								gap: 10px;">-->
-<!--                                        <div>-->
-<!--                                            <img style="max-width: 100px"  th:src="${r.getImages().get(0)}">-->
-<!--                                        </div>-->
-<!--                                        <div style="  padding: 10px;-->
-<!--								display: block;-->
-<!--								gap: 10px;">-->
-<!--                                            <div th:text="${r.getTitle()}" ></div>-->
-<!--                                            <div th:if="${r.getCondition().toString()} == 'used'"> <b>Condição: </b> Usado</div>-->
-<!--                                            <div th:if="${r.getCondition().toString()} == 'not_used'"> <b>Condição: </b> Novo</div>-->
-<!--                                        </div>-->
+                            <tr th:each="r : ${sales}">
+                                <td>
+                                    <h4 style="text-align: center;">Dados da Compra</h4>
+                                    <div
+                                            style="  padding: 10px;
+								flex-direction: row;
+								display: flex;
+								gap: 10px;">
+                                        <div>
+                                            <img style="max-width: 100px"  th:src="${ r.getImages()}">
+                                        </div>
+                                        <div style="  padding: 10px;
+								display: block;
+								gap: 10px;">
+                                            <div th:text="${r.getProduct().getModel()} ${r.getColor()} ${r.getSize()}" ></div>
+                                            <div> <b>quantidade: </b>  <div th:text="${r.getQuantity()}" ></div></div>
+                                        </div>
 
-<!--                                    </div>-->
-<!--                                </td>-->
-<!--                            </tr>-->
+                                    </div>
+                                </td>
+                            </tr>
                         </div>
-                        <div th:if="${sales} != null">
+<!--                        <div th:if="${sales} != null">-->
 <!--                            <tr th:each="e : ${exchangeTO.getRequesterAds()}">-->
 <!--                                <td >-->
 <!--                                    <h4 style="text-align: center;" th:if="${exchangeTO.getRequesterAds().get(0).getId()} == ${e.getId()}">Proposta</h4>-->
@@ -363,7 +362,7 @@
 <!--                                    </div>-->
 <!--                                </td>-->
 <!--                            </tr>-->
-                        </div>
+<!--                        </div>-->
                         <tr>
                             <td style="text-align: center;">
                                 <div class="text-author">
