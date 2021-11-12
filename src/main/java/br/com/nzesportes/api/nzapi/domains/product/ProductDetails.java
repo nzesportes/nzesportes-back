@@ -1,6 +1,8 @@
 package br.com.nzesportes.api.nzapi.domains.product;
 
+import io.netty.util.internal.StringUtil;
 import lombok.Data;
+import org.apache.commons.lang.StringUtils;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -40,5 +42,6 @@ public class ProductDetails {
         this.creationDate = LocalDateTime.now();
         if(this.stock != null && this.stock.size() > 0)
             this.stock.forEach(s -> s.setProductDetail(this));
+        StringUtils.sp
     }
 }
