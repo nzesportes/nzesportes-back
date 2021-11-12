@@ -1,1 +1,1 @@
-ALTER TABLE purchases ADD code bigserial;
+    ALTER TABLE purchases ADD COLUMN code bigint;
