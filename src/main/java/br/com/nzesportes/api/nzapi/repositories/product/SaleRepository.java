@@ -12,4 +12,6 @@ import java.util.UUID;
 @Repository
 public interface SaleRepository extends JpaRepository<Sale, UUID> {
     Page<Sale> findByProductDetailIdOrderByEndDateDesc(UUID productId, Pageable pageable);
+
+    Sale findAllById(UUID id);
 }
