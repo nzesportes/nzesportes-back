@@ -147,9 +147,6 @@ public class ProductService {
 
     public List<ProductDetailsTO> getAllProductDetailsByPurchaseId(UUID id) {
         Purchase purchase = purchaseService.getById(id);
-        List<ProductDetails> details = purchase.getItems()
-                .parallelStream()
-                .map(purchaseItems -> purchaseItems.getItem().getProductDetail()).collect(Collectors.toList());
-        return utils.toProductDetailsList(details);
+        return utils.toPurchaseProductDetailsList(purchase.getItems());
     }
 }
