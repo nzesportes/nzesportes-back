@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
@@ -34,6 +35,10 @@ public class ProductUtils {
 
         dto.setProduct(toProductTO(productService.getById(details.getProductId())));
         return dto;
+    }
+
+    public List<ProductDetailsTO> toProductDetailsList(List<ProductDetails> products) {
+       return products.parallelStream().map(this::toProductDetailsTO).collect(Collectors.toList());
     }
 
     public ProductTO toProductTO(Product product) {

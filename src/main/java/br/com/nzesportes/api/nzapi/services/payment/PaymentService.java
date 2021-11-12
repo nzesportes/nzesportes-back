@@ -100,7 +100,7 @@ public class PaymentService {
         return createPurchase(dto, principal);
     }
 
-    public Page<Purchase> getAllByCustomerId(UUID customerId, int page, int size, UserDetailsImpl principal) {
+    public Page<Purchase> getAllByCustomerId(UUID customerId, int page, int size) {
         return purchaseRepository.findAllByCustomerId(customerId, PageRequest.of(page, size));
     }
 

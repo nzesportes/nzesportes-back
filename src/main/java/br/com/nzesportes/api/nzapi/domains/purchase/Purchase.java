@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,6 +40,8 @@ public class Purchase {
     @JoinColumn(name = "payment_request_id")
     private PaymentRequest paymentRequest;
     private Integer shipmentServiceId;
+
+    private BigInteger code;
 
     @PrePersist
     private void prePersist() {

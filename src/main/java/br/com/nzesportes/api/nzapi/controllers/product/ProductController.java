@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -84,9 +85,14 @@ public class ProductController {
         return service.getAllProductDetails(name, gender, category, subcategory, productSize, color, brand, order, page, size);
     }
 
+    @GetMapping("/details/purchase/{id}")
+    public List<ProductDetailsTO> getByPurchaseId(@PathVariable UUID id) {
+        return service.getAllProductDetailsByPurchaseId(id);
+    }
+
     @GetMapping("/details/{id}")
-    public ProductDetails getDetailById(@PathVariable UUID id, Authentication authentication) {
-        return service.getDetailById(id, (UserDetailsImpl) authentication.getPrincipal());
+    public ProductDetails getDetailById(@PathVariable UUID id, Authentication auth) {
+        return service.getDetailById(id, auth != null ? (UserDetailsImpl) auth.getPrincipal() : null);
     }
 
     @DeleteMapping("/details/{id}")
