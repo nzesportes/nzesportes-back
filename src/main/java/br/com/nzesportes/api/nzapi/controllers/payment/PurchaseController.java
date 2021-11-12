@@ -27,9 +27,9 @@ public class PurchaseController {
         return service.createPaymentRequest(dto, (UserDetailsImpl) auth.getPrincipal());
     }
 
-    @GetMapping("/customers/{id}")
-    public Page<Purchase> getAllByCustomerId(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) UUID customerId, Authentication auth) {
-        return service.getAllByCustomerId(customerId, page, size, (UserDetailsImpl) auth.getPrincipal());
+    @GetMapping("/customers/{customerId}")
+    public Page<Purchase> getAllByCustomerId(@RequestParam int page, @RequestParam int size, @PathVariable UUID customerId) {
+        return service.getAllByCustomerId(customerId, page, size);
     }
 
     @GetMapping("/{id}")

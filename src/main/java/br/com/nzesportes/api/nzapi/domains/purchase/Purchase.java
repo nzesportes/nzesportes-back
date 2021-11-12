@@ -41,7 +41,7 @@ public class Purchase {
     private PaymentRequest paymentRequest;
     private Integer shipmentServiceId;
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private BigInteger code;
 
     @PrePersist
