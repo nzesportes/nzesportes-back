@@ -173,7 +173,7 @@ public class PaymentService {
             sendEmailPurchase(
                 principal.getUsername(),
                 "NZESPORTES - PEDIDO",
-                    EmailContentEnum.COMPRA_APROVADA.getText(),
+                    EmailContentEnum.COMPRA_CONFIRMADA.getText(),
                     "Obrigado pela compra!",
                     "ver seu pedido",
                     this.urlFront,
