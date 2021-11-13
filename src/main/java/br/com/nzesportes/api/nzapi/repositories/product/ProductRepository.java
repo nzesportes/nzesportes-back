@@ -22,4 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     @Query(value = "SELECT * FROM products p WHERE difference(p.model, :name) >= 2 ORDER BY difference(p.model, :name) DESC", nativeQuery = true)
     List<Product> findByProductName(String name);
+
+    List<Product> findBySizeId(UUID sizeId);
+
 }

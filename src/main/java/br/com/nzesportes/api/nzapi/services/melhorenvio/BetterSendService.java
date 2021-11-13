@@ -1,10 +1,10 @@
-package br.com.nzesportes.api.nzapi.services;
+package br.com.nzesportes.api.nzapi.services.melhorenvio;
 
 import br.com.nzesportes.api.nzapi.domains.BetterSend;
 import br.com.nzesportes.api.nzapi.dtos.BetterSendTokenStatusTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceUnauthorizedException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
-import br.com.nzesportes.api.nzapi.repositories.BetterSendRepository;
+import br.com.nzesportes.api.nzapi.repositories.melhorenvio.BetterSendRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
