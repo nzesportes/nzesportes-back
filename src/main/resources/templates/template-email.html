@@ -332,10 +332,15 @@
                                         <div style="  padding: 10px;
 								display: block;
 								gap: 10px;">
-                                            <div th:text="${r.getProduct().getModel() + r.getColor() + r.getSize()}" ></div>
-                                            <div> <b>quantidade: </b>  <div th:text="${r.getQuantity()}" ></div></div>
+                                            <div style="font-size: 14px" th:text="${r.getProduct().getModel() + ' ' + r.getColor() + ' ' + r.getSize()}" ></div>
+                                            <div style="font-size: 14px">
+                                                <b>quantidade: </b>
+                                                <div th:text="${r.getQuantity()}" ></div>
+                                            </div>
+                                            <div style="font-size: 14px">
+                                                <b th:text="${'R$ ' + r.getPrice()}"> </b>
+                                            </div>
                                         </div>
-
                                     </div>
                                 </td>
                             </tr>
@@ -364,9 +369,9 @@
                                             <h3 class="heading">Informações do cliente</h3>
                                             <p style="font-size: 16px">Endereço de entrega:</p>
                                             <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getAddressee()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getStreet() + purchase.getShipmentAddress().getNumber() + purchase.getShipmentAddress().getComplement()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getStreet() + ' ' + purchase.getShipmentAddress().getNumber() + ' ' + purchase.getShipmentAddress().getComplement()}"></p>
                                             <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getDistrict()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCity() + purchase.getShipmentAddress().getState()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCity() + ' ' + purchase.getShipmentAddress().getState()}"></p>
                                             <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCep()}"></p>
                                             <p style="font-size: 14px">Brasil</p>
                                         </td>
@@ -379,31 +384,31 @@
                                         <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
                                             <h3 class="heading">Total da compra</h3>
 
-                                            <div style="border: 1px solid rgba(0,0,0,.05);max-width: 100%; margin: 0 auto; padding: 1em;">
+                                            <div style="border: 1px solid rgba(0,0,0,.05);max-width: 100%; margin: 0 auto; padding: 0.5em;">
                                                 <ul>
                                                     <li>
                                                         <div style="display: flex; justify-content: space-between">
                                                             <div><span style="font-size: 14px">Desconto: </span></div>
-                                                            <div><b style="text-align: right" >-R$ 100</b></div>
+                                                            <div><b style="text-align: right; font-size: 14px" >-R$ 100</b></div>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div style="display: flex; justify-content: space-between">
                                                             <div><span style="font-size: 14px">Subtotal: </span></div>
-                                                            <div><b style="text-align: right" th:text="${purchase.getTotalCost() - purchase.getShipment()}"></b></div>
+                                                            <div><b style="text-align: right; font-size: 14px" th:text="${purchase.getTotalCost() - purchase.getShipment()}"></b></div>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div style="display: flex; justify-content: space-between">
                                                             <div><span style="font-size: 14px">Frete: </span></div>
-                                                            <div><b style="text-align: right" th:text="${purchase.getShipment()}"></b></div>
+                                                            <div><b style="text-align: right; font-size: 14px" th:text="${purchase.getShipment()}"></b></div>
                                                         </div>
                                                     </li>
                                                     <hr>
                                                     <li>
                                                         <div style="display: flex; justify-content: space-between">
                                                             <div><span style="font-size: 14px">Total: </span></div>
-                                                            <div><b style="text-align: right" th:text="${purchase.getTotalCost()}"></b></div>
+                                                            <div><b style="text-align: right; font-size: 14px" th:text="${purchase.getTotalCost()}"></b></div>
                                                         </div>
                                                     </li>
                                                 </ul>
