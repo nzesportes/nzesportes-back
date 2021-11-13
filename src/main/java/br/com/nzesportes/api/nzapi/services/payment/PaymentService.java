@@ -62,6 +62,9 @@ public class PaymentService {
     @Value("${nz.mercado-pago.auto-return}")
     private String AUTO_RETURN;
 
+    @Value("${nz.front.url}")
+    private String urlFront;
+
     private final static String CURRENCY = "BRL";
     private final static String IDENTIFICATION_TYPE = "CPF";
     private final static String STATEMENT = "NZESPORTES";
@@ -166,13 +169,16 @@ public class PaymentService {
         saved.getPaymentRequest().setPreferenceId(preference.getId());
         saved = purchaseRepository.save(saved);
 
-//        emailService.
-//                sendEmailPurchase(
-//                    principal.getUsername(),
-//                    "NZESPORTES - DETALHE DO PRODUTO",
-//                        EmailContentEnum.COMPRA_APROVADA,
-//                        ""
-//                );
+        emailService.
+            sendEmailPurchase(
+                principal.getUsername(),
+                "NZESPORTES - PEDIDO",
+                    EmailContentEnum.COMPRA_APROVADA.getText(),
+                    "Obrigado pela compra!",
+                    "ver seu pedido",
+                    this.urlFront,
+                    saved
+            );
 
         return PaymentPurchaseTO.builder().purchaseId(saved.getId()).paymentUrl(preference.getInit_point()).build();
     }

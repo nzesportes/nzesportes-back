@@ -317,8 +317,8 @@
                                 </div>
                             </td>
                         </tr>
-                        <div  th:if="${sales} != null">
-                            <tr th:each="r : ${sales}">
+                        <div  th:if="${products} != null">
+                            <tr th:each="r : ${products}">
                                 <td>
                                     <h4 style="text-align: center;">Dados da Compra</h4>
                                     <div
@@ -340,29 +340,6 @@
                                 </td>
                             </tr>
                         </div>
-<!--                        <div th:if="${sales} != null">-->
-<!--                            <tr th:each="e : ${exchangeTO.getRequesterAds()}">-->
-<!--                                <td >-->
-<!--                                    <h4 style="text-align: center;" th:if="${exchangeTO.getRequesterAds().get(0).getId()} == ${e.getId()}">Proposta</h4>-->
-<!--                                    <div-->
-<!--                                            style="  padding: 10px;-->
-<!--								flex-direction: row;-->
-<!--								display: flex;-->
-<!--								gap: 10px;">-->
-<!--                                        <div>-->
-<!--                                            <img style="max-width: 100px"  th:src="${e.getImages().get(0)}">-->
-<!--                                        </div>-->
-<!--                                        <div style="  padding: 10px;-->
-<!--								        display: block;-->
-<!--								        gap: 10px;">-->
-<!--                                            <div  th:text="${e.getTitle()}" ></div>-->
-<!--                                            <div  th:if="${e.getCondition().toString()} == 'used'"><b>Condição: </b> Usado</div>-->
-<!--                                            <div  th:if="${e.getCondition().toString()} == 'not_used'"><b>Condição: </b> Novo</div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                </td>-->
-<!--                            </tr>-->
-<!--                        </div>-->
                         <tr>
                             <td style="text-align: center;">
                                 <div class="text-author">
@@ -374,6 +351,71 @@
                 </td>
             </tr><!-- end tr -->
             <!-- 1 Column Text + Button : END -->
+        </table>
+        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
+            <tr>
+                <td valign="middle" class="bg_light footer email-section">
+                    <table>
+                        <tr>
+                            <td valign="top" width="33.333%" style="padding-top: 20px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+                                        <td style="text-align: left; padding-right: 10px;">
+                                            <h3 class="heading">Informações do cliente</h3>
+                                            <p style="font-size: 16px">Endereço de entrega:</p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getAddressee()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getStreet()} ${purchase.getShipmentAddress().getNumber()} ${purchase.getShipmentAddress().getComplement()()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getDistrict()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCity()} ${purchase.getShipmentAddress().getState()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCep()}"></p>
+                                            <p style="font-size: 14px">Brasil</p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td valign="top" width="33.333%" style="padding-top: 20px;">
+                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                    <tr>
+                                        <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
+                                            <h3 class="heading">Total da compra</h3>
+
+                                            <div style="border: 1px solid rgba(0,0,0,.05);max-width: 100%; margin: 0 auto; padding: 1em;">
+                                                <ul>
+                                                    <li>
+                                                        <div style="display: flex; justify-content: space-between">
+                                                            <div><span style="font-size: 14px">Desconto: </span></div>
+                                                            <div><b style="text-align: right" >-R$ 100</b></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div style="display: flex; justify-content: space-between">
+                                                            <div><span style="font-size: 14px">Subtotal: </span></div>
+                                                            <div><b style="text-align: right" th:text="${purchase.getTotalCost() - purchase.getShipment()}"></b></div>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div style="display: flex; justify-content: space-between">
+                                                            <div><span style="font-size: 14px">Frete: </span></div>
+                                                            <div><b style="text-align: right" th:text="${purchase.getShipment()}"></b></div>
+                                                        </div>
+                                                    </li>
+                                                    <hr>
+                                                    <li>
+                                                        <div style="display: flex; justify-content: space-between">
+                                                            <div><span style="font-size: 14px">Total: </span></div>
+                                                            <div><b style="text-align: right" th:text="${purchase.getTotalCost()}"></b></div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr><!-- end: tr -->
         </table>
         <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
             <tr>

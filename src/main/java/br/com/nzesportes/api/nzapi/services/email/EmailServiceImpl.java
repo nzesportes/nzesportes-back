@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.email;
 
 
+import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
 import br.com.nzesportes.api.nzapi.dtos.product.ProductDetailsTO;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
@@ -40,6 +41,8 @@ public class EmailServiceImpl implements EmailService {
     private String action;
     private String link;
     private List<ProductDetailsTO> products;
+    private Purchase purchase;
+
 
     @Autowired
     public EmailServiceImpl(EmailContentBuilder emailContentBuilder, JavaMailSender emailSender, ProductService productService, ProductUtils productUtils) {
@@ -65,18 +68,19 @@ public class EmailServiceImpl implements EmailService {
                 this.title,
                 this.action,
                 this.link,
-                this.products
+                this.products,
+                this.purchase
         );
     }
 
     @Override
-    public boolean sendEmailTo(String to, String subject, String text, String title, String action, String link, List<ProductDetailsTO> products) {
+    public boolean sendEmailTo(String to, String subject, String text, String title, String action, String link, List<ProductDetailsTO> products, Purchase purchase) {
         MimeMessagePreparator preparator = mimeMessage -> {
             MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
             message.setTo(to);
             message.setFrom(this.from);
             message.setSubject(subject);
-            String content = emailContentBuilder.build(text, title, action, link, products);
+            String content = emailContentBuilder.build(text, title, action, link, products, purchase);
             message.setText(content, true);
         };
 
@@ -140,6 +144,11 @@ public class EmailServiceImpl implements EmailService {
         return this;
     }
 
+    @Override
+    public EmailService withPurchase(Purchase purchase) {
+        this.purchase = purchase;
+        return this;
+    }
 
     @Override
     public String getTo() {
@@ -186,9 +195,9 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public void sendEmailPurchase(String toEmail, String subject, String text, String title, String action, String link, List<PurchaseItems> purchaseItems) {
+    public void sendEmailPurchase(String toEmail, String subject, String text, String title, String action, String link, Purchase purchase) {
         List<ProductDetailsTO> items = new ArrayList<>();
-        purchaseItems.parallelStream().forEach(product -> {
+        purchase.getItems().parallelStream().forEach(product -> {
             ProductDetailsTO p = new ProductDetailsTO();
             p.setId(product.getItem().getProductDetail().getId());
             p.setColor(product.getItem().getProductDetail().getColor());
@@ -207,16 +216,16 @@ public class EmailServiceImpl implements EmailService {
         });
 
         new Thread(()-> {
-            this.
-                    getInstance()
-                    .withTo(toEmail)
-                    .withTitle(title)
-                    .withAction(action)
-                    .withLink(link)
-                    .withContent(text)
-                    .withSubject(subject)
-                    .withProducts(items)
-                    .send();
+            this.getInstance()
+                .withTo(toEmail)
+                .withTitle(title)
+                .withAction(action)
+                .withLink(link)
+                .withContent(text)
+                .withSubject(subject)
+                .withProducts(items)
+                .withPurchase(purchase)
+                .send();
         }).start();
     }
 }
