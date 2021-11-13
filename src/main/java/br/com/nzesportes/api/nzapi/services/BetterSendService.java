@@ -100,7 +100,7 @@ public class BetterSendService {
             ResponseEntity<Object> response = rest.postForEntity(URI + "api/v2/me/shipment/calculate", entity, Object.class);
 
             if(response.getStatusCode() == HttpStatus.OK){
-                return response;
+                return ResponseEntity.ok(response.getBody());
             }
         }catch (Exception ex ){
             System.out.println(ex.toString());

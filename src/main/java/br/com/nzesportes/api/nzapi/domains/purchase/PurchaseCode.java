@@ -15,7 +15,7 @@ import java.util.UUID;
 @Table(name = "purchase_code")
 public class PurchaseCode {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
     private UUID purchaseId;
 }
