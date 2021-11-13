@@ -327,12 +327,12 @@
 								display: flex;
 								gap: 10px;">
                                         <div>
-                                            <img style="max-width: 100px"  th:src="${ r.getImages()}">
+                                            <img style="max-width: 100px"  th:src="${r.getImages()}">
                                         </div>
                                         <div style="  padding: 10px;
 								display: block;
 								gap: 10px;">
-                                            <div th:text="${r.getProduct().getModel()} ${r.getColor()} ${r.getSize()}" ></div>
+                                            <div th:text="${r.getProduct().getModel() + r.getColor() + r.getSize()}" ></div>
                                             <div> <b>quantidade: </b>  <div th:text="${r.getQuantity()}" ></div></div>
                                         </div>
 
@@ -364,9 +364,9 @@
                                             <h3 class="heading">Informações do cliente</h3>
                                             <p style="font-size: 16px">Endereço de entrega:</p>
                                             <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getAddressee()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getStreet()} ${purchase.getShipmentAddress().getNumber()} ${purchase.getShipmentAddress().getComplement()()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getStreet() + purchase.getShipmentAddress().getNumber() + purchase.getShipmentAddress().getComplement()}"></p>
                                             <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getDistrict()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCity()} ${purchase.getShipmentAddress().getState()}"></p>
+                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCity() + purchase.getShipmentAddress().getState()}"></p>
                                             <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCep()}"></p>
                                             <p style="font-size: 14px">Brasil</p>
                                         </td>
