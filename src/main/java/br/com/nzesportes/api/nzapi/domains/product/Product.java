@@ -19,5 +19,6 @@ public class Product {
     @OneToMany(mappedBy = "productId", orphanRemoval = true, cascade = CascadeType.ALL)
     private List<ProductDetails> productDetails;
     private Boolean status;
-
+    @ManyToOne
+    private Size size;
 }
