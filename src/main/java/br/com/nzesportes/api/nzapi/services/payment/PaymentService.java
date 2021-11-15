@@ -3,6 +3,7 @@ package br.com.nzesportes.api.nzapi.services.payment;
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
 import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Brand;
+import br.com.nzesportes.api.nzapi.domains.product.Coupon;
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
 import br.com.nzesportes.api.nzapi.domains.purchase.*;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPage;
@@ -23,6 +24,7 @@ import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.customer.AddressService;
 import br.com.nzesportes.api.nzapi.services.customer.CustomerService;
 import br.com.nzesportes.api.nzapi.services.customer.UserService;
+import br.com.nzesportes.api.nzapi.services.product.CouponService;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import br.com.nzesportes.api.nzapi.services.product.StockService;
 import br.com.nzesportes.api.nzapi.utils.PurchaseUtils;
@@ -93,7 +95,7 @@ public class PaymentService {
     private MercadoPagoClient mercadoPagoAPI;
 
     @Autowired
-    private PurchaseUtils utils;
+    private CouponService couponService;
 
     public PaymentPurchaseTO createPaymentRequest(PaymentTO dto, UserDetailsImpl principal) {
         return createPurchase(dto, principal);
@@ -157,6 +159,13 @@ public class PaymentService {
             }
         });
         purchase.setItems(items);
+        if(dto.getCoupon() != null && !dto.getCoupon().isBlank()){
+            if(!couponService.getStatus(dto.getCoupon()))
+                throw new ResourceConflictException(ResponseErrorEnum.NOT_FOUND);
+            Coupon coupon = couponService.getByCode(dto.getCoupon());
+            purchase.setTotalCost(purchase.getTotalCost().subtract(coupon.getDiscount()));
+            purchase.setCoupon(coupon);
+        }
 
         if(purchase.getTotalCost().equals(purchase.getShipment()))
             throw new ResourceConflictException(ResponseErrorEnum.PAY001);

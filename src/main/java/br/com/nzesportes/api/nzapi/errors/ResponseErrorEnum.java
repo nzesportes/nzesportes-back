@@ -6,6 +6,7 @@ public enum ResponseErrorEnum {
     NOT_FOUND("NOT_FOUND - Não encontrado"),
     COMPLETED("COMPLETED - Ação já realizada"),
     CONFLICTED_OPERATION("CONFLICTED_OPERATION - Esta operação não pode ser realizada"),
+    EXPIRED("EXPIRED - Expirado"),
 
     //Authentication
     AUTH001("AUTH001 - Usuário já registrado"),
