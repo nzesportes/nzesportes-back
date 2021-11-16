@@ -1,450 +1,331 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="utf-8"> <!-- utf-8 works for most cases -->
     <meta name="viewport" content="width=device-width"> <!-- Forcing initial-scale shouldn't be necessary -->
     <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Use the latest (edge) version of IE rendering engine -->
-    <meta name="x-apple-disable-message-reformatting">  <!-- Disable auto-scale in iOS 10 Mail entirely -->
+    <meta name="x-apple-disable-message-reformatting"> <!-- Disable auto-scale in iOS 10 Mail entirely -->
     <title></title> <!-- The title tag shows in email notifications, like Android 4.4. -->
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300;400;500;600;700;800;900&display=swap"
+          rel="stylesheet">
 
-    <!-- CSS Reset : BEGIN -->
     <style>
-
-        /* What it does: Remove spaces around the email design added by some email clients. */
-        /* Beware: It can remove the padding / margin and add a background color to the compose a reply window. */
-        html,
         body {
-            margin: 0 auto !important;
-            padding: 0 !important;
-            height: 100% !important;
-            width: 100% !important;
-            background: #f1f1f1;
+            font-family: Barlow;
+            font-size: 16px;
         }
 
-        /* What it does: Stops email clients resizing small text. */
-        * {
-            -ms-text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
+        .container {
+            padding: 40px 20px 20px;
+            max-width: 1200px;
+            margin: auto;
         }
 
-        /* What it does: Centers email on Android 4.4 */
-        div[style*="margin: 16px 0"] {
-            margin: 0 !important;
+        .img-header {
+            text-align: center;
         }
 
-        /* What it does: Stops Outlook from adding extra spacing to tables. */
-        table,
-        td {
-            mso-table-lspace: 0pt !important;
-            mso-table-rspace: 0pt !important;
+        .img-header img {
+            height: 120px;
+            width: auto;
         }
 
-        /* What it does: Fixes webkit padding issue. */
-        table {
-            border-spacing: 0 !important;
-            border-collapse: collapse !important;
-            table-layout: fixed !important;
-            margin: 0 auto !important;
-        }
-
-        /* What it does: Uses a better rendering method when resizing images in IE. */
-        img {
-            -ms-interpolation-mode:bicubic;
-        }
-
-        /* What it does: Prevents Windows 10 Mail from underlining links despite inline CSS. Styles for underlined links should be inline. */
-        a {
-            text-decoration: none;
-        }
-
-        /* What it does: A work-around for email clients meddling in triggered links. */
-        *[x-apple-data-detectors],  /* iOS */
-        .unstyle-auto-detected-links *,
-        .aBn {
-            border-bottom: 0 !important;
-            cursor: default !important;
-            color: inherit !important;
-            text-decoration: none !important;
-            font-size: inherit !important;
-            font-family: inherit !important;
-            font-weight: inherit !important;
-            line-height: inherit !important;
-        }
-
-        /* What it does: Prevents Gmail from displaying a download button on large, non-linked images. */
-        .a6S {
-            display: none !important;
-            opacity: 0.01 !important;
-        }
-
-        /* What it does: Prevents Gmail from changing the text color in conversation threads. */
-        .im {
-            color: inherit !important;
-        }
-
-        /* If the above doesn't work, add a .g-img class to any image in question. */
-        img.g-img + div {
-            display: none !important;
-        }
-
-        /* What it does: Removes right gutter in Gmail iOS app: https://github.com/TedGoas/Cerberus/issues/89  */
-        /* Create one of these media queries for each additional viewport size you'd like to fix */
-
-        /* iPhone 4, 4S, 5, 5S, 5C, and 5SE */
-        @media only screen and (min-device-width: 320px) and (max-device-width: 374px) {
-            u ~ div .email-container {
-                min-width: 320px !important;
-            }
-        }
-        /* iPhone 6, 6S, 7, 8, and X */
-        @media only screen and (min-device-width: 375px) and (max-device-width: 413px) {
-            u ~ div .email-container {
-                min-width: 375px !important;
-            }
-        }
-        /* iPhone 6+, 7+, and 8+ */
-        @media only screen and (min-device-width: 414px) {
-            u ~ div .email-container {
-                min-width: 414px !important;
-            }
-        }
-
-
-    </style>
-
-    <!-- CSS Reset : END -->
-
-    <!-- Progressive Enhancements : BEGIN -->
-    <style>
-
-        .primary{
-            background: #17bebb;
-        }
-        .bg_white{
-            background: #ffffff;
-        }
-        .bg_light{
-            background: #f7fafa;
-        }
-        .bg_black{
-            background: #000000;
-        }
-        .bg_dark{
-            background: rgba(0,0,0,.8);
-        }
-        .email-section{
-            padding:2.5em;
-        }
-
-        /*BUTTON*/
-        .btn{
-            padding: 10px 15px;
-            display: inline-block;
-        }
-        .btn.btn-primary{
-            border-radius: 5px;
-            background: #394a59;
-            color: #ffffff;
-        }
-        .btn.btn-white{
-            border-radius: 5px;
-            background: #ffffff;
-            color: #000000;
-        }
-        .btn.btn-white-outline{
-            border-radius: 5px;
-            background: transparent;
-            border: 1px solid #fff;
-            color: #fff;
-        }
-        .btn.btn-black-outline{
-            border-radius: 0px;
-            background: transparent;
-            border: 2px solid #000;
-            color: #000;
+        .title {
             font-weight: 700;
-        }
-        .btn-custom{
-            color: rgba(0,0,0,.3);
-            text-decoration: underline;
-        }
-
-        h1,h2,h3,h4,h5,h6{
-            font-family: 'Poppins', sans-serif;
-            color: #000000;
-            margin-top: 0;
-            font-weight: 400;
+            font-size: 20px;
+            margin: 0 0 10px;
+            text-align: center;
+            text-transform: uppercase;
         }
 
-        body{
-            font-family: 'Poppins', sans-serif;
-            font-weight: 400;
-            font-size: 18px;
-            line-height: 1.8;
-            color: rgba(0,0,0,.4);
-        }
-
-        a{
-            color: #17bebb;
-        }
-
-        table{
-        }
-        /*LOGO*/
-
-        .logo h1{
-            margin: 0;
-        }
-        .logo img {
-            max-width: 150px;
-        }
-        .logo h1 a{
-            color: #394a59;
-            font-size: 24px;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        /*HERO*/
-        .hero{
-            position: relative;
-            z-index: 0;
-        }
-
-        .hero .text{
-            color: rgba(0,0,0,.3);
-        }
-        .hero .text h2{
-            color: #000;
-            font-size: 34px;
-            margin-bottom: 0;
-            font-weight: 200;
-            line-height: 1.4;
-        }
-        .hero .text h3{
-            font-size: 24px;
-            font-weight: 300;
-        }
-        .hero .text h2 span{
-            font-weight: 600;
-            color: #000;
-        }
-
-        .text-author{
-            bordeR: 1px solid rgba(0,0,0,.05);
-            max-width: 50%;
-            margin: 0 auto;
-            padding: 2em;
-        }
-        .text-author img{
-            border-radius: 50%;
+        .container-text {
             padding-bottom: 20px;
         }
-        .text-author h3{
-            margin-bottom: 0;
-        }
-        ul.social{
-            padding: 0;
-        }
-        ul.social li{
-            display: inline-block;
-            margin-right: 10px;
-        }
 
-        /*FOOTER*/
-
-        .footer{
-            border-top: 1px solid rgba(0,0,0,.05);
-            color: rgba(0,0,0,.5);
-        }
-        .footer .heading{
-            color: #000;
-            font-size: 20px;
-        }
-        .footer ul{
+        .text {
+            color: #777;
+            line-height: 150%;
+            font-size: 14px;
             margin: 0;
-            padding: 0;
+            text-align: center;
         }
-        .footer ul li{
-            list-style: none;
+
+        .img-products {
+            margin-right: 16px;
+            width: 64px;
+        }
+
+        .img-products img {
+            width: 100%;
+        }
+
+        .titles {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 18px;
+            margin: 0 0 25 px;
+        }
+
+        .container-details-products {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #777;
+        }
+
+        .list-details-products {
+            display: flex;
+        }
+
+
+        .container-products,
+        .container-purchase-details,
+        .container-address {
+            padding: 20px 0;
+        }
+
+        .details-products {
+            width: calc(100% - 80px);
+        }
+
+        .details-products p {
+            text-transform: uppercase;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+
+        .details-products-purchase {
+            width: 100%;
+            text-transform: uppercase;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+
+        .button-go-to-order {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            text-decoration: none;
+            display: block;
+            color: #fff;
+            padding: 18px 25px;
+            width: calc(100% - 50px);
+            border-radius: 4px;
+            background-color: #f37135;
+            cursor: pointer;
+        }
+
+        .button-go-to-order:hover {
+            opacity: 0.8;
+        }
+
+        .container-pd-line {
+            display: flex;
             margin-bottom: 10px;
         }
-        .footer ul li a{
-            color: rgba(0,0,0,1);
+
+        .container-pd-line:last-child {
+            display: flex;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-top: 1px solid #777;
+            padding-top: 5px;
+            font-size: 18px;
+        }
+
+        .pd-left {
+            width: 65%;
+        }
+
+        .pd-right {
+            text-align: right;
+            width: 35%;
+        }
+
+        .container-address-details {
+            margin-bottom: 10px;
+        }
+
+        .city-state {
+            display: flex;
+        }
+
+        .city-details {
+            width: 75%;
+        }
+
+        .state-details {
+            width: 25%;
+        }
+
+        @media (min-width: 576px) {
+            .container {
+                padding: 40px 35px 20px;
+            }
+
+            .title {
+                font-size: 22px;
+            }
+
+            .text {
+                font-size: 16px;
+            }
+
+            .titles {
+                font-size: 20px;
+            }
+
+            .details-products p {
+                font-size: 15px;
+            }
+
+            .details-products-purchase {
+                font-size: 15px;
+            }
+
+            .button-go-to-order {
+                font-size: 18px;
+            }
+
+            .container-pd-line:last-child {
+                font-size: 20px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .container {
+                padding: 40px 50px 20px;
+            }
+
+            .container-purchase-address {
+                display: flex;
+            }
+
+            .container-purchase-details,
+            .container-address {
+                width: 50%;
+            }
+
+            .container-purchase-details {
+                padding-right: 30px;
+            }
+        }
+
+        @media (min-width: 992px) {
+            .container {
+                padding: 40px 65px 20px;
+            }
+
+            .button-go-to-order {
+                font-size: 18px;
+                width: 350px;
+                margin: auto;
+                margin-bottom: 30px;
+            }
+
         }
 
 
-        @media screen and (max-width: 500px) {
-
-
+        @media (min-width: 1200px) {
+            .container {
+                padding: 40px 80px 20px;
+            }
         }
-
-
     </style>
 
 
 </head>
 
-<body width="100%" style="margin: 0; padding: 0 !important; mso-line-height-rule: exactly; background-color: #f1f1f1;">
-<center style="width: 100%; background-color: #f1f1f1;">
-    <div style="display: none; font-size: 1px;max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; mso-hide: all; font-family: sans-serif;">
-        &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
+<body>
+<div class="container">
+    <!-- imagem do email -->
+    <div class="img-header">
+        <img src="https://res.cloudinary.com/nzesportes/image/upload/v1631149504/produtos/logo_nz_skpxaz.png">
     </div>
-    <div style="max-width: 600px; margin: 0 auto;" class="email-container">
-        <!-- BEGIN BODY -->
-        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            <tr>
-                <td valign="top" class="bg_white" style="padding: 1em 2.5em 0 2.5em;">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr>
-                            <td class="logo" style="text-align: center;">
-                                <img src="https://res.cloudinary.com/nzesportes/image/upload/v1632798247/nz%20logotipo/logo_nz_mvgyer.png">
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr><!-- end tr -->
-            <tr>
-                <td valign="middle" class="hero bg_white" style="padding: 2em 0 4em 0;">
-                    <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-                        <tr>
-                            <td style="padding: 0 2.5em; text-align: center; padding-bottom: 3em;">
-                                <div class="text">
-                                    <h3 th:text="${title}"> </h3>
-                                    <p th:text="${text}"> </p>
-                                </div>
-                            </td>
-                        </tr>
-                        <div  th:if="${products} != null">
-                            <tr th:each="r : ${products}">
-                                <td>
-                                    <h4 style="text-align: center;">Dados da Compra</h4>
-                                    <div
-                                            style="  padding: 10px;
-								flex-direction: row;
-								display: flex;
-								gap: 10px;">
-                                        <div>
-                                            <img style="max-width: 100px"  th:src="${r.getImages()}">
-                                        </div>
-                                        <div style="  padding: 10px;
-								display: block;
-								gap: 10px;">
-                                            <div style="font-size: 14px" th:text="${r.getProduct().getModel() + ' ' + r.getColor() + ' ' + r.getSize()}" ></div>
-                                            <div style="font-size: 14px">
-                                                <b>quantidade: </b>
-                                                <div th:text="${r.getQuantity()}" ></div>
-                                            </div>
-                                            <div style="font-size: 14px">
-                                                <b th:text="${'R$ ' + r.getPrice()}"> </b>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                            </tr>
-                        </div>
-                        <tr>
-                            <td style="text-align: center;">
-                                <div class="text-author">
-                                    <p><a th:href="${link}" class="btn btn-primary" target="_blank" th:text="${action}"></a></p>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr><!-- end tr -->
-            <!-- 1 Column Text + Button : END -->
-        </table>
-        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            <tr>
-                <td valign="middle" class="bg_light footer email-section">
-                    <table>
-                        <tr>
-                            <td valign="top" width="33.333%" style="padding-top: 20px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td style="text-align: left; padding-right: 10px;">
-                                            <h3 class="heading">Informações do cliente</h3>
-                                            <p style="font-size: 16px">Endereço de entrega:</p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getAddressee()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getStreet() + ' ' + purchase.getShipmentAddress().getNumber() + ' ' + purchase.getShipmentAddress().getComplement()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getDistrict()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCity() + ' ' + purchase.getShipmentAddress().getState()}"></p>
-                                            <p style="font-size: 14px" th:text="${purchase.getShipmentAddress().getCep()}"></p>
-                                            <p style="font-size: 14px">Brasil</p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                            <td valign="top" width="33.333%" style="padding-top: 20px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td style="text-align: left; padding-left: 5px; padding-right: 5px;">
-                                            <h3 class="heading">Total da compra</h3>
-
-                                            <div style="border: 1px solid rgba(0,0,0,.05);max-width: 100%; margin: 0 auto; padding: 0.5em;">
-                                                <ul>
-                                                    <li>
-                                                        <div style="display: flex; justify-content: space-between">
-                                                            <div><span style="font-size: 14px">Desconto: </span></div>
-                                                            <div><b style="text-align: right; font-size: 14px" >-R$ 100</b></div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div style="display: flex; justify-content: space-between">
-                                                            <div><span style="font-size: 14px">Subtotal: </span></div>
-                                                            <div><b style="text-align: right; font-size: 14px" th:text="${purchase.getTotalCost() - purchase.getShipment()}"></b></div>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div style="display: flex; justify-content: space-between">
-                                                            <div><span style="font-size: 14px">Frete: </span></div>
-                                                            <div><b style="text-align: right; font-size: 14px" th:text="${purchase.getShipment()}"></b></div>
-                                                        </div>
-                                                    </li>
-                                                    <hr>
-                                                    <li>
-                                                        <div style="display: flex; justify-content: space-between">
-                                                            <div><span style="font-size: 14px">Total: </span></div>
-                                                            <div><b style="text-align: right; font-size: 14px" th:text="${purchase.getTotalCost()}"></b></div>
-                                                        </div>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr><!-- end: tr -->
-        </table>
-        <table align="center" role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin: auto;">
-            <tr>
-                <td valign="middle" class="bg_light footer email-section">
-                    <table>
-                        <tr>
-                            <td valign="top" width="33.333%" style="padding-top: 20px;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td style="text-align: left; padding-right: 10px;">
-                                            <h3 class="heading">Sobre</h3>
-                                            <p> Nz esportes</p>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr><!-- end: tr -->
-
-        </table>
-
+    <!-- título do email -->
+    <div>
+        <h2 class="title"  th:text="${title}"></h2>
     </div>
-</center>
+    <!-- text do email -->
+    <div class="container-text">
+        <p class="text" th:text="${text}"></p>
+    </div>
+    <!-- produtos do email -->
+    <div class="container-products" th:if="${products} != null">
+        <div>
+            <h3 class="titles">Dados da compra</h3>
+        </div>
+        <!-- detalhes produto -->
+        <div class="container-details-products" th:each="r : ${products}">
+            <div class="list-details-products">
+                <div class="img-products">
+                    <img th:src="${r.getImages()}">
+                </div>
+                <div class="details-products">
+                    <p th:text="${r.getProduct().getModel() + ' ' + r.getColor() + ' ' + r.getSize()}"></p>
+                    <p>Quantidade: <span th:text="${r.getQuantity()}"></span></p>
+                </div>
+            </div>
+            <div class="details-products-purchase">
+                <p>Preço: <span th:text="${'R$ ' + r.getPrice()}"></span></p>
+                <p>Subtotal: <span th:text="${'R$ ' + r.getPrice() * r.getQuantity()}"></span></p>
+            </div>
+        </div>
+        <div class="container-purchase-address">
+            <!-- detalhes da compra -->
+            <div class="container-purchase-details">
+                <div>
+                    <h2 class="titles">Detalhes da Compra</h2>
+                </div>
+                <div class="container-pd-line">
+                    <div class="pd-left"><b>Valor da Compra</b></div>
+                    <div class="pd-right" th:text="${'R$ ' + purchase.getTotalCost() - purchase.getShipment()}"></div>
+                </div>
+                <div class="container-pd-line">
+                    <div class="pd-left"><b>Desconto</b></div>
+                    <div class="pd-right">- R$ 10,00</div>
+                </div>
+                <div class="container-pd-line">
+                    <div class="pd-left"><b>Frete</b></div>
+                    <div class="pd-right" th:text="${'R$ ' + purchase.getShipment()}"></div>
+                </div>
+                <div class="container-pd-line">
+                    <div class="pd-left"><b>Total</b></div>
+                    <div class="pd-right"><b th:text="${'R$ ' + purchase.getTotalCost()}"></b></div>
+                </div>
+            </div>
+            <!-- endereço de entrega -->
+            <div class="container-address">
+                <div>
+                    <h2 class="titles">Endereço de Entrega</h2>
+                </div>
+                <div class="container-address-details">
+                    <div><b>CEP</b></div>
+                    <div th:text="${purchase.getShipmentAddress().getCep()}"></div>
+                </div>
+                <div class="container-address-details">
+                    <div><b>Endereço</b></div>
+                    <div th:text="${purchase.getShipmentAddress().getAddressee() + ' - ' + purchase.getShipmentAddress().getDistrict()}"></div>
+                </div>
+                <div class="container-address-details city-state">
+                    <div class="city-details">
+                        <div><b>Cidade</b></div>
+                        <div th:text="${purchase.getShipmentAddress().getCity()}"></div>
+                    </div>
+                    <div class="state-details">
+                        <div><b>Estado</b></div>
+                        <div th:text="${purchase.getShipmentAddress().getState()}"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- acao -->
+    <div>
+        <a class="button-go-to-order" th:href="${link}" th:text="${action}" th:if="${products} != null"></a>
+    </div>
+</div>
+
 </body>
+
 </html>
