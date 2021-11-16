@@ -64,6 +64,8 @@ nz:
     url: ${RECOVERY_URL}
   email:
     from: ${EMAIL_FROM}
+  front:
+    url: ${FRONT_URL}
   allowed:
     origin: '*'
   jwt:

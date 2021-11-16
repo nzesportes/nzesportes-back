@@ -1,6 +1,12 @@
 package br.com.nzesportes.api.nzapi.services.payment;
 
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
+import br.com.nzesportes.api.nzapi.domains.product.Stock;
+import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
+import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
+import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
+import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
+import br.com.nzesportes.api.nzapi.dtos.enums.EmailContentEnum;
 import br.com.nzesportes.api.nzapi.domains.customer.Role;
 import br.com.nzesportes.api.nzapi.domains.product.Brand;
 import br.com.nzesportes.api.nzapi.domains.product.Coupon;
@@ -14,7 +20,6 @@ import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentPurchaseTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentTO;
-import br.com.nzesportes.api.nzapi.dtos.purchase.PurchaseTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.feign.MercadoPagoClient;
@@ -24,6 +29,7 @@ import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.customer.AddressService;
 import br.com.nzesportes.api.nzapi.services.customer.CustomerService;
 import br.com.nzesportes.api.nzapi.services.customer.UserService;
+import br.com.nzesportes.api.nzapi.services.email.EmailService;
 import br.com.nzesportes.api.nzapi.services.product.CouponService;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import br.com.nzesportes.api.nzapi.services.product.StockService;
@@ -63,6 +69,9 @@ public class PaymentService {
     @Value("${nz.mercado-pago.auto-return}")
     private String AUTO_RETURN;
 
+    @Value("${nz.front.url}")
+    private String urlFront;
+
     private final static String CURRENCY = "BRL";
     private final static String IDENTIFICATION_TYPE = "CPF";
     private final static String STATEMENT = "NZESPORTES";
@@ -95,6 +104,10 @@ public class PaymentService {
     private MercadoPagoClient mercadoPagoAPI;
 
     @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private PurchaseUtils utils;
     private CouponService couponService;
 
     public PaymentPurchaseTO createPaymentRequest(PaymentTO dto, UserDetailsImpl principal) {
@@ -177,6 +190,17 @@ public class PaymentService {
         saved.getPaymentRequest().setPreferenceId(preference.getId());
         saved.setCode(code.getId());
         saved = purchaseRepository.save(saved);
+
+        emailService.
+            sendEmailPurchase(
+                principal.getUsername(),
+                "NZESPORTES - PEDIDO",
+                    EmailContentEnum.COMPRA_CONFIRMADA.getText(),
+                    "Obrigado pela compra!",
+                    "ver seu pedido",
+                    this.urlFront,
+                    saved
+            );
 
         return PaymentPurchaseTO.builder().purchaseId(saved.getId()).paymentUrl(preference.getInit_point()).build();
     }
