@@ -1,6 +1,6 @@
-package br.com.nzesportes.api.nzapi.controllers;
+package br.com.nzesportes.api.nzapi.controllers.melhorenvio;
 
-import br.com.nzesportes.api.nzapi.services.BetterSendService;
+import br.com.nzesportes.api.nzapi.services.melhorenvio.BetterSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/better-send")
-@CrossOrigin(origins = "${nz.allowed.origin}")
+@CrossOrigin("${nz.allowed.origin}")
 public class BetterSendController {
 
     @Autowired

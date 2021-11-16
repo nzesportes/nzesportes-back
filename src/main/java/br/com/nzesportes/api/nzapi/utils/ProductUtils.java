@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.utils;
 
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
 import br.com.nzesportes.api.nzapi.dtos.product.ProductDetailsTO;
 import br.com.nzesportes.api.nzapi.dtos.product.ProductTO;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
@@ -45,5 +46,15 @@ public class ProductUtils {
         ProductTO dto = new ProductTO();
         copyProperties(product, dto);
         return dto;
+    }
+
+    public List<ProductDetailsTO> toPurchaseProductDetailsList(List<PurchaseItems> items) {
+        return items.parallelStream().map(this::toPurchaseDetailsTO).collect(Collectors.toList());
+    }
+
+    public ProductDetailsTO toPurchaseDetailsTO(PurchaseItems i) {
+        ProductDetailsTO details = toProductDetailsTO(i.getItem().getProductDetail());
+        details.setPurchaseStockId(i.getItem().getId());
+        return details;
     }
 }

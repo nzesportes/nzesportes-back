@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.controllers.product;
+package br.com.nzesportes.api.nzapi.controllers.payment;
 
 import br.com.nzesportes.api.nzapi.domains.product.Coupon;
 import br.com.nzesportes.api.nzapi.services.product.CouponService;
@@ -28,6 +28,11 @@ public class CouponController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public Page<Coupon> getCoupons(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) String  code) {
         return service.getCoupons(page, size, code);
+    }
+
+    @GetMapping("/validate/{code}")
+    public Boolean validate(@PathVariable String code) {
+        return service.getStatus(code);
     }
 
     @GetMapping("/{id}")

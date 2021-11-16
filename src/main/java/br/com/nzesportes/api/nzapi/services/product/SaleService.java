@@ -34,4 +34,8 @@ public class SaleService {
             repository.deleteById(id);
         throw new ResourceConflictException(ResponseErrorEnum.SAL002);
     }
+
+    public Sale getById(UUID id) {
+        return repository.findAllById(id);
+    }
 }

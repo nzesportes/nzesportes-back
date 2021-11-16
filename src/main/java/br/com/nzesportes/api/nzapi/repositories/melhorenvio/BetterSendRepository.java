@@ -1,4 +1,4 @@
-package br.com.nzesportes.api.nzapi.repositories;
+package br.com.nzesportes.api.nzapi.repositories.melhorenvio;
 
 import br.com.nzesportes.api.nzapi.domains.BetterSend;
 import org.springframework.data.jpa.repository.JpaRepository;

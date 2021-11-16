@@ -27,4 +27,5 @@ public class ProductDetailsTO {
     private String size;
     @JsonIgnore
     private Integer quantity;
+    private UUID purchaseStockId;
 }
