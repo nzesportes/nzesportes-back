@@ -174,9 +174,13 @@ public class PaymentService {
         });
         purchase.setItems(items);
         if(dto.getCoupon() != null && !dto.getCoupon().isBlank()){
-            if(!couponService.getStatus(dto.getCoupon()))
+            if(!couponService.getStatus(dto.getCoupon()).getStatus())
                 throw new ResourceConflictException(ResponseErrorEnum.NOT_FOUND);
+
             Coupon coupon = couponService.getByCode(dto.getCoupon());
+            coupon.setQuantityLeft(coupon.getQuantityLeft() - 1);
+            coupon = couponService.save(coupon);
+
             purchase.setTotalCost(purchase.getTotalCost().subtract(coupon.getDiscount()));
             purchase.setCoupon(coupon);
         }

@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.controllers.payment;
 
 import br.com.nzesportes.api.nzapi.domains.product.Coupon;
+import br.com.nzesportes.api.nzapi.dtos.product.CouponDTO;
 import br.com.nzesportes.api.nzapi.services.product.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -31,7 +32,7 @@ public class CouponController {
     }
 
     @GetMapping("/validate/{code}")
-    public Boolean validate(@PathVariable String code) {
+    public CouponDTO validate(@PathVariable String code) {
         return service.getStatus(code);
     }
 
