@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.domains.purchase;
 
 import br.com.nzesportes.api.nzapi.domains.customer.Address;
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
+import br.com.nzesportes.api.nzapi.domains.product.Coupon;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,8 +41,9 @@ public class Purchase {
     @JoinColumn(name = "payment_request_id")
     private PaymentRequest paymentRequest;
     private Integer shipmentServiceId;
-
     private BigInteger code;
+    @ManyToOne
+    private Coupon coupon;
 
     @PrePersist
     private void prePersist() {

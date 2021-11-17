@@ -64,6 +64,8 @@ nz:
     url: 'http://localhost:4200/auth/recovery/'
   email:
     from: 'nao-responda@nzesportes'
+  front:
+    url: 'http://localhost:4200/'
   allowed:
     origin: '*'
   jwt:

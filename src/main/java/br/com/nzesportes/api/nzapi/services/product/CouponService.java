@@ -39,4 +39,8 @@ public class CouponService {
             return true;
         return false;
     }
+
+    public Coupon getByCode(String code) {
+        return repository.findByCode(code).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+    }
 }

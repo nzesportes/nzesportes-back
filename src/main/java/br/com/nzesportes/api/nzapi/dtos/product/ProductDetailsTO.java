@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.dtos.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,5 +23,9 @@ public class ProductDetailsTO {
     private List<Stock> stock;
     private List<SubCategory> subCategories;
     private ProductTO product;
+    @JsonIgnore
+    private String size;
+    @JsonIgnore
+    private Integer quantity;
     private UUID purchaseStockId;
 }

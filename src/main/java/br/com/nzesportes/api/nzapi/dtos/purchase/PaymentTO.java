@@ -15,4 +15,5 @@ public class PaymentTO {
     private UUID shipmentId;
     private Integer shipmentService;
     private List<PackageTO> packages;
+    private String coupon;
 }
