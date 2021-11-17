@@ -1,6 +1,7 @@
 package br.com.nzesportes.api.nzapi.services.payment;
 
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
+import br.com.nzesportes.api.nzapi.domains.customer.User;
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
 import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
@@ -190,14 +191,15 @@ public class PaymentService {
         saved.getPaymentRequest().setPreferenceId(preference.getId());
         saved.setCode(code.getId());
         saved = purchaseRepository.save(saved);
+        sendEmailPurchase(saved, saved.getStatus());
 
         emailService.
             sendEmailPurchase(
                 principal.getUsername(),
-                "NZESPORTES - PEDIDO",
+                    "NZESPORTES: PEDIDO CONFIRMADO " + saved.getCode(),
                     EmailContentEnum.COMPRA_CONFIRMADA.getText(),
                     "Obrigado pela compra!",
-                    "ver seu pedido",
+                    "ver pedido",
                     this.urlFront,
                     saved
             );
@@ -249,7 +251,8 @@ public class PaymentService {
     private void cancelPurchase(Purchase purchase) {
         purchase.setStatus(MercadoPagoPaymentStatus.cancelled);
         purchase.getItems().parallelStream().forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));
-        purchaseRepository.save(purchase);
+        Purchase saved = purchaseRepository.save(purchase);
+        sendEmailPurchase(saved, saved.getStatus());
     }
 
     private void updateStatus(Purchase purchase, MercadoPagoPaymentStatus status) {
@@ -257,7 +260,8 @@ public class PaymentService {
         if(status.equals(MercadoPagoPaymentStatus.approved)){
             purchase.getPaymentRequest().setConfirmationDate(LocalDateTime.now());
         }
-        purchaseRepository.save(purchase);
+        Purchase saved = purchaseRepository.save(purchase);
+        sendEmailPurchase(saved, saved.getStatus());
     }
 
     @Scheduled(cron = "* 30 * * * *")
@@ -303,5 +307,55 @@ public class PaymentService {
                 log.error("Exception while trying to check payment for purchase {}", purchase.getId());
             }
         });
+    }
+
+    public void sendEmailPurchase(Purchase purchase, MercadoPagoPaymentStatus status) {
+        User user = userService.getById(purchase.getCustomer().getUserId());
+        String subject = "";
+        String title = "";
+        String text;
+
+        switch (status) {
+            case approved:
+                subject = "NZESPORTES: PAGAMENTO APROVADO ";
+                title = "Obrigado pela compra!";
+                text = EmailContentEnum.COMPRA_APROVADA.getText();
+                emailService.
+                    sendEmailPurchase(
+                            user.getUsername(),
+                            "NZESPORTES: AVALIE SEU PRODUTO " + purchase.getCode(),
+                            EmailContentEnum.COMPRA_AVALIAR.getText(),
+                            "Olá, o que achou dos produtos?",
+                            "avaliar produto",
+                            this.urlFront + "avaliar/" + purchase.getId(),
+                            purchase
+                    );
+                break;
+            case cancelled:
+                subject = "NZESPORTES: PAGAMENTO CANCELADO ";
+                title = "Ops, sua compra foi cancelada!";
+                text = EmailContentEnum.COMPRA_CANCELADA.getText();
+                break;
+            case rejected:
+                subject = "NZESPORTES: PAGAMENTO NÃO APROVADO ";
+                title = "Ops, seu pagamento não foi não foi aprovado!";
+                text = EmailContentEnum.COMPRA_REJEITADA.getText();
+                break;
+            default:
+                subject = "NZESPORTES: PROBLEMA NO PEDIDO ";
+                title = "Ops, ocorreu um problema no seu pedido!";
+                text = EmailContentEnum.COMPRA_ERRO_GENERICO.getText();
+
+        }
+        emailService.
+            sendEmailPurchase(
+                    user.getUsername(),
+                    subject + purchase.getCode(),
+                    text,
+                    title,
+                    "ver pedido",
+                    this.urlFront,
+                    purchase
+            );
     }
 }
