@@ -23,7 +23,6 @@ public class WebhookService {
         Purchase purchase = purchaseService.getById(id);
         if(PAYMENT_CREATED.equals(webhookNotification.getAction())){
             purchase.getPaymentRequest().setPaymentId(webhookNotification.getData().getId());
-            purchase.getPaymentRequest().setCreationDate(LocalDateTime.now());
             purchase = purchaseService.save(purchase);
             paymentService.checkPaymentStatus(purchase);
         } else if (PAYMENT_UPDATED.equals(webhookNotification.getAction()))

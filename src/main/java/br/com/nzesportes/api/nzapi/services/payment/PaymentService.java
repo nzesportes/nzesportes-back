@@ -142,7 +142,7 @@ public class PaymentService {
                 .shipmentServiceId(dto.getShipmentService())
                 .totalCost(dto.getShipment())
                 .status(MercadoPagoPaymentStatus.pending)
-                .paymentRequest(PaymentRequest.builder().buyerId(customer.getId()).build())
+                .paymentRequest(PaymentRequest.builder().creationDate(LocalDateTime.now()).buyerId(customer.getId()).build())
                 .shipmentAddress(addressService.getById(dto.getShipmentId()))
                 .build();
 
