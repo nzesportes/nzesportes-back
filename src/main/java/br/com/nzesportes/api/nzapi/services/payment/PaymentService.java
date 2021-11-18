@@ -109,6 +109,8 @@ public class PaymentService {
 
     @Autowired
     private PurchaseUtils utils;
+
+    @Autowired
     private CouponService couponService;
 
     public PaymentPurchaseTO createPaymentRequest(PaymentTO dto, UserDetailsImpl principal) {
@@ -179,7 +181,7 @@ public class PaymentService {
 
             Coupon coupon = couponService.getByCode(dto.getCoupon());
             coupon.setQuantityLeft(coupon.getQuantityLeft() - 1);
-            coupon = couponService.save(coupon);
+            coupon = couponService.update(coupon);
 
             purchase.setTotalCost(purchase.getTotalCost().subtract(coupon.getDiscount()));
             purchase.setCoupon(coupon);
