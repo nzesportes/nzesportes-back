@@ -18,7 +18,7 @@ public class SaleController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public Sale create(Sale sale) {
+    public Sale create(@RequestBody Sale sale) {
         return service.save(sale);
     }
 
