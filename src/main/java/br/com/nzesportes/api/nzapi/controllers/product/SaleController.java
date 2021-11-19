@@ -33,8 +33,8 @@ public class SaleController {
         return service.getById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable UUID id) {
-        service.deleteById(id);
+    @PutMapping
+    public void deleteById(@RequestBody Sale sale) {
+        service.update(sale);
     }
 }

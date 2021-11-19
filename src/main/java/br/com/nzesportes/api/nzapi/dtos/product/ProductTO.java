@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ProductTO {
-    public UUID id;
+    private UUID id;
     private String model;
     private Brand brand;
     private Boolean status;
