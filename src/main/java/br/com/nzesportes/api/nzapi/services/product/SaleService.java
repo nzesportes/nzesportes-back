@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
+import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.domains.product.Sale;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
@@ -8,15 +9,20 @@ import br.com.nzesportes.api.nzapi.repositories.product.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class SaleService {
     @Autowired
     private SaleRepository repository;
+
+    @Autowired
+    private ProductDetailsService productDetailsService;
 
     public Sale save(Sale sale) {
         Page<Sale> sales = repository.findByProductDetailIdOrderByEndDateDesc(sale.getProductDetailId(), PageRequest.of(0, 1));
@@ -30,12 +36,21 @@ public class SaleService {
     }
 
     public void deleteById(UUID id) {
-        if(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH)).getStartDate().isAfter(LocalDateTime.now()));
-            repository.deleteById(id);
-        throw new ResourceConflictException(ResponseErrorEnum.SAL002);
+        Sale sale = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+        sale.setStatus(false);
+        repository.save(sale);
     }
 
     public Sale getById(UUID id) {
         return repository.findAllById(id);
     }
+
+    @Scheduled(cron = "00 00 00 * * *")
+    public void checkPromotions() {
+        List<Sale> starting = repository.findByStartDateEquals(LocalDate.now());
+        List<Sale> ending = repository.findByEndDateEquals(LocalDate.now());
+
+    }
+
+
 }

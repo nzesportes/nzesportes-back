@@ -3,7 +3,7 @@ package br.com.nzesportes.api.nzapi.domains.product;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -16,7 +16,8 @@ public class Sale {
     private Double percentage;
     private Integer quantity;
     private UUID productDetailId;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private Integer quantityLeft;
+    private Boolean status;
 }

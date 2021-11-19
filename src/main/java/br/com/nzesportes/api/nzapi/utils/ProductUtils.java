@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,8 +31,9 @@ public class ProductUtils {
         copyProperties(details, dto);
 
         details.getSales().parallelStream()
-                .filter(sale -> sale.getStartDate().isBefore(LocalDateTime.now())
-                        && sale.getEndDate().isAfter(LocalDateTime.now())).findFirst().ifPresent(sale -> dto.setSale(sale));
+                .filter(sale -> !sale.getStartDate().isAfter(LocalDate.now())
+                        && !sale.getEndDate().isBefore(LocalDate.now())
+                        && sale.getStatus()).findFirst().ifPresent(sale -> dto.setSale(sale));
 
         dto.setProduct(toProductTO(productService.getById(details.getProductId())));
         return dto;
