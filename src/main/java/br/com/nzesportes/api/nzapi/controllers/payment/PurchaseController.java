@@ -7,6 +7,7 @@ import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +21,7 @@ public class PurchaseController {
     private PaymentService service;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public PaymentPurchaseTO createPaymentRequest(@RequestBody PaymentTO dto, Authentication auth) {
         return service.createPaymentRequest(dto, (UserDetailsImpl) auth.getPrincipal());
     }
@@ -40,6 +42,7 @@ public class PurchaseController {
     }
 
     @PutMapping("/{id}/tag")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public Purchase tag(@PathVariable UUID id){
         return service.tag(id);
     }

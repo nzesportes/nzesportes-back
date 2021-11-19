@@ -1,6 +1,5 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.domains.product.Sale;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
@@ -30,10 +29,10 @@ public class SaleService {
         return repository.findAll(PageRequest.of(page, size));
     }
 
-    public void deleteById(UUID id) {
-        Sale sale = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
-        sale.setStatus(false);
-        repository.save(sale);
+    public Sale update(Sale request) {
+        Sale response = repository.findById(request.getId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+        response.setStatus(false);
+        return repository.save(response);
     }
 
     public Sale getById(UUID id) {
