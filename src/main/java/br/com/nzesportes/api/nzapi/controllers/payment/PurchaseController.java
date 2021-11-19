@@ -38,4 +38,9 @@ public class PurchaseController {
     public Page<Purchase> getAll(@RequestParam int page, @RequestParam int size, Authentication auth) {
         return service.getAll(page, size, (UserDetailsImpl) auth.getPrincipal());
     }
+
+    @PutMapping("/{id}/tag")
+    public Purchase tag(@PathVariable UUID id){
+        return service.tag(id);
+    }
 }

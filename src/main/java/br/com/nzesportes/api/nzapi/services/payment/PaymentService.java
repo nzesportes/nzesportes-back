@@ -315,6 +315,13 @@ public class PaymentService {
         });
     }
 
+
+    public Purchase tag(UUID id) {
+        Purchase purchase = getById(id);
+        purchase.setTag(!purchase.getTag());
+        return purchaseRepository.save(purchase);
+    }
+
     public void sendEmailPurchase(Purchase purchase, MercadoPagoPaymentStatus status) {
         User user = userService.getById(purchase.getCustomer().getUserId());
         String subject = "";
