@@ -40,18 +40,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -121,8 +120,11 @@ public class PaymentService {
         return purchaseRepository.findAllByCustomerId(customerId, PageRequest.of(page, size));
     }
 
-    public Page<Purchase> getAll(int page, int size, UserDetailsImpl principal) {
-        return purchaseRepository.findAllPurchase(PageRequest.of(page, size));
+    public Page<Purchase> getAll(BigInteger code, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        if(Objects.nonNull(code))
+            return purchaseRepository.findByCode(code, pageable);
+        return purchaseRepository.findAllPurchase(pageable);
     }
 
     public Purchase getById(UUID id) {
