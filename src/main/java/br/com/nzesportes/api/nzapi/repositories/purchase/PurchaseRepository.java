@@ -20,12 +20,12 @@ public interface PurchaseRepository extends JpaRepository<Purchase, UUID> {
 
     List<Purchase> findByStatusNot(MercadoPagoPaymentStatus status);
 
-    @Query(value = "SELECT p.* FROM purchases p, payment_requests pr WHERE p.payment_request_id = pr.id AND p.customer_id = :customerId ORDER BY pr.creation_date DESC", nativeQuery = true)
+    @Query(value = "SELECT p.* FROM purchases p, payment_requests pr WHERE p.payment_request_id = pr.id AND p.customer_id = :customerId ORDER BY pr.creation_date DESC, p.code DESC", nativeQuery = true)
     Page<Purchase> findAllByCustomerId(UUID customerId, Pageable pageable);
 
     Purchase findAllById(UUID id);
 
-    @Query(value = "SELECT p.* FROM purchases p, payment_requests pr WHERE p.payment_request_id = pr.id ORDER BY pr.creation_date DESC", nativeQuery = true)
+    @Query(value = "SELECT p.* FROM purchases p, payment_requests pr WHERE p.payment_request_id = pr.id ORDER BY pr.creation_date DESC, p.code DESC", nativeQuery = true)
     Page<Purchase> findAllPurchase(Pageable pageable);
     List<Purchase> findByStatus(MercadoPagoPaymentStatus status);
 }

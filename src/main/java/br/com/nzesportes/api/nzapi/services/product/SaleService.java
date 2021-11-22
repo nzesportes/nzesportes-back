@@ -1,6 +1,5 @@
 package br.com.nzesportes.api.nzapi.services.product;
 
-import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
 import br.com.nzesportes.api.nzapi.domains.product.Sale;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
@@ -9,11 +8,8 @@ import br.com.nzesportes.api.nzapi.repositories.product.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -25,9 +21,7 @@ public class SaleService {
     private ProductDetailsService productDetailsService;
 
     public Sale save(Sale sale) {
-        Page<Sale> sales = repository.findByProductDetailIdOrderByEndDateDesc(sale.getProductDetailId(), PageRequest.of(0, 1));
-        if((!sales.isEmpty() && sales.getContent().get(0).getEndDate().isAfter(sale.getStartDate())) || sale.getStartDate().isAfter(sale.getEndDate()))
-            throw new ResourceConflictException(ResponseErrorEnum.SAL001);
+        checkSale(sale);
         return repository.save(sale);
     }
 
@@ -35,22 +29,21 @@ public class SaleService {
         return repository.findAll(PageRequest.of(page, size));
     }
 
-    public void deleteById(UUID id) {
-        Sale sale = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
-        sale.setStatus(false);
-        repository.save(sale);
+    public Sale update(Sale request) {
+        Sale response = repository.findById(request.getId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
+        response.setStatus(false);
+        return repository.save(response);
     }
 
     public Sale getById(UUID id) {
         return repository.findAllById(id);
     }
 
-    @Scheduled(cron = "00 00 00 * * *")
-    public void checkPromotions() {
-        List<Sale> starting = repository.findByStartDateEquals(LocalDate.now());
-        List<Sale> ending = repository.findByEndDateEquals(LocalDate.now());
-
+    private void checkSale(Sale sale) {
+        productDetailsService.getById(sale.getProductDetailId());
+        Page<Sale> sales = repository.findByProductDetailIdOrderByEndDateDesc(sale.getProductDetailId(), PageRequest.of(0, 1));
+        if((!sales.isEmpty() && sales.getContent().get(0).getEndDate().isAfter(sale.getStartDate())) || sale.getStartDate().isAfter(sale.getEndDate()))
+            throw new ResourceConflictException(ResponseErrorEnum.SAL001);
     }
-
 
 }

@@ -18,7 +18,7 @@ public class SaleController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
-    public Sale create(Sale sale) {
+    public Sale create(@RequestBody Sale sale) {
         return service.save(sale);
     }
 
@@ -33,8 +33,8 @@ public class SaleController {
         return service.getById(id);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteById(@PathVariable UUID id) {
-        service.deleteById(id);
+    @PutMapping
+    public void deleteById(@RequestBody Sale sale) {
+        service.update(sale);
     }
 }
