@@ -8,14 +8,11 @@ import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
 import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
 import br.com.nzesportes.api.nzapi.dtos.enums.EmailContentEnum;
-import br.com.nzesportes.api.nzapi.domains.customer.Role;
-import br.com.nzesportes.api.nzapi.domains.product.Brand;
 import br.com.nzesportes.api.nzapi.domains.product.Coupon;
-import br.com.nzesportes.api.nzapi.domains.product.Stock;
 import br.com.nzesportes.api.nzapi.domains.purchase.*;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPage;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPaymentStatus;
-import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderStatus;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderTO;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentMPTO;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
@@ -51,6 +48,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -279,44 +277,58 @@ public class PaymentService {
 
         purchases.parallelStream().forEach(purchase -> {
             try {
-                log.info("Getting preferences for purchase {}...", purchase.getId());
+                log.info("Getting preferences for purchase {}...", purchase.toString());
                 PreferenceSearchPage preferences = mercadoPagoAPI.getPreferences("Bearer " + TOKEN, purchase.getId().toString());
+                log.info("Preferences from mercado pago: {}",  preferences.getElements().toString());
+
                 Preference preference = mercadoPagoAPI.getPreferenceById("Bearer " + TOKEN, preferences.getElements().get(0).getId());
+                if(preference.getExpiration_date_to().isBefore(OffsetDateTime.now())) {
+                    OrderPage orders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), null);
+                    log.info("Orders from mercado pago: {}",  preferences.getElements().toString());
 
-                log.info("Getting closed orders...");
-                OrderPage closedOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.closed.getText());
+                    List<OrderTO> filtered = orders.getElements().parallelStream().filter(order -> order.getOrder_status().equals(OrderPaymentStatus.paid)
+                            || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
+                            || order.getOrder_status().equals(OrderPaymentStatus.partially_paid)).collect(Collectors.toList());
 
-                if(closedOrders.getElements() != null && closedOrders.getElements().size() > 0) {
-                    log.info("Approving purchase with at least one order closed...");
-                    closedOrders.getElements().parallelStream()
-                            .forEach(orderTO -> {
-                                if (OrderPaymentStatus.paid.equals(orderTO.getOrder_status()))
-                                    updateStatus(purchase, MercadoPagoPaymentStatus.approved);
-                                    return;});
-                }
-                else {
-                    log.info("Searching for open and closed orders...");
-                    OrderPage openOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.opened.getText());
-                    OrderPage expiredOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.expired.getText());
-
-                    if((openOrders.getElements() == null || closedOrders.getElements().size() == 0)
-                            && preference.getExpiration_date_to().isAfter(OffsetDateTime.now())) {
-                        log.info("Closing purchases with no payments...");
+                    if(filtered.size() == 0) {
                         cancelPurchase(purchase);
-                    }
-
-                    else if(openOrders.getElements() != null && closedOrders.getElements().size() > 0) {
-                        openOrders.getElements().forEach(orderTO -> {
-
-                        });
+                        return;
                     }
                 }
+
+//                log.info("Getting closed orders...");
+//                OrderPage closedOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.closed.getText());
+//
+//                if(closedOrders.getElements() != null && closedOrders.getElements().size() > 0) {
+//                    log.info("Approving purchase with at least one order closed...");
+//                    closedOrders.getElements().parallelStream()
+//                            .forEach(orderTO -> {
+//                                if (OrderPaymentStatus.paid.equals(orderTO.getOrder_status()))
+//                                    updateStatus(purchase, MercadoPagoPaymentStatus.approved);
+//                                    return;});
+//                }
+//                else {
+//                    log.info("Searching for open and closed orders...");
+//                    OrderPage openOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.opened.getText());
+//                    OrderPage expiredOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.expired.getText());
+//
+//                    if((openOrders.getElements() == null || closedOrders.getElements().size() == 0)
+//                            && preference.getExpiration_date_to().isAfter(OffsetDateTime.now())) {
+//                        log.info("Closing purchases with no payments...");
+//                        cancelPurchase(purchase);
+//                    }
+//
+//                    else if(openOrders.getElements() != null && closedOrders.getElements().size() > 0) {
+//                        openOrders.getElements().forEach(orderTO -> {
+//
+//                        });
+//                    }
+//                }
             } catch (Exception e) {
                 log.error("Exception while trying to check payment for purchase {}", purchase.getId());
             }
         });
     }
-
 
     public Purchase tag(UUID id) {
         Purchase purchase = getById(id);
