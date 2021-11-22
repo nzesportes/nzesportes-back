@@ -1,7 +1,10 @@
 package br.com.nzesportes.api.nzapi.dtos.mercadopago.order;
 
 public enum OrderPaymentStatus {
-    paid("paid");
+    paid("paid"),
+    payment_in_process("payment_in_process"),
+    partially_paid("partially_paid"),
+    expired("expired");
 
     private final String text;
 

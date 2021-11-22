@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.UUID;
 
 @RestController
@@ -21,7 +22,6 @@ public class PurchaseController {
     private PaymentService service;
 
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public PaymentPurchaseTO createPaymentRequest(@RequestBody PaymentTO dto, Authentication auth) {
         return service.createPaymentRequest(dto, (UserDetailsImpl) auth.getPrincipal());
     }
@@ -37,8 +37,8 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public Page<Purchase> getAll(@RequestParam int page, @RequestParam int size, Authentication auth) {
-        return service.getAll(page, size, (UserDetailsImpl) auth.getPrincipal());
+    public Page<Purchase> getAll(@RequestParam(required = false) BigInteger code, @RequestParam int page, @RequestParam int size, Authentication auth) {
+        return service.getAll(code, page, size);
     }
 
     @PutMapping("/{id}/tag")

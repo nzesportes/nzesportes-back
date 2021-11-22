@@ -33,5 +33,5 @@ public interface MercadoPagoClient {
     @GetMapping("/merchant_orders/search")
     OrderPage getOrders(@RequestHeader("Authorization") String token,
                         @RequestParam("external_reference") String external_reference,
-                        @RequestParam("status") String status);
+                        @RequestParam(value = "status",  required = false) String status);
 }
