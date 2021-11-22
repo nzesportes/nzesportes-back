@@ -31,8 +31,8 @@ public class SizeService {
         return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
     }
 
-    public Page<Size> getAll(int page, int size) {
-        return repository.findAll(PageRequest.of(page, size));
+    public Page<Size> getAll(String type, int page, int size) {
+        return repository.findByFilter(type != null ? type : "", PageRequest.of(page, size));
     }
 
     public void deleteById(UUID id) {
