@@ -290,7 +290,7 @@ public class PaymentService {
                             || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
                             || order.getOrder_status().equals(OrderPaymentStatus.partially_paid)).collect(Collectors.toList());
 
-                    if(filtered.size() == 0 || (orders.getElements() != null && orders.getElements().size() == 0)) {
+                    if(filtered.size() == 0 || (orders.getElements() == null && orders.getElements().size() == 0)) {
                         cancelPurchase(purchase);
                         return;
                     }
