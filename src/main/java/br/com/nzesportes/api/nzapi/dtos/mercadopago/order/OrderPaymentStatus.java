@@ -1,5 +1,8 @@
 package br.com.nzesportes.api.nzapi.dtos.mercadopago.order;
 
+import lombok.ToString;
+
+@ToString
 public enum OrderPaymentStatus {
     paid("paid"),
     payment_in_process("payment_in_process"),
