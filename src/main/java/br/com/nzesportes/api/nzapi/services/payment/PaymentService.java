@@ -284,7 +284,7 @@ public class PaymentService {
                 Preference preference = mercadoPagoAPI.getPreferenceById("Bearer " + TOKEN, preferences.getElements().get(0).getId());
                 if(preference.getExpiration_date_to().isBefore(OffsetDateTime.now())) {
                     OrderPage orders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), null);
-                    log.info("Orders from mercado pago: {}",  orders.getElements().toString());
+                    log.info("Orders from mercado pago: {}",  orders.getElements());
 
                     List<OrderTO> filtered = orders.getElements().parallelStream().filter(order -> order.getOrder_status().equals(OrderPaymentStatus.paid)
                             || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)

@@ -15,6 +15,7 @@ public class Sale {
     private UUID id;
     private Double percentage;
     private Integer quantity;
+    @JoinColumn
     private UUID productDetailId;
     private LocalDate startDate;
     private LocalDate endDate;
