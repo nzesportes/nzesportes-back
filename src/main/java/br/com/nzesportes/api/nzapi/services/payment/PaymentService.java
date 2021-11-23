@@ -12,6 +12,7 @@ import br.com.nzesportes.api.nzapi.domains.product.Coupon;
 import br.com.nzesportes.api.nzapi.domains.purchase.*;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPage;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPaymentStatus;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderStatus;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderTO;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentMPTO;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
@@ -300,35 +301,6 @@ public class PaymentService {
                         return;
                     }
                 }
-
-//                log.info("Getting closed orders...");
-//                OrderPage closedOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.closed.getText());
-//
-//                if(closedOrders.getElements() != null && closedOrders.getElements().size() > 0) {
-//                    log.info("Approving purchase with at least one order closed...");
-//                    closedOrders.getElements().parallelStream()
-//                            .forEach(orderTO -> {
-//                                if (OrderPaymentStatus.paid.equals(orderTO.getOrder_status()))
-//                                    updateStatus(purchase, MercadoPagoPaymentStatus.approved);
-//                                    return;});
-//                }
-//                else {
-//                    log.info("Searching for open and closed orders...");
-//                    OrderPage openOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.opened.getText());
-//                    OrderPage expiredOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.expired.getText());
-//
-//                    if((openOrders.getElements() == null || closedOrders.getElements().size() == 0)
-//                            && preference.getExpiration_date_to().isAfter(OffsetDateTime.now())) {
-//                        log.info("Closing purchases with no payments...");
-//                        cancelPurchase(purchase);
-//                    }
-//
-//                    else if(openOrders.getElements() != null && closedOrders.getElements().size() > 0) {
-//                        openOrders.getElements().forEach(orderTO -> {
-//
-//                        });
-//                    }
-//                }
             } catch (Exception e) {
                 log.error("Exception while trying to check payment for purchase {}", purchase.toString());
                 log.error("Exception while trying to check payment for purchase {}", e.toString());
@@ -346,6 +318,7 @@ public class PaymentService {
     private List<OrderTO> filterOrders(OrderPage orders) {
         return orders.getElements().parallelStream().filter(order -> order.getOrder_status().equals(OrderPaymentStatus.paid)
                 || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
+                || (order.getOrder_status().equals(OrderPaymentStatus.payment_required) && OrderStatus.opened.equals(order.getStatus()))
                 || order.getOrder_status().equals(OrderPaymentStatus.partially_paid)).collect(Collectors.toList());
     }
 
