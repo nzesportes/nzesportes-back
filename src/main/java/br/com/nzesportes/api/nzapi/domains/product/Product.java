@@ -12,7 +12,7 @@ import java.util.UUID;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public UUID id;
+    private UUID id;
     private String model;
     @ManyToOne
     private Brand brand;

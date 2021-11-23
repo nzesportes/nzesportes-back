@@ -3,6 +3,7 @@ package br.com.nzesportes.api.nzapi.dtos.mercadopago.order;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.Payer;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@ToString
 public class OrderTO {
     private BigInteger id;
     private OrderStatus status;

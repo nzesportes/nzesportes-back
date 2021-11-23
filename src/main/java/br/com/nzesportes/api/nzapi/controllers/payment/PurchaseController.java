@@ -7,9 +7,11 @@ import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.payment.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigInteger;
 import java.util.UUID;
 
 @RestController
@@ -35,7 +37,20 @@ public class PurchaseController {
     }
 
     @GetMapping
-    public Page<Purchase> getAll(@RequestParam int page, @RequestParam int size, Authentication auth) {
-        return service.getAll(page, size, (UserDetailsImpl) auth.getPrincipal());
+    public Page<Purchase> getAll(@RequestParam(required = false) BigInteger code, @RequestParam int page, @RequestParam int size, Authentication auth) {
+        return service.getAll(code, page, size);
     }
+
+    @PutMapping("/{id}/tag")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    public Purchase tag(@PathVariable UUID id){
+        return service.tag(id);
+    }
+
+    @GetMapping("/refresh")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    public void refresh() {
+        service.checkPayments();
+    }
+
 }

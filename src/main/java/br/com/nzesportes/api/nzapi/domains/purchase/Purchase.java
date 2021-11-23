@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Entity
 @Table(name = "purchases")
 public class Purchase {
@@ -44,9 +45,11 @@ public class Purchase {
     private BigInteger code;
     @ManyToOne
     private Coupon coupon;
+    private Boolean tag;
 
     @PrePersist
     private void prePersist() {
+        this.tag = false;
         if(this.items != null && this.items.size() > 0)
             this.items.forEach(i -> i.setPurchase(this));
     }

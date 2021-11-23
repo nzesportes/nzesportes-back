@@ -1,5 +1,8 @@
 package br.com.nzesportes.api.nzapi.domains.purchase;
 
+import lombok.ToString;
+
+@ToString
 public enum MercadoPagoPaymentStatus {
     pending("pending"), // The user has not yet completed the payment process.
     approved("approved"), // The payment has been approved and accredited.

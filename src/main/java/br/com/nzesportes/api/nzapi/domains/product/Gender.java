@@ -1,5 +1,8 @@
 package br.com.nzesportes.api.nzapi.domains.product;
 
+import lombok.ToString;
+
+@ToString
 public enum Gender {
     FEMALE("FEMALE"),
     MALE("MALE"),

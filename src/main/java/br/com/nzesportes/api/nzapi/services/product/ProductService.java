@@ -10,6 +10,7 @@ import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.product.*;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
+import br.com.nzesportes.api.nzapi.services.melhorenvio.SizeService;
 import br.com.nzesportes.api.nzapi.services.payment.PurchaseService;
 import br.com.nzesportes.api.nzapi.utils.ProductUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,9 @@ public class ProductService {
     @Autowired
     private StockService stockService;
 
+    @Autowired
+    private SizeService sizeService;
+
     public Product save(Product product) {
         if(repository.existsByModel(product.getModel()))
             throw new ResourceConflictException(ResponseErrorEnum.PRD002);
@@ -74,6 +78,7 @@ public class ProductService {
     public Product update(ProductUpdateTO dto) {
         Product product = getById(dto.getId());
         copyProperties(dto, product);
+        product.setSize(sizeService.getById(dto.getSizeId()));
         return repository.save(product);
     }
 

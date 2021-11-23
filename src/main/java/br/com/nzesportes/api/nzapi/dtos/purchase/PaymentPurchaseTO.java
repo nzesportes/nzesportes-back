@@ -10,6 +10,6 @@ import java.util.UUID;
 @Setter
 @Builder
 public class PaymentPurchaseTO {
-    public UUID purchaseId;
-    public String paymentUrl;
+    private UUID purchaseId;
+    private String paymentUrl;
 }

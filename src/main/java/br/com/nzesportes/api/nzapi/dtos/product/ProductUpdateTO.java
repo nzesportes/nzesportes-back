@@ -11,4 +11,5 @@ public class ProductUpdateTO {
     private UUID id;
     private String model;
     private Boolean status;
+    private UUID sizeId;
 }

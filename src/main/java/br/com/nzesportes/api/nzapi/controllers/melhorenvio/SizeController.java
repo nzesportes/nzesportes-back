@@ -23,8 +23,8 @@ public class SizeController {
     }
 
     @GetMapping
-    public Page<Size> getAll(@RequestParam int page, @RequestParam int size) {
-        return service.getAll(page, size);
+    public Page<Size> getAll(@RequestParam(required = false) String type, @RequestParam int page, @RequestParam int size) {
+        return service.getAll(type, page, size);
     }
 
     @GetMapping("/{id}")
