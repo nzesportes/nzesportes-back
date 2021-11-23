@@ -254,6 +254,8 @@ public class PaymentService {
                 .auto_return(AUTO_RETURN)
                 .build();
 
+        log.info("Preference: {}", preference);
+
         Preference savedPreference = mercadoPagoAPI.createPreference("Bearer " + TOKEN, preference);
         return savedPreference;
     }
