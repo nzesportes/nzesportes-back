@@ -22,6 +22,7 @@ public class SaleService {
 
     public Sale save(Sale sale) {
         checkSale(sale);
+        sale.setQuantityLeft(sale.getQuantity());
         return repository.save(sale);
     }
 
