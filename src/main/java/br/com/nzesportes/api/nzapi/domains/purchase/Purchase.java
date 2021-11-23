@@ -46,6 +46,7 @@ public class Purchase {
     @ManyToOne
     private Coupon coupon;
     private Boolean tag;
+    private Boolean ticket;
 
     @PrePersist
     private void prePersist() {

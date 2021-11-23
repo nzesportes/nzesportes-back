@@ -73,9 +73,6 @@ public class PaymentService {
     private final static String CURRENCY = "BRL";
     private final static String IDENTIFICATION_TYPE = "CPF";
     private final static String STATEMENT = "NZESPORTES";
-    private final static String SORT_TYPE = "date_created";
-    private final static String CRITERIA = "desc";
-
 
     @Autowired
     private CustomerService customerService;
@@ -105,9 +102,6 @@ public class PaymentService {
     private EmailService emailService;
 
     @Autowired
-    private PurchaseUtils utils;
-
-    @Autowired
     private CouponService couponService;
 
     public PaymentPurchaseTO createPaymentRequest(PaymentTO dto, UserDetailsImpl principal) {
@@ -133,8 +127,13 @@ public class PaymentService {
         PaymentMPTO payment = mercadoPagoAPI.getPayment("Bearer " + TOKEN, purchase.getPaymentRequest().getPaymentId());
         if(MercadoPagoPaymentStatus.cancelled.equals(payment.getStatus()))
             cancelPurchase(purchase);
-        else
-            updateStatus(purchase, payment.getStatus());
+        else {
+            if(purchase.getTicket() == null || purchase.getTicket().equals(Boolean.FALSE)) {
+                purchase.setTicket(payment.getPayment_type_id().equals("ticket"));
+                purchase.getPaymentRequest().setExpirationDate(payment.getDate_of_expiration());
+            }
+            updateStatus(purchase, payment);
+        }
     }
 
     private PaymentPurchaseTO createPurchase(PaymentTO dto, UserDetailsImpl principal) {
@@ -237,6 +236,9 @@ public class PaymentService {
                 .address(Address.builder().zip_code(purchase.getShipmentAddress().getCep()).street_name(purchase.getShipmentAddress().getStreet()).street_number(Integer.parseInt(purchase.getShipmentAddress().getNumber())).build())
                 .build();
 
+        List<ExcludedPaymentMethod> excludedPaymentMethods = new ArrayList<>();
+        excludedPaymentMethods.add(ExcludedPaymentMethod.builder().id("PEC").build());
+
         Preference preference = Preference.builder()
                 .payer(payer)
                 .items(items)
@@ -246,6 +248,7 @@ public class PaymentService {
                 .expiration_date_to(OffsetDateTime.now().plusMinutes(30))
                 .statement_descriptor(STATEMENT)
                 .external_reference(purchase.getId().toString())
+                .payment_methods(PaymentMethods.builder().excluded_payment_methods(excludedPaymentMethods).build())
                 .back_urls(BackUrls.builder().success(PAYMENT_BACK_URL).failure(PAYMENT_BACK_URL).pending(PAYMENT_BACK_URL).build())
                 .auto_return(AUTO_RETURN)
                 .build();
@@ -261,11 +264,15 @@ public class PaymentService {
         sendEmailPurchase(saved, saved.getStatus());
     }
 
-    private void updateStatus(Purchase purchase, MercadoPagoPaymentStatus status) {
-        purchase.setStatus(status);
-        if(status.equals(MercadoPagoPaymentStatus.approved)){
+    private void updateStatus(Purchase purchase, PaymentMPTO payment) {
+        purchase.setStatus(payment.getStatus());
+        if(payment.getStatus().equals(MercadoPagoPaymentStatus.approved)){
             purchase.getPaymentRequest().setConfirmationDate(LocalDateTime.now());
         }
+        else if (MercadoPagoPaymentStatus.cancelled.equals(payment.getStatus())){
+            purchase.getPaymentRequest().setCancellationDate(LocalDateTime.now());
+        }
+
         Purchase saved = purchaseRepository.save(purchase);
         sendEmailPurchase(saved, saved.getStatus());
     }

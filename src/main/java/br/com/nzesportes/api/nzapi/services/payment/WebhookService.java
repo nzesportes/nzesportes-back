@@ -28,6 +28,4 @@ public class WebhookService {
         } else if (PAYMENT_UPDATED.equals(webhookNotification.getAction()))
             paymentService.checkPaymentStatus(purchase);
     }
-    //criar cenário de notificação de merchat order
-    //adicionar order_status de merchat order ao enum do backend
 }
