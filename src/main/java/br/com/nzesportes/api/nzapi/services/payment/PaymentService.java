@@ -238,7 +238,7 @@ public class PaymentService {
                 .build();
 
         List<ExcludedPaymentMethod> excludedPaymentMethods = new ArrayList<>();
-        excludedPaymentMethods.add(ExcludedPaymentMethod.builder().id("PEC").build());
+        excludedPaymentMethods.add(ExcludedPaymentMethod.builder().id("pec").build());
 
         Preference preference = Preference.builder()
                 .payer(payer)
