@@ -16,6 +16,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 @Entity
 @Table(name = "purchases")
 public class Purchase {

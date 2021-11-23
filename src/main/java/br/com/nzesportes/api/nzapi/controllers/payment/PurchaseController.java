@@ -46,4 +46,11 @@ public class PurchaseController {
     public Purchase tag(@PathVariable UUID id){
         return service.tag(id);
     }
+
+    @GetMapping("/refresh")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
+    public void refresh() {
+        service.checkPayments();
+    }
+
 }

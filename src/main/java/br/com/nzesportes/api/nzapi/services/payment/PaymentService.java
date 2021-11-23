@@ -284,7 +284,7 @@ public class PaymentService {
                 Preference preference = mercadoPagoAPI.getPreferenceById("Bearer " + TOKEN, preferences.getElements().get(0).getId());
                 if(preference.getExpiration_date_to().isBefore(OffsetDateTime.now())) {
                     OrderPage orders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), null);
-                    log.info("Orders from mercado pago: {}",  preferences.getElements().toString());
+                    log.info("Orders from mercado pago: {}",  orders.getElements().toString());
 
                     List<OrderTO> filtered = orders.getElements().parallelStream().filter(order -> order.getOrder_status().equals(OrderPaymentStatus.paid)
                             || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
@@ -325,7 +325,8 @@ public class PaymentService {
 //                    }
 //                }
             } catch (Exception e) {
-                log.error("Exception while trying to check payment for purchase {}", purchase.getId());
+                log.error("Exception while trying to check payment for purchase {}", purchase.toString());
+                log.error("Exception while trying to check payment for purchase {}", e.toString());
             }
         });
     }
