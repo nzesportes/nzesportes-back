@@ -327,7 +327,7 @@ public class PaymentService {
             } catch (Exception e) {
                 log.error("Exception while trying to check payment for purchase {}", purchase.toString());
                 log.error("Exception while trying to check payment for purchase {}", e.toString());
-                log.error("Exception while trying to check payment for purchase {}", e.printStackTrace());
+                e.printStackTrace();
             }
         });
     }
