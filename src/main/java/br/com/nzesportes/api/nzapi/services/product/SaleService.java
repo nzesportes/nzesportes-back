@@ -32,7 +32,6 @@ public class SaleService {
 
     public Sale update(Sale request) {
         Sale response = repository.findById(request.getId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND));
-        response.setStatus(false);
         return repository.save(response);
     }
 
