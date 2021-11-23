@@ -286,11 +286,7 @@ public class PaymentService {
                     OrderPage orders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), null);
                     log.info("Orders from mercado pago: {}",  orders.getElements());
 
-                    List<OrderTO> filtered = orders.getElements().parallelStream().filter(order -> order.getOrder_status().equals(OrderPaymentStatus.paid)
-                            || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
-                            || order.getOrder_status().equals(OrderPaymentStatus.partially_paid)).collect(Collectors.toList());
-
-                    if(filtered.size() == 0 || (orders.getElements() == null && orders.getElements().size() == 0)) {
+                    if((orders.getElements() == null || orders.getElements().size() == 0) || filterOrders(orders).size() == 0) {
                         cancelPurchase(purchase);
                         return;
                     }
@@ -336,6 +332,12 @@ public class PaymentService {
         Purchase purchase = getById(id);
         purchase.setTag(!purchase.getTag());
         return purchaseRepository.save(purchase);
+    }
+
+    private List<OrderTO> filterOrders(OrderPage orders) {
+        return orders.getElements().parallelStream().filter(order -> order.getOrder_status().equals(OrderPaymentStatus.paid)
+                || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
+                || order.getOrder_status().equals(OrderPaymentStatus.partially_paid)).collect(Collectors.toList());
     }
 
     public void sendEmailPurchase(Purchase purchase, MercadoPagoPaymentStatus status) {
