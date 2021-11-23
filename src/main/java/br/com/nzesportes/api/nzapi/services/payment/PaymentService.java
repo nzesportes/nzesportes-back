@@ -274,6 +274,7 @@ public class PaymentService {
     public void checkPayments() {
         log.info("Checking pending payments...");
         List<Purchase> purchases = purchaseRepository.findByStatus(MercadoPagoPaymentStatus.pending);
+        purchases.addAll(purchaseRepository.findByStatus(MercadoPagoPaymentStatus.rejected));
 
         purchases.parallelStream().forEach(purchase -> {
             try {
@@ -287,6 +288,7 @@ public class PaymentService {
                     log.info("Orders from mercado pago: {}",  orders.getElements());
 
                     if((orders.getElements() == null || orders.getElements().size() == 0) || filterOrders(orders).size() == 0) {
+                        log.error("Canceling purchase: {}", purchase.toString());
                         cancelPurchase(purchase);
                         return;
                     }
