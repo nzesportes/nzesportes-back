@@ -8,5 +8,5 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ExcludedPaymentMethod {
-    public String id;
+    private String id;
 }
