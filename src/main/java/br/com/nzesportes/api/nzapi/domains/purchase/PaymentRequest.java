@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Getter
@@ -25,4 +26,5 @@ public class PaymentRequest {
     private LocalDateTime updateDate;
     private LocalDateTime confirmationDate;
     private LocalDateTime cancellationDate;
+    private OffsetDateTime expirationDate;
 }

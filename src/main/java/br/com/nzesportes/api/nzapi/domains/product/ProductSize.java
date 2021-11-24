@@ -22,4 +22,5 @@ public class ProductSize {
     private String indicated_height;
     private String indicated_weight;
     private String image;
+    private String name;
 }

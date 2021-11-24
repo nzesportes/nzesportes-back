@@ -1,8 +1,13 @@
 package br.com.nzesportes.api.nzapi.dtos.mercadopago.preference;
 
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class ExcludedPaymentMethod {
-    public String id;
+    private String id;
 }

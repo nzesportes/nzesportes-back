@@ -5,7 +5,6 @@ import br.com.nzesportes.api.nzapi.dtos.mercadopago.webhook.PaymentWebhookNotifi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -28,6 +27,4 @@ public class WebhookService {
         } else if (PAYMENT_UPDATED.equals(webhookNotification.getAction()))
             paymentService.checkPaymentStatus(purchase);
     }
-    //criar cenário de notificação de merchat order
-    //adicionar order_status de merchat order ao enum do backend
 }

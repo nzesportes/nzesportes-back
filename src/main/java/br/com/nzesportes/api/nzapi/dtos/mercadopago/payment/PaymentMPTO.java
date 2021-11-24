@@ -17,6 +17,7 @@ public class PaymentMPTO {
     public OffsetDateTime date_created;
     public OffsetDateTime date_approved;
     public OffsetDateTime date_last_updated;
+    public OffsetDateTime date_of_expiration;
     public OffsetDateTime money_release_date;
     public String payment_method_id;
     public String payment_type_id;

@@ -12,6 +12,7 @@ import br.com.nzesportes.api.nzapi.domains.product.Coupon;
 import br.com.nzesportes.api.nzapi.domains.purchase.*;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPage;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderPaymentStatus;
+import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderStatus;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.order.OrderTO;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.payment.PaymentMPTO;
 import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
@@ -73,9 +74,6 @@ public class PaymentService {
     private final static String CURRENCY = "BRL";
     private final static String IDENTIFICATION_TYPE = "CPF";
     private final static String STATEMENT = "NZESPORTES";
-    private final static String SORT_TYPE = "date_created";
-    private final static String CRITERIA = "desc";
-
 
     @Autowired
     private CustomerService customerService;
@@ -105,9 +103,6 @@ public class PaymentService {
     private EmailService emailService;
 
     @Autowired
-    private PurchaseUtils utils;
-
-    @Autowired
     private CouponService couponService;
 
     public PaymentPurchaseTO createPaymentRequest(PaymentTO dto, UserDetailsImpl principal) {
@@ -133,8 +128,13 @@ public class PaymentService {
         PaymentMPTO payment = mercadoPagoAPI.getPayment("Bearer " + TOKEN, purchase.getPaymentRequest().getPaymentId());
         if(MercadoPagoPaymentStatus.cancelled.equals(payment.getStatus()))
             cancelPurchase(purchase);
-        else
-            updateStatus(purchase, payment.getStatus());
+        else {
+            if(purchase.getTicket() == null || purchase.getTicket().equals(Boolean.FALSE)) {
+                purchase.setTicket(payment.getPayment_type_id().equals("ticket"));
+                purchase.getPaymentRequest().setExpirationDate(payment.getDate_of_expiration());
+            }
+            updateStatus(purchase, payment);
+        }
     }
 
     private PaymentPurchaseTO createPurchase(PaymentTO dto, UserDetailsImpl principal) {
@@ -237,6 +237,9 @@ public class PaymentService {
                 .address(Address.builder().zip_code(purchase.getShipmentAddress().getCep()).street_name(purchase.getShipmentAddress().getStreet()).street_number(Integer.parseInt(purchase.getShipmentAddress().getNumber())).build())
                 .build();
 
+        List<ExcludedPaymentMethod> excludedPaymentMethods = new ArrayList<>();
+        excludedPaymentMethods.add(ExcludedPaymentMethod.builder().id("pec").build());
+
         Preference preference = Preference.builder()
                 .payer(payer)
                 .items(items)
@@ -246,9 +249,12 @@ public class PaymentService {
                 .expiration_date_to(OffsetDateTime.now().plusMinutes(30))
                 .statement_descriptor(STATEMENT)
                 .external_reference(purchase.getId().toString())
+                .payment_methods(PaymentMethods.builder().excluded_payment_methods(excludedPaymentMethods).build())
                 .back_urls(BackUrls.builder().success(PAYMENT_BACK_URL).failure(PAYMENT_BACK_URL).pending(PAYMENT_BACK_URL).build())
                 .auto_return(AUTO_RETURN)
                 .build();
+
+        log.info("Preference: {}", preference);
 
         Preference savedPreference = mercadoPagoAPI.createPreference("Bearer " + TOKEN, preference);
         return savedPreference;
@@ -261,11 +267,15 @@ public class PaymentService {
         sendEmailPurchase(saved, saved.getStatus());
     }
 
-    private void updateStatus(Purchase purchase, MercadoPagoPaymentStatus status) {
-        purchase.setStatus(status);
-        if(status.equals(MercadoPagoPaymentStatus.approved)){
+    private void updateStatus(Purchase purchase, PaymentMPTO payment) {
+        purchase.setStatus(payment.getStatus());
+        if(payment.getStatus().equals(MercadoPagoPaymentStatus.approved)){
             purchase.getPaymentRequest().setConfirmationDate(LocalDateTime.now());
         }
+        else if (MercadoPagoPaymentStatus.cancelled.equals(payment.getStatus())){
+            purchase.getPaymentRequest().setCancellationDate(LocalDateTime.now());
+        }
+
         Purchase saved = purchaseRepository.save(purchase);
         sendEmailPurchase(saved, saved.getStatus());
     }
@@ -293,35 +303,6 @@ public class PaymentService {
                         return;
                     }
                 }
-
-//                log.info("Getting closed orders...");
-//                OrderPage closedOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.closed.getText());
-//
-//                if(closedOrders.getElements() != null && closedOrders.getElements().size() > 0) {
-//                    log.info("Approving purchase with at least one order closed...");
-//                    closedOrders.getElements().parallelStream()
-//                            .forEach(orderTO -> {
-//                                if (OrderPaymentStatus.paid.equals(orderTO.getOrder_status()))
-//                                    updateStatus(purchase, MercadoPagoPaymentStatus.approved);
-//                                    return;});
-//                }
-//                else {
-//                    log.info("Searching for open and closed orders...");
-//                    OrderPage openOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.opened.getText());
-//                    OrderPage expiredOrders = mercadoPagoAPI.getOrders("Bearer " + TOKEN, purchase.getId().toString(), OrderStatus.expired.getText());
-//
-//                    if((openOrders.getElements() == null || closedOrders.getElements().size() == 0)
-//                            && preference.getExpiration_date_to().isAfter(OffsetDateTime.now())) {
-//                        log.info("Closing purchases with no payments...");
-//                        cancelPurchase(purchase);
-//                    }
-//
-//                    else if(openOrders.getElements() != null && closedOrders.getElements().size() > 0) {
-//                        openOrders.getElements().forEach(orderTO -> {
-//
-//                        });
-//                    }
-//                }
             } catch (Exception e) {
                 log.error("Exception while trying to check payment for purchase {}", purchase.toString());
                 log.error("Exception while trying to check payment for purchase {}", e.toString());
@@ -339,6 +320,7 @@ public class PaymentService {
     private List<OrderTO> filterOrders(OrderPage orders) {
         return orders.getElements().parallelStream().filter(order -> order.getOrder_status().equals(OrderPaymentStatus.paid)
                 || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
+                || (order.getOrder_status().equals(OrderPaymentStatus.payment_required) && OrderStatus.opened.equals(order.getStatus()))
                 || order.getOrder_status().equals(OrderPaymentStatus.partially_paid)).collect(Collectors.toList());
     }
 
