@@ -93,10 +93,10 @@ public class ProductService {
         return detailService.update(dto);
     }
 
-    public ProductDetails getDetailById(UUID id, UserDetailsImpl principal) {
+    public Object getDetailById(UUID id, UserDetailsImpl principal) {
         if(principal != null && principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.getText())))
             return detailService.getById(id);
-        return detailService.getByIdUser(id);
+        return utils.toProductDetailsTO(detailService.getById(id));
     }
 
     public ProductDetails saveDetail(ProductDetailSaveTO details) {
