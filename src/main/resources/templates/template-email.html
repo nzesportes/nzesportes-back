@@ -158,6 +158,87 @@
             width: 25%;
         }
 
+
+        .bg-raisin-black {
+            margin-top: 20px;
+            background-color: #2b2828;
+            padding: 24px 15px;
+        }
+
+        .bg-raisin-black .nav {
+            display: flex;
+            flex-wrap: wrap;
+            padding-left: 0;
+            margin-bottom: 0;
+            list-style: none;
+        }
+
+        .bg-raisin-black ul {
+            justify-content: center;
+            margin: 0;
+        }
+
+        .isMobile {
+            display: block;
+        }
+
+        .notIsMobile {
+            display: none;
+        }
+
+        .bg-raisin-black a {
+            padding: 8px 16px;
+        }
+
+        .bg-raisin-black img {
+            height: 17px;
+            width: auto;
+        }
+
+        .bg-orange-crayola {
+            background-color: #F37135;
+            padding: 24px 15px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.5rem 1rem;
+        }
+
+        .row-footer {
+            padding: 24px;
+        }
+
+        .col-address {
+            width: 100%;
+        }
+
+        .col-cnpj {
+            width: 100%;
+        }
+
+        .col-policy {
+            width: 100%;
+        }
+
+        .title-footer {
+            text-transform: uppercase;
+            font-size: 16px;
+            font-weight: bolder;
+            color: #2b2828;
+            line-height: 1.8em;
+        }
+
+        .title-footer a {
+            text-decoration: none;
+            color: #2b2828;
+        }
+
+        .text-footer {
+            font-size: 16px;
+            color: #fff;
+        }
+
         @media (min-width: 576px) {
             .container {
                 padding: 40px 35px 20px;
@@ -209,6 +290,10 @@
             .container-purchase-details {
                 padding-right: 30px;
             }
+
+            .row-footer {
+                display: flex;
+            }
         }
 
         @media (min-width: 992px) {
@@ -223,6 +308,14 @@
                 margin-bottom: 30px;
             }
 
+            .isMobile {
+                display: none;
+            }
+
+            .notIsMobile {
+                display: block;
+            }
+
         }
 
 
@@ -232,8 +325,6 @@
             }
         }
     </style>
-
-
 </head>
 
 <body>
@@ -323,6 +414,52 @@
     <!-- acao -->
     <div>
         <a class="button-go-to-order" th:href="${link}" th:text="${action}"></a>
+    </div>
+    <!-- rodapé -->
+    <div class="bg-raisin-black">
+        <ul class="nav justify-content-center">
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://www.facebook.com/artigos.nzesportes">
+                    <img class="social-icon"
+                         src="https://res.cloudinary.com/nzesportes/image/upload/v1637722122/nz%20logotipo/facebook_aronta.png">
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" target="_blank" href="https://www.instagram.com/nz_esportes/?hl=pt-br">
+                    <img class="social-icon"
+                         src="https://res.cloudinary.com/nzesportes/image/upload/v1637722122/nz%20logotipo/instagram_m42izr.png">
+                </a>
+            </li>
+            <li class="isMobile nav-item">
+                <a class="nav-link" target="_blank"
+                   href="https://api.whatsapp.com/send?phone=+5511957466088&text=Olá, Gabriel! Poderia me ajudar?">
+                    <img class="social-icon"
+                         src="https://res.cloudinary.com/nzesportes/image/upload/v1637722122/nz%20logotipo/wpp_zbbw63.png"></a>
+            </li>
+            <li class="notIsMobile nav-item">
+                <a class="nav-link" target="_blank"
+                   href="https://web.whatsapp.com/send?phone=+5511957466088&text=Olá, Gabriel! Poderia me ajudar?">
+                    <img class="social-icon"
+                         src="https://res.cloudinary.com/nzesportes/image/upload/v1637722122/nz%20logotipo/wpp_zbbw63.png"></a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="bg-orange-crayola">
+        <div class="row-footer">
+            <div class="col-address">
+                <h3 class="title-footer">NZ ESPORTES</h3>
+            </div>
+            <div class="col-cnpj">
+                <h3 class="title-footer">CNPJ</h3>
+                <p class="text-footer">123.456.789-00</p>
+            </div>
+            <div class="col-policy">
+                <h3 class="title-footer"><a href="#">Política de Troca</a></h3>
+                <h3 class="title-footer"><a href="#">Reclame Aqui</a></h3>
+                <h3 class="title-footer"><a href="#">Política de Privacidade</a></h3>
+            </div>
+        </div>
     </div>
 </div>
 

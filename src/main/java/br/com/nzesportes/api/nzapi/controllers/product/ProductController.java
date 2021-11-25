@@ -91,7 +91,7 @@ public class ProductController {
     }
 
     @GetMapping("/details/{id}")
-    public ProductDetails getDetailById(@PathVariable UUID id, Authentication auth) {
+    public Object getDetailById(@PathVariable UUID id, Authentication auth) {
         return service.getDetailById(id, auth != null ? (UserDetailsImpl) auth.getPrincipal() : null);
     }
 
