@@ -334,7 +334,7 @@ public class PaymentService {
         BigDecimal result;
         if(sale.isPresent()) {
             result = new BigDecimal("100").subtract(new BigDecimal(sale.get().getPercentage().toString()))
-                    .divide(new BigDecimal("100").multiply(updatedStock.getProductDetail().getPrice()))
+                    .divide(new BigDecimal("100")).multiply(updatedStock.getProductDetail().getPrice())
                     .multiply(new BigDecimal(productPaymentTO.getQuantity().toString()));
 
             pi.setDiscount((sale.get().getPercentage()));
