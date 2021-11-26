@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.utils;
 
 import br.com.nzesportes.api.nzapi.domains.product.Product;
 import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.domains.product.Sale;
 import br.com.nzesportes.api.nzapi.domains.purchase.PurchaseItems;
 import br.com.nzesportes.api.nzapi.dtos.product.ProductDetailsTO;
 import br.com.nzesportes.api.nzapi.dtos.product.ProductTO;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
@@ -30,13 +32,19 @@ public class ProductUtils {
         ProductDetailsTO dto = new ProductDetailsTO();
         copyProperties(details, dto);
 
-        details.getSales().parallelStream()
-                .filter(sale -> !sale.getStartDate().isAfter(LocalDate.now())
-                        && !sale.getEndDate().isBefore(LocalDate.now())
-                        && sale.getStatus()).findFirst().ifPresent(sale -> dto.setSale(sale));
+        Optional<Sale> sale =  getSale(details);
+        if(sale.isPresent())
+            dto.setSale(sale.get());
 
         dto.setProduct(toProductTO(productService.getById(details.getProductId())));
         return dto;
+    }
+
+    public Optional<Sale> getSale(ProductDetails details) {
+        return details.getSales().parallelStream()
+                .filter(sale -> !sale.getStartDate().isAfter(LocalDate.now())
+                        && !sale.getEndDate().isBefore(LocalDate.now())
+                        && sale.getStatus()).findFirst();
     }
 
     public List<ProductDetailsTO> toProductDetailsList(List<ProductDetails> products) {
