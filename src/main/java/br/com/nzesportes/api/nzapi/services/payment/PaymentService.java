@@ -157,7 +157,7 @@ public class PaymentService {
                 .build();
 
         List<PurchaseItems> items = new ArrayList<>();
-        dto.getProducts().parallelStream().forEach(productPaymentTO -> {
+        dto.getProducts().forEach(productPaymentTO -> {
             Stock updatedStock;
             try {
                 updatedStock = stockService.updateQuantity(new UpdateStockTO(productPaymentTO.getStockId(), -productPaymentTO.getQuantity()));
