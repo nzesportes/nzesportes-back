@@ -8,7 +8,6 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,5 +27,38 @@ public class PurchaseItems {
     private Purchase purchase;
     private Integer quantity;
     private BigDecimal cost;
+    private Double discount;
     private boolean available;
+
+    public UUID getId() {
+        return id;
+    }
+
+    public Stock getItem() {
+        return item;
+    }
+
+    public Purchase getPurchase() {
+        return purchase;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public BigDecimal getCost() {
+        if(discount != null && discount > 0)
+            return new BigDecimal("100").subtract(new BigDecimal(discount.toString()))
+                    .divide(new BigDecimal("100").multiply(item.getProductDetail().getPrice()));
+        else
+            return item.getProductDetail().getPrice();
+    }
+
+    public Double getDiscount() {
+        return discount;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
 }

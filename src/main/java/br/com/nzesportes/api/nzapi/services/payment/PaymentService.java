@@ -2,6 +2,8 @@ package br.com.nzesportes.api.nzapi.services.payment;
 
 import br.com.nzesportes.api.nzapi.domains.customer.Customer;
 import br.com.nzesportes.api.nzapi.domains.customer.User;
+import br.com.nzesportes.api.nzapi.domains.product.ProductDetails;
+import br.com.nzesportes.api.nzapi.domains.product.Sale;
 import br.com.nzesportes.api.nzapi.domains.product.Stock;
 import br.com.nzesportes.api.nzapi.domains.purchase.PaymentRequest;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
@@ -19,6 +21,7 @@ import br.com.nzesportes.api.nzapi.dtos.mercadopago.preference.*;
 import br.com.nzesportes.api.nzapi.dtos.product.UpdateStockTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentPurchaseTO;
 import br.com.nzesportes.api.nzapi.dtos.purchase.PaymentTO;
+import br.com.nzesportes.api.nzapi.dtos.purchase.ProductPaymentTO;
 import br.com.nzesportes.api.nzapi.errors.ResourceConflictException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.feign.MercadoPagoClient;
@@ -32,6 +35,7 @@ import br.com.nzesportes.api.nzapi.services.email.EmailService;
 import br.com.nzesportes.api.nzapi.services.product.CouponService;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
 import br.com.nzesportes.api.nzapi.services.product.StockService;
+import br.com.nzesportes.api.nzapi.utils.ProductUtils;
 import br.com.nzesportes.api.nzapi.utils.PurchaseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +109,9 @@ public class PaymentService {
     @Autowired
     private CouponService couponService;
 
+    @Autowired
+    private ProductUtils utils;
+
     public PaymentPurchaseTO createPaymentRequest(PaymentTO dto, UserDetailsImpl principal) {
         return createPurchase(dto, principal);
     }
@@ -164,9 +171,7 @@ public class PaymentService {
                         .quantity(productPaymentTO.getQuantity()).build();
 
                 if(available) {
-                    purchase.setTotalCost(purchase.getTotalCost().add(updatedStock.getProductDetail().getPrice()
-                            .multiply(new BigDecimal(productPaymentTO.getQuantity().toString()))));
-                    pi.setCost(updatedStock.getProductDetail().getPrice());
+                    purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
                 }
                 items.add(pi);
             }
@@ -322,6 +327,24 @@ public class PaymentService {
                 || order.getOrder_status().equals(OrderPaymentStatus.payment_in_process)
                 || (order.getOrder_status().equals(OrderPaymentStatus.payment_required) && OrderStatus.opened.equals(order.getStatus()))
                 || order.getOrder_status().equals(OrderPaymentStatus.partially_paid)).collect(Collectors.toList());
+    }
+
+    private BigDecimal calculateDiscount(Stock updatedStock, PurchaseItems pi, ProductPaymentTO productPaymentTO) {
+        Optional<Sale> sale = utils.getSale(updatedStock.getProductDetail());
+        BigDecimal result;
+        if(sale.isPresent()) {
+            result = new BigDecimal("100").subtract(new BigDecimal(sale.get().getPercentage().toString()))
+                    .divide(new BigDecimal("100").multiply(updatedStock.getProductDetail().getPrice()))
+                    .multiply(new BigDecimal(productPaymentTO.getQuantity().toString()));
+
+            pi.setDiscount((sale.get().getPercentage()));
+        }
+        else
+            result = updatedStock.getProductDetail().getPrice()
+                    .multiply(new BigDecimal(productPaymentTO.getQuantity().toString()));
+
+        pi.setCost(updatedStock.getProductDetail().getPrice());
+        return result;
     }
 
     public void sendEmailPurchase(Purchase purchase, MercadoPagoPaymentStatus status) {
