@@ -228,7 +228,7 @@ public class PaymentService {
                         .picture_url(Arrays.asList(purchaseItem.getItem().getProductDetail().getImages()).get(0))
                         .description(purchaseItem.getItem().getProductDetail().getDescription())
                         .quantity(purchaseItem.getQuantity())
-                        .unit_price(purchaseItem.getCost())
+                        .unit_price(purchaseItem.getPurchaseCost())
                         .build()));
 
         items.add(Item.builder().unit_price(purchase.getShipment()).quantity(1).description("Taxa de frete").title("Entrega").build());
