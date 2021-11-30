@@ -13,8 +13,8 @@ public class Size {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private String type;
-    private Integer weight;
-    private Integer length;
-    private Integer depth;
-    private Integer height;
+    private Double weight;
+    private Double length;
+    private Double depth;
+    private Double height;
 }
