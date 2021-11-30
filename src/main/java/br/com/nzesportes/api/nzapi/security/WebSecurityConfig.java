@@ -59,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "style-src 'self' https://fonts.googleapis.com/, https://use.typekit.net; " +
                         "script-src 'self' https://fonts.googleapis.com/ http://apis.google.com/ http://connect.facebook.net/ *.facebook.com; " +
                         "connect-src *; " +
-                        "child-src 'self' https://melhorenvio.com.br https://melhorenvio.com.br/ https://api.mercadopago.com/ https://accounts.google.com/ https://storage.googleapis.com/;"))
+                        "child-src 'self' https://melhorenvio.com.br https://melhorenvio.com.br/ https://api.mercadopago.com/ https://accounts.google.com/ https://storage.googleapis.com/  https://nzesportes.com.br:8080/;"))
                 .addHeaderWriter(new StaticHeadersWriter("Permissions-Policy", "geolocation=(self), fullscreen=(self)"))
                 .addHeaderWriter(new StaticHeadersWriter("Referrer-Policy", "same-origin")).and()
                 .csrf().disable()
