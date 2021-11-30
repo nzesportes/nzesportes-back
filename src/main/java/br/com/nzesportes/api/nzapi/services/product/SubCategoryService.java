@@ -63,6 +63,7 @@ public class SubCategoryService {
 
     public SubCategory update(SubCategorySaveTO dto) {
         SubCategory subCategory = getById(dto.getId());
+        subCategory.setCategory(categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_FOUND)));
         copyProperties(dto, subCategory);
 
         return repository.save(subCategory);
