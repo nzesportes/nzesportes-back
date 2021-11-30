@@ -46,12 +46,16 @@ public class PurchaseItems {
         return quantity;
     }
 
-    public BigDecimal getCost() {
+    public BigDecimal getPurchaseCost() {
         if(discount != null && discount > 0)
             return new BigDecimal("100").subtract(new BigDecimal(discount.toString()))
-                    .divide(new BigDecimal("100").multiply(item.getProductDetail().getPrice()));
+                    .divide(new BigDecimal("100")).multiply(item.getProductDetail().getPrice());
         else
             return item.getProductDetail().getPrice();
+    }
+
+    public BigDecimal getCost() {
+        return cost;
     }
 
     public Double getDiscount() {

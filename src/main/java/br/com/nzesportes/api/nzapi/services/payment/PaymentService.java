@@ -157,7 +157,7 @@ public class PaymentService {
                 .build();
 
         List<PurchaseItems> items = new ArrayList<>();
-        dto.getProducts().parallelStream().forEach(productPaymentTO -> {
+        dto.getProducts().forEach(productPaymentTO -> {
             Stock updatedStock;
             try {
                 updatedStock = stockService.updateQuantity(new UpdateStockTO(productPaymentTO.getStockId(), -productPaymentTO.getQuantity()));
@@ -228,7 +228,7 @@ public class PaymentService {
                         .picture_url(Arrays.asList(purchaseItem.getItem().getProductDetail().getImages()).get(0))
                         .description(purchaseItem.getItem().getProductDetail().getDescription())
                         .quantity(purchaseItem.getQuantity())
-                        .unit_price(purchaseItem.getCost())
+                        .unit_price(purchaseItem.getPurchaseCost())
                         .build()));
 
         items.add(Item.builder().unit_price(purchase.getShipment()).quantity(1).description("Taxa de frete").title("Entrega").build());
@@ -334,7 +334,7 @@ public class PaymentService {
         BigDecimal result;
         if(sale.isPresent()) {
             result = new BigDecimal("100").subtract(new BigDecimal(sale.get().getPercentage().toString()))
-                    .divide(new BigDecimal("100").multiply(updatedStock.getProductDetail().getPrice()))
+                    .divide(new BigDecimal("100")).multiply(updatedStock.getProductDetail().getPrice())
                     .multiply(new BigDecimal(productPaymentTO.getQuantity().toString()));
 
             pi.setDiscount((sale.get().getPercentage()));
