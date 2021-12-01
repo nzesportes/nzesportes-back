@@ -28,6 +28,8 @@ public class ProductDetailsTO {
     private String size;
     @JsonIgnore
     private Integer quantity;
+    @JsonIgnore
+    private Double discount;
     private UUID purchaseStockId;
     private LocalDateTime creationDate;
 }

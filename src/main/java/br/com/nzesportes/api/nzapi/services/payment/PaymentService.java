@@ -391,6 +391,8 @@ public class PaymentService {
                 title = "Ops, seu pagamento não foi não foi aprovado!";
                 text = EmailContentEnum.COMPRA_REJEITADA.getText();
                 break;
+            case pending:
+                return;
             default:
                 subject = "NZESPORTES: PROBLEMA NO PEDIDO ";
                 title = "Ops, ocorreu um problema no seu pedido!";
