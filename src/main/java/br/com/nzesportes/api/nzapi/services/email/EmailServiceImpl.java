@@ -207,6 +207,7 @@ public class EmailServiceImpl implements EmailService {
             p.setStatus(product.getItem().getProductDetail().getStatus());
             p.setSize(product.getItem().getSize());
             p.setQuantity(product.getQuantity());
+            p.setDiscount(product.getDiscount());
             p.setProduct(
                 this.productUtils.toProductTO(
                     productService.getById(product.getItem().getProductDetail().getProductId())

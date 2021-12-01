@@ -163,6 +163,8 @@ public class PaymentService {
                 updatedStock = stockService.updateQuantity(new UpdateStockTO(productPaymentTO.getStockId(), -productPaymentTO.getQuantity()));
 
                 Boolean available = (updatedStock != null && updatedStock.getProductDetail().getStatus());
+                if(!available)
+                    cancelPurchaseProcess(items);
 
                 PurchaseItems pi = PurchaseItems
                         .builder()
@@ -170,16 +172,21 @@ public class PaymentService {
                         .available(available)
                         .quantity(productPaymentTO.getQuantity()).build();
 
-                if(available) {
-                    purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
-                }
+                purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
                 items.add(pi);
             }
             catch (Exception e) {
                 log.error("Exception finding stock");
+                cancelPurchaseProcess(items);
+                throw new ResourceConflictException(ResponseErrorEnum.PAY001);
+
             }
         });
         purchase.setItems(items);
+
+        if(purchase.getTotalCost().equals(purchase.getShipment()))
+            throw new ResourceConflictException(ResponseErrorEnum.PAY001);
+
         if(dto.getCoupon() != null && !dto.getCoupon().isBlank()){
             if(!couponService.getStatus(dto.getCoupon()).getStatus())
                 throw new ResourceConflictException(ResponseErrorEnum.NOT_FOUND);
@@ -191,9 +198,6 @@ public class PaymentService {
             purchase.setTotalCost(purchase.getTotalCost().subtract(coupon.getDiscount()));
             purchase.setCoupon(coupon);
         }
-
-        if(purchase.getTotalCost().equals(purchase.getShipment()))
-            throw new ResourceConflictException(ResponseErrorEnum.PAY001);
 
         Purchase saved = purchaseRepository.save(purchase);
         PurchaseCode code = purchaseCodeRepository.save(PurchaseCode.builder().purchaseId(saved.getId()).build());
@@ -233,6 +237,9 @@ public class PaymentService {
 
         items.add(Item.builder().unit_price(purchase.getShipment()).quantity(1).description("Taxa de frete").title("Entrega").build());
 
+        if(purchase.getCoupon() != null)
+            items.add(Item.builder().unit_price(purchase.getCoupon().getDiscount().negate()).quantity(1).description("Cupom: " + purchase.getCoupon().getCode()).title("Desconto de cupom").build());
+
         Payer payer = Payer.builder()
                 .name(purchase.getCustomer().getName())
                 .surname(purchase.getCustomer().getLastName())
@@ -267,9 +274,14 @@ public class PaymentService {
 
     private void cancelPurchase(Purchase purchase) {
         purchase.setStatus(MercadoPagoPaymentStatus.cancelled);
-        purchase.getItems().parallelStream().forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));
+        purchase.getItems().forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));
         Purchase saved = purchaseRepository.save(purchase);
         sendEmailPurchase(saved, saved.getStatus());
+    }
+
+    private void cancelPurchaseProcess(List<PurchaseItems> items) {
+        items.forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));;
+        throw new ResourceConflictException(ResponseErrorEnum.PAY001);
     }
 
     private void updateStatus(Purchase purchase, PaymentMPTO payment) {
@@ -379,6 +391,8 @@ public class PaymentService {
                 title = "Ops, seu pagamento não foi não foi aprovado!";
                 text = EmailContentEnum.COMPRA_REJEITADA.getText();
                 break;
+            case pending:
+                return;
             default:
                 subject = "NZESPORTES: PROBLEMA NO PEDIDO ";
                 title = "Ops, ocorreu um problema no seu pedido!";
