@@ -378,7 +378,7 @@
                 </div>
                 <div class="container-pd-line" th:if="${purchase.getCoupon()} != null">
                     <div class="pd-left"><b>Valor da Compra</b></div>
-                    <div class="pd-right" th:text="${'R$ ' + (purchase.getTotalCost() - purchase.getShipment() - purchase.getCoupon().getDiscount())}"></div>
+                    <div class="pd-right" th:text="${'R$ ' + (purchase.getTotalCost() - purchase.getShipment() + purchase.getCoupon().getDiscount())}"></div>
                 </div>
                 <div class="container-pd-line" th:if="${purchase.getCoupon()} == null">
                     <div class="pd-left"><b>Desconto</b></div>
