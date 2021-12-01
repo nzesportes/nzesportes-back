@@ -170,9 +170,10 @@ public class PaymentService {
                         .available(available)
                         .quantity(productPaymentTO.getQuantity()).build();
 
-                if(available) {
-                    purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
-                }
+                if(!available)
+                    throw new ResourceConflictException(ResponseErrorEnum.PAY001);
+
+                purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
                 items.add(pi);
             }
             catch (Exception e) {
@@ -233,6 +234,9 @@ public class PaymentService {
                         .build()));
 
         items.add(Item.builder().unit_price(purchase.getShipment()).quantity(1).description("Taxa de frete").title("Entrega").build());
+
+        if(purchase.getCoupon() != null)
+            items.add(Item.builder().unit_price(purchase.getCoupon().getDiscount().negate()).quantity(1).description("Cupom: " + purchase.getCoupon().getCode()).title("Desconto de cupom").build());
 
         Payer payer = Payer.builder()
                 .name(purchase.getCustomer().getName())
