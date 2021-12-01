@@ -234,6 +234,9 @@ public class PaymentService {
 
         items.add(Item.builder().unit_price(purchase.getShipment()).quantity(1).description("Taxa de frete").title("Entrega").build());
 
+        if(purchase.getCoupon() != null)
+            items.add(Item.builder().unit_price(purchase.getCoupon().getDiscount().negate()).quantity(1).description("Cupom: " + purchase.getCoupon().getCode()).title("Desconto de cupom").build());
+
         Payer payer = Payer.builder()
                 .name(purchase.getCustomer().getName())
                 .surname(purchase.getCustomer().getLastName())
