@@ -180,6 +180,10 @@ public class PaymentService {
             }
         });
         purchase.setItems(items);
+
+        if(purchase.getTotalCost().equals(purchase.getShipment()))
+            throw new ResourceConflictException(ResponseErrorEnum.PAY001);
+
         if(dto.getCoupon() != null && !dto.getCoupon().isBlank()){
             if(!couponService.getStatus(dto.getCoupon()).getStatus())
                 throw new ResourceConflictException(ResponseErrorEnum.NOT_FOUND);
@@ -191,9 +195,6 @@ public class PaymentService {
             purchase.setTotalCost(purchase.getTotalCost().subtract(coupon.getDiscount()));
             purchase.setCoupon(coupon);
         }
-
-        if(purchase.getTotalCost().equals(purchase.getShipment()))
-            throw new ResourceConflictException(ResponseErrorEnum.PAY001);
 
         Purchase saved = purchaseRepository.save(purchase);
         PurchaseCode code = purchaseCodeRepository.save(PurchaseCode.builder().purchaseId(saved.getId()).build());
