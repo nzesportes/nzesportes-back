@@ -163,6 +163,8 @@ public class PaymentService {
                 updatedStock = stockService.updateQuantity(new UpdateStockTO(productPaymentTO.getStockId(), -productPaymentTO.getQuantity()));
 
                 Boolean available = (updatedStock != null && updatedStock.getProductDetail().getStatus());
+                if(!available)
+                    cancelPurchaseProcess(items);
 
                 PurchaseItems pi = PurchaseItems
                         .builder()
@@ -170,14 +172,12 @@ public class PaymentService {
                         .available(available)
                         .quantity(productPaymentTO.getQuantity()).build();
 
-                if(!available)
-                    throw new ResourceConflictException(ResponseErrorEnum.PAY001);
-
                 purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
                 items.add(pi);
             }
             catch (Exception e) {
                 log.error("Exception finding stock");
+                cancelPurchaseProcess(items);
                 throw new ResourceConflictException(ResponseErrorEnum.PAY001);
 
             }
@@ -274,9 +274,14 @@ public class PaymentService {
 
     private void cancelPurchase(Purchase purchase) {
         purchase.setStatus(MercadoPagoPaymentStatus.cancelled);
-        purchase.getItems().parallelStream().forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));
+        purchase.getItems().forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));
         Purchase saved = purchaseRepository.save(purchase);
         sendEmailPurchase(saved, saved.getStatus());
+    }
+
+    private void cancelPurchaseProcess(List<PurchaseItems> items) {
+        items.forEach(purchaseItems -> stockService.updateQuantity(new UpdateStockTO(purchaseItems.getItem().getId(), purchaseItems.getQuantity())));;
+        throw new ResourceConflictException(ResponseErrorEnum.PAY001);
     }
 
     private void updateStatus(Purchase purchase, PaymentMPTO payment) {
