@@ -178,6 +178,8 @@ public class PaymentService {
             }
             catch (Exception e) {
                 log.error("Exception finding stock");
+                throw new ResourceConflictException(ResponseErrorEnum.PAY001);
+
             }
         });
         purchase.setItems(items);
