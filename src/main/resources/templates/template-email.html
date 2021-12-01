@@ -357,9 +357,13 @@
                     <p>Quantidade: <span th:text="${r.getQuantity()}"></span></p>
                 </div>
             </div>
-            <div class="details-products-purchase">
+            <div class="details-products-purchase" th:if="${r.getDiscount()} == null">
                 <p>Preço: <span th:text="${'R$ ' + r.getPrice()}"></span></p>
                 <p>Subtotal: <span th:text="${'R$ ' + r.getPrice() * r.getQuantity()}"></span></p>
+            </div>
+            <div class="details-products-purchase" th:if="${r.getDiscount()} != null">
+                <p>Preço: <del th:text="${'R$ ' + r.getPrice()}"> </del> <span th:text="${'R$' + (r.getPrice() * ((100 - r.getDiscount()) / 100))}"></span></p>
+                <p>Subtotal: <span th:text="${'R$ ' + (r.getPrice() * ((100 - r.getDiscount()) / 100)) * r.getQuantity()}"></span></p>
             </div>
         </div>
         <div class="container-purchase-address">
@@ -368,13 +372,21 @@
                 <div>
                     <h2 class="titles">Detalhes da Compra</h2>
                 </div>
-                <div class="container-pd-line">
+                <div class="container-pd-line" th:if="${purchase.getCoupon()} == null">
                     <div class="pd-left"><b>Valor da Compra</b></div>
-                    <div class="pd-right" th:text="${'R$ ' + purchase.getTotalCost() - purchase.getShipment()}"></div>
+                    <div class="pd-right" th:text="${'R$ ' + (purchase.getTotalCost() - purchase.getShipment())}"></div>
                 </div>
-                <div class="container-pd-line">
+                <div class="container-pd-line" th:if="${purchase.getCoupon()} != null">
+                    <div class="pd-left"><b>Valor da Compra</b></div>
+                    <div class="pd-right" th:text="${'R$ ' + (purchase.getTotalCost() - purchase.getShipment() - purchase.getCoupon().getDiscount())}"></div>
+                </div>
+                <div class="container-pd-line" th:if="${purchase.getCoupon()} == null">
                     <div class="pd-left"><b>Desconto</b></div>
-                    <div class="pd-right">- R$ 10,00</div>
+                    <div class="pd-right"  th:text="${'- R$ 0' }"></div>
+                </div>
+                <div class="container-pd-line" th:if="${purchase.getCoupon()} != null">
+                    <div class="pd-left"><b>Desconto</b></div>
+                    <div class="pd-right"  th:text="${'- R$ ' + purchase.getCoupon().getDiscount()}"></div>
                 </div>
                 <div class="container-pd-line">
                     <div class="pd-left"><b>Frete</b></div>
