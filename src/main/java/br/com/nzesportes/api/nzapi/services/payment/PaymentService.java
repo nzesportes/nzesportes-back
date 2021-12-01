@@ -170,9 +170,10 @@ public class PaymentService {
                         .available(available)
                         .quantity(productPaymentTO.getQuantity()).build();
 
-                if(available) {
-                    purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
-                }
+                if(!available)
+                    throw new ResourceConflictException(ResponseErrorEnum.PAY001);
+
+                purchase.setTotalCost(purchase.getTotalCost().add(calculateDiscount(updatedStock, pi, productPaymentTO)));
                 items.add(pi);
             }
             catch (Exception e) {
