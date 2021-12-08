@@ -27,7 +27,7 @@ public class PurchaseItems {
     private Purchase purchase;
     private Integer quantity;
     private BigDecimal cost;
-    private Double discount;
+    private BigDecimal discount;
     private boolean available;
 
     public UUID getId() {
@@ -47,8 +47,8 @@ public class PurchaseItems {
     }
 
     public BigDecimal getPurchaseCost() {
-        if(discount != null && discount > 0)
-            return new BigDecimal("100").subtract(new BigDecimal(discount.toString()))
+        if(discount != null && discount.compareTo(BigDecimal.ZERO) > 0)
+            return new BigDecimal("100").subtract(discount)
                     .divide(new BigDecimal("100")).multiply(item.getProductDetail().getPrice());
         else
             return item.getProductDetail().getPrice();
@@ -58,7 +58,7 @@ public class PurchaseItems {
         return cost;
     }
 
-    public Double getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
