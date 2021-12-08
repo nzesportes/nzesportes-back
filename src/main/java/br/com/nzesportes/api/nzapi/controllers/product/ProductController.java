@@ -4,6 +4,7 @@ import br.com.nzesportes.api.nzapi.domains.product.*;
 import br.com.nzesportes.api.nzapi.dtos.product.*;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.product.ProductService;
+import br.com.nzesportes.api.nzapi.services.product.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,9 @@ public class ProductController {
 
     @Autowired
     private ProductService service;
+
+    @Autowired
+    private StockService stockService;
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
@@ -99,6 +103,11 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN') or hasRole('MODERATOR')")
     public void deleteById(@PathVariable UUID id) {
         service.deleteById(id);
+    }
+
+    @GetMapping("/details/stock/{id}")
+    public Stock updateQuantity(@PathVariable UUID id) {
+        return stockService.getById(id);
     }
 
     @PutMapping("/details/stock/quantity")

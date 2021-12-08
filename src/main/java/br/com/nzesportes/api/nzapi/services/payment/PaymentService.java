@@ -204,6 +204,7 @@ public class PaymentService {
         Preference preference = createPreference(saved);
 
         saved.getPaymentRequest().setPreferenceId(preference.getId());
+        saved.getPaymentRequest().setWebhookStatus(preference.getInit_point());
         saved.setCode(code.getId());
         saved = purchaseRepository.save(saved);
         sendEmailPurchase(saved, saved.getStatus());

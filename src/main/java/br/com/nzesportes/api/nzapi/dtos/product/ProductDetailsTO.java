@@ -1,6 +1,8 @@
 package br.com.nzesportes.api.nzapi.dtos.product;
 
-import br.com.nzesportes.api.nzapi.domains.product.*;
+import br.com.nzesportes.api.nzapi.domains.product.Sale;
+import br.com.nzesportes.api.nzapi.domains.product.Stock;
+import br.com.nzesportes.api.nzapi.domains.product.SubCategory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,7 +31,7 @@ public class ProductDetailsTO {
     @JsonIgnore
     private Integer quantity;
     @JsonIgnore
-    private Double discount;
+    private BigDecimal discount;
     private UUID purchaseStockId;
     private LocalDateTime creationDate;
 }

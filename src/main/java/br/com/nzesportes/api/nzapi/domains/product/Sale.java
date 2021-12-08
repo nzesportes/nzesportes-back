@@ -3,6 +3,7 @@ package br.com.nzesportes.api.nzapi.domains.product;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -13,7 +14,7 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    private Double percentage;
+    private BigDecimal percentage;
     private Integer quantity;
     @JoinColumn
     private UUID productDetailId;
