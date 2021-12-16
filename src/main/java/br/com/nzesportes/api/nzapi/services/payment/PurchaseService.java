@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.services.payment;
 
+import br.com.nzesportes.api.nzapi.domains.customer.Address;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import br.com.nzesportes.api.nzapi.errors.ResourceNotFoundException;
 import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
@@ -7,6 +8,7 @@ import br.com.nzesportes.api.nzapi.repositories.purchase.PurchaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,6 +25,11 @@ public class PurchaseService {
     }
     public Purchase getByIdAndCustomerId(UUID id, UUID customerId) {
         return repository.findByIdAndCustomerId(id, customerId).orElseThrow(() -> new ResourceNotFoundException(ResponseErrorEnum.NOT_AUTH));
+    }
+
+    public Boolean hasPurchases(Address address) {
+        List<Purchase> purchases = repository.findAllByShipmentAddress(address);
+        return purchases != null && purchases.size() > 0 ? true : false;
     }
 
 }

@@ -7,6 +7,7 @@ import br.com.nzesportes.api.nzapi.errors.ResponseErrorEnum;
 import br.com.nzesportes.api.nzapi.repositories.customer.AddressRepository;
 import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.customer.CustomerService;
+import br.com.nzesportes.api.nzapi.services.payment.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class AddressService {
 
     @Autowired
     private AddressRepository repository;
+
+    @Autowired
+    private PurchaseService purchaseService;
 
     public Address save(Address address, UserDetailsImpl user) {
          address.setCustomerId(customerService.getByUserId(user.getId()).getId());
@@ -37,7 +41,8 @@ public class AddressService {
 
     public ResponseEntity<?> deleteById(UUID id, UserDetailsImpl principal) {
         Address address = getById(id);
-        if(address.getCustomerId().equals(customerService.getByUserId(principal.getId()).getId())) {
+        if(address.getCustomerId().equals(customerService.getByUserId(principal.getId()).getId())
+                && !purchaseService.hasPurchases(address)) {
             repository.deleteById(id);
             return ResponseEntity.status(201).body(null);
         }

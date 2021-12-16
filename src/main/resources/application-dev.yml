@@ -34,10 +34,10 @@ spring:
         smtp:
           auth: true
           starttls:
-            enable: true
-            required: true
+            enable: false
+            required: false
           ssl:
-            enable: true
+            enable: false
       test-connection: true
 flyway:
   locations: filesystem:db/migration
