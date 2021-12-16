@@ -36,7 +36,6 @@ public class MenuController {
     }
 
     @GetMapping("/sizes")
-    @Cacheable("sizes")
     public List<SizeTO> getSizes() {
         return service.getSizes();
     }
