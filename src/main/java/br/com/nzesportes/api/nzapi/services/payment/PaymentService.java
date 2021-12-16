@@ -216,7 +216,7 @@ public class PaymentService {
                     EmailContentEnum.COMPRA_CONFIRMADA.getText(),
                     "Obrigado pela compra!",
                     "ver pedido",
-                    this.urlFront,
+                    this.urlFront + "minha-conta/meus-pedidos",
                     saved
             );
 
@@ -407,7 +407,7 @@ public class PaymentService {
                     text,
                     title,
                     "ver pedido",
-                    this.urlFront,
+                    this.urlFront + "minha-conta/meus-pedidos",
                     purchase
             );
     }
