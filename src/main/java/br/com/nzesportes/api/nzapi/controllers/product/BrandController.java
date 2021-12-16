@@ -28,7 +28,7 @@ public class BrandController {
 
     @GetMapping
     public Page<Brand> getAll(@RequestParam int page, @RequestParam int size, @RequestParam(required = false) String name, Authentication authentication) {
-        return service.getAll(name, page, size, (UserDetailsImpl) authentication.getPrincipal());
+        return service.getAll(name, page, size, authentication != null ? (UserDetailsImpl) authentication.getPrincipal() : null);
     }
 
     @GetMapping("/{id}")

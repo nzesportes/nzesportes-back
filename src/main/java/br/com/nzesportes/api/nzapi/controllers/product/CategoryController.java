@@ -2,6 +2,7 @@ package br.com.nzesportes.api.nzapi.controllers.product;
 
 import br.com.nzesportes.api.nzapi.domains.product.Category;
 import br.com.nzesportes.api.nzapi.dtos.StatusTO;
+import br.com.nzesportes.api.nzapi.security.services.UserDetailsImpl;
 import br.com.nzesportes.api.nzapi.services.product.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -35,7 +36,7 @@ public class CategoryController {
                                         @RequestParam int size,
                                         @RequestParam(required = false) Boolean status,
                                         @RequestParam(required = false) String name, Authentication auth) {
-        return service.getAll(page, size, status, name, (UserDetails) auth.getPrincipal());
+        return service.getAll(page, size, status, name, auth != null ? (UserDetailsImpl) auth.getPrincipal() : null);
     }
 
     @GetMapping("/{id}")
