@@ -1,5 +1,6 @@
 package br.com.nzesportes.api.nzapi.repositories.purchase;
 
+import br.com.nzesportes.api.nzapi.domains.customer.Address;
 import br.com.nzesportes.api.nzapi.domains.purchase.MercadoPagoPaymentStatus;
 import br.com.nzesportes.api.nzapi.domains.purchase.Purchase;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, UUID> {
 
     @Query(value = "SELECT p.* FROM purchases p, payment_requests pr WHERE p.payment_request_id = pr.id AND p.customer_id = :customerId ORDER BY pr.creation_date DESC, p.code DESC", nativeQuery = true)
     Page<Purchase> findAllByCustomerId(UUID customerId, Pageable pageable);
+
+    List<Purchase> findAllByShipmentAddress(Address shipmentAddress);
 
     Purchase findAllById(UUID id);
 
