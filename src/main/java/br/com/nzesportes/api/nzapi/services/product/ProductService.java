@@ -23,7 +23,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import static org.springframework.beans.BeanUtils.copyProperties;
 
@@ -71,8 +70,8 @@ public class ProductService {
         if(name == null)
             name = "";
         if(status != null)
-            return repository.findByModelContainingAndStatus(name ,status, pageRequest);
-        return repository.findByModelContaining(name, pageRequest);
+            return repository.findByModelContainingAndStatusOrderByModel(name ,status, pageRequest);
+        return repository.findByModelContainingOrderByModel(name, pageRequest);
     }
 
     public Product update(ProductUpdateTO dto) {

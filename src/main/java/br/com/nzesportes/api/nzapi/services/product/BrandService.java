@@ -34,7 +34,7 @@ public class BrandService {
     }
 
     public Page<Brand> getAll(String name, int page, int size, UserDetailsImpl principal) {
-        if(principal != null && principal.getAuthorities() != null && principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_USER.getText())))
+        if((principal != null && principal.getAuthorities() != null && principal.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_USER.getText()))) || principal == null)
             return repository.findByFilterAndStatusTrue(name == null ? "" : name, PageRequest.of(page, size));
         return repository.findByFilter(name == null ? "" : name, PageRequest.of(page, size));
     }

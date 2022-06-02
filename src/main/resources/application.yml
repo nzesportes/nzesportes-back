@@ -27,8 +27,8 @@ spring:
   mail:
     host: mail.nzesportes.com.br
     port: 587
-    username: 'nzesportes@nzesportes.com.br'
-    password: '7q=4rG{8y-Cl'
+    username: 'teste@teste'
+    password: 'teste'
     properties:
       mail:
         smtp:
