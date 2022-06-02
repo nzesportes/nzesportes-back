@@ -16,9 +16,9 @@ public interface ProductRepository extends JpaRepository<Product, UUID> {
 
     boolean existsByBrandId(UUID brandId);
 
-    Page<Product> findByModelContaining(String model, Pageable of);
+    Page<Product> findByModelContainingOrderByModel(String model, Pageable of);
 
-    Page<Product> findByModelContainingAndStatus(String model,Boolean status, Pageable of);
+    Page<Product> findByModelContainingAndStatusOrderByModel(String model, Boolean status, Pageable of);
 
     @Query(value = "SELECT * FROM products p WHERE difference(p.model, :name) >= 2 ORDER BY difference(p.model, :name) DESC", nativeQuery = true)
     List<Product> findByProductName(String name);
