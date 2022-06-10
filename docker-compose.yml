@@ -9,7 +9,7 @@ services:
       - 208.67.222.222
       - 208.67.220.220
     ports:
-      - "8080:8080"
+      - "8081:8081"
     environment:
       CLIENT_SECRET: ${CLIENT_SECRET}
       CLIENT_ID: ${CLIENT_ID}
