@@ -19,7 +19,7 @@ public interface BrandRepository extends JpaRepository<Brand, UUID> {
     @Query(value = "SELECT * FROM brands b WHERE b.status = true ORDER BY difference(b.name, ?1) DESC", nativeQuery = true)
     Page<Brand> findByFilterAndStatusTrue(String name, Pageable pageable);
 
-    @Query(value = "SELECT * FROM brands b WHERE b.status = true AND b.on_menu = true ORDER BY b.name", nativeQuery = true)
+    @Query(value = "SELECT * FROM brands b WHERE b.status = true AND b.on_menu = true ORDER BY b.name ASC", nativeQuery = true)
     List<Brand> findOnMenu();
 
     Optional<Brand> findByName(String name);
