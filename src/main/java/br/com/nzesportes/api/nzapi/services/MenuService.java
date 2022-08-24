@@ -64,7 +64,7 @@ public class MenuService {
     private List<SubCategoryMenuTO> getSubCategory(Category c, Gender gender) {
         List<SubCategoryMenuTO> subCategoryMenu = new ArrayList<>();
         List<SubCategory> subCategories = subCategoryRepository.findByCategoryMenu(c, gender);
-        subCategories.parallelStream().forEach(subCategory -> subCategoryMenu.add(new SubCategoryMenuTO(subCategory.getId(), subCategory.getName())));
+        subCategories.stream().forEach(subCategory -> subCategoryMenu.add(new SubCategoryMenuTO(subCategory.getId(), subCategory.getName())));
         return subCategoryMenu;
     }
 
